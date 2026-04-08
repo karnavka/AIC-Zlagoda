@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: zlagoda_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: zlagoda_db
+      MYSQL_USER: zlagoda_user
+      MYSQL_PASSWORD: zlagoda_pass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:
