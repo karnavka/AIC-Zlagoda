@@ -1,11 +1,11 @@
 CREATE TABLE Category (
                           category_number INT NOT NULL PRIMARY KEY,
-                          category_name VARCHAR(50) NOT NULL UNIQUE /*хз залишати ли тут юнік але  залишила*/
+                          name VARCHAR(50) NOT NULL UNIQUE /*хз залишати ли тут юнік, але  залишила*/
 );
 
 CREATE TABLE Product (
                          id_product INT NOT NULL PRIMARY KEY,
-                         product_name VARCHAR(50) NOT NULL,
+                         name VARCHAR(50) NOT NULL,
                          manufacturer VARCHAR(50) NOT NULL,
                          characteristics VARCHAR(100) NOT NULL,
                          category_number INT NOT NULL,
