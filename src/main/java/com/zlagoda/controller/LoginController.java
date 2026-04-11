@@ -1,6 +1,9 @@
 package com.zlagoda.controller;
 
 import com.zlagoda.MainApp;
+import com.zlagoda.dao.UserDAO;
+import com.zlagoda.model.User;
+import com.zlagoda.util.PassWordUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginController {
 
@@ -24,17 +28,45 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
+    private final UserDAO userDAO = new UserDAO();
+
     @FXML
-    private void handleLogin(ActionEvent event) throws IOException {
-        String login = loginField.getText();
+    private void handleLogin(ActionEvent event) {
+        String login = loginField.getText().trim();
         String password = passwordField.getText();
 
-        if ("manager".equals(login) && "1234".equals(password)) {
-            openScene(event, "/fxml/manager-main.fxml", "Manager");
-        } else if ("cashier".equals(login) && "1234".equals(password)) {
-            openScene(event, "/fxml/cashier-main.fxml", "Cashier");
-        } else {
-            errorLabel.setText("Invalid login or password");
+        if (login.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Enter login and password");
+            return;
+        }
+
+        try {
+            User user = userDAO.findByUsername(login);
+            System.out.println(user);
+            if (user == null) {
+                errorLabel.setText("Invalid login or password");
+                return;
+            }
+
+            boolean passwordMatches = PassWordUtil.verifyPassword(password, user.getPasswordHash());
+
+            if (!passwordMatches) {
+                errorLabel.setText("Invalid login or password");
+                return;
+            }
+
+            switch (user.getRole()) {
+                case "MANAGER" -> openScene(event, "/fxml/manager-main.fxml", "Manager");
+                case "CASHIER" -> openScene(event, "/fxml/cashier-main.fxml", "Cashier");
+                default -> errorLabel.setText("Unknown user role");
+            }
+
+        } catch (SQLException e) {
+            errorLabel.setText("Database error");
+            e.printStackTrace();
+        } catch (IOException e) {
+            errorLabel.setText("Cannot open window");
+            e.printStackTrace();
         }
     }
 

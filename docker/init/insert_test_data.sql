@@ -1,7 +1,8 @@
-INSERT INTO Сategory (category_number, name) VALUES
-                                                          (1, 'Dairy'),
-                                                          (2, 'Bakery'),
-                                                          (3, 'Drinks');
+INSERT INTO Category (category_number, name)
+VALUES
+(1, 'Dairy'),
+(2, 'Bakery'),
+(3, 'Drinks');
 
 INSERT INTO Employee
 (id_employee, surname, name, patronymic, role, salary, date_of_birth, date_of_start, phone_number, city, street, zip_code)
@@ -28,3 +29,8 @@ VALUES
     ('UPC001', NULL, 1, 52.00, 40, FALSE),
     ('UPC002', NULL, 2, 28.00, 60, FALSE),
     ('UPC003', NULL, 3, 75.00, 25, TRUE);
+
+INSERT INTO users (username, password_hash, role, employee_id)
+VALUES
+    ('manager', '$2a$10$meuvb5wIomHoSdliVxjiWO2wP4FfbiX094SctaUwYz9JjIti.a2IK', 'MANAGER', 'E001'),
+    ('cashier', '$2a$10$COs0H4YrU6u2QEhsXDRi/u4V//SHFTADmQKqKQ4hqvWxlTtAmZw4i', 'CASHIER', 'E002');

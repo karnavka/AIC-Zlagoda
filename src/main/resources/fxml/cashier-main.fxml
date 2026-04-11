@@ -1,5 +1,14 @@
-<!--cashier-main.fxml
+<?xml version="1.0" encoding="UTF-8"?>
 
-        Це головний екран касира.
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
 
-       side navigation-->
+<?import javafx.scene.layout.StackPane?>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.zlagoda.controller.CashierMainController">
+
+    <VBox alignment="CENTER" spacing="12" maxWidth="320">
+        <Label text="Вікно касира" />
+
+    </VBox>
+</StackPane>

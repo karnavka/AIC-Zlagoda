@@ -1,6 +1,6 @@
 CREATE TABLE Category (
                           category_number INT NOT NULL PRIMARY KEY,
-                          name VARCHAR(50) NOT NULL UNIQUE /*хз залишати ли тут юнік, але  залишила*/
+                          name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE Product (
@@ -12,7 +12,6 @@ CREATE TABLE Product (
                          FOREIGN KEY (category_number) REFERENCES Category(category_number)
                              ON UPDATE CASCADE
                              ON DELETE NO ACTION
-
 );
 
 CREATE TABLE Employee (
@@ -31,15 +30,15 @@ CREATE TABLE Employee (
 );
 
 CREATE TABLE Customer_Card (
-                           card_number VARCHAR(13) NOT NULL PRIMARY KEY,
-                           surname VARCHAR(50) NOT NULL,
-                           name VARCHAR(50) NOT NULL,
-                           patronymic VARCHAR(50) NULL,
-                           phone_number VARCHAR(13) NOT NULL,
-                           city VARCHAR(50) NULL,
-                           street VARCHAR(50) NULL,
-                           zip_code VARCHAR(9) NULL,
-                           percent INT NOT NULL CHECK (percent >= 0)
+                               card_number VARCHAR(13) NOT NULL PRIMARY KEY,
+                               surname VARCHAR(50) NOT NULL,
+                               name VARCHAR(50) NOT NULL,
+                               patronymic VARCHAR(50) NULL,
+                               phone_number VARCHAR(13) NOT NULL,
+                               city VARCHAR(50) NULL,
+                               street VARCHAR(50) NULL,
+                               zip_code VARCHAR(9) NULL,
+                               percent INT NOT NULL CHECK (percent >= 0)
 );
 
 CREATE TABLE Store_Product (
@@ -51,38 +50,46 @@ CREATE TABLE Store_Product (
                                promotional_product BOOLEAN NOT NULL,
                                FOREIGN KEY (id_product) REFERENCES Product(id_product)
                                    ON UPDATE CASCADE
-                                   ON DELETE SET NULL,
-                               FOREIGN KEY (UPC_prom) REFERENCES Store_Product(UPC_prom)
+                                   ON DELETE NO ACTION,
+                               FOREIGN KEY (UPC_prom) REFERENCES Store_Product(UPC)
                                    ON UPDATE CASCADE
                                    ON DELETE NO ACTION
-
 );
 
-CREATE TABLE Check (
+CREATE TABLE Receipt (
                          check_number VARCHAR(10) NOT NULL PRIMARY KEY,
-                         id_employee VARCHAR(10) NOT NULL, /*? чи краще залишити cashier_id*/
+                         id_employee VARCHAR(10) NOT NULL,
                          card_number VARCHAR(13) NULL,
                          print_date DATETIME NOT NULL,
                          sum_total DECIMAL(13,4) NOT NULL CHECK (sum_total >= 0),
                          vat DECIMAL(13,4) NOT NULL CHECK (vat >= 0),
-                         FOREIGN KEY (id_employee) REFERENCES employee(id_employee)
+                         FOREIGN KEY (id_employee) REFERENCES Employee(id_employee)
                              ON UPDATE CASCADE
                              ON DELETE NO ACTION,
-                         FOREIGN KEY (card_number) REFERENCES customer_card(card_number)
+                         FOREIGN KEY (card_number) REFERENCES Customer_Card(card_number)
                              ON UPDATE CASCADE
                              ON DELETE NO ACTION
 );
-/*Я СПОДІВАЮСЬ Я ПРАВИЛЬНО ЗРОЗУМІЛА ЩО РЕСІПТ ЦЕ ЧЕК. НЕ БИЙТЕ ЯКЩО НЕ ТАК*/
+
 CREATE TABLE Sale (
                       check_number VARCHAR(10) NOT NULL,
                       UPC VARCHAR(12) NOT NULL,
                       product_number INT NOT NULL CHECK (product_number > 0),
                       selling_price DECIMAL(13,4) NOT NULL CHECK (selling_price >= 0),
-                      PRIMARY KEY (check_number, upc),
-                      FOREIGN KEY (check_number) REFERENCES receipt(check_number)
+                      PRIMARY KEY (check_number, UPC),
+                      FOREIGN KEY (check_number) REFERENCES Receipt(check_number)
                           ON UPDATE CASCADE
                           ON DELETE NO ACTION,
                       FOREIGN KEY (UPC) REFERENCES Store_Product(UPC)
                           ON UPDATE CASCADE
                           ON DELETE CASCADE
+);
+
+CREATE TABLE users (
+                       id INT PRIMARY KEY AUTO_INCREMENT,
+                       employee_id VARCHAR(10),
+                       username VARCHAR(50) NOT NULL UNIQUE,
+                       password_hash VARCHAR(255) NOT NULL,
+                       role VARCHAR(20) NOT NULL,
+                       FOREIGN KEY (employee_id) REFERENCES Employee(id_employee)
 );
