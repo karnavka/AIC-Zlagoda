@@ -1,4 +1,4 @@
-INSERT INTO Сategory (category_number, category_name) VALUES
+INSERT INTO Сategory (category_number, name) VALUES
                                                           (1, 'Dairy'),
                                                           (2, 'Bakery'),
                                                           (3, 'Drinks');
@@ -16,14 +16,14 @@ VALUES
     ('C001', 'Melnyk', 'Anna', 'Ivanivna', '+380991234567', 'Kyiv', 'Lvivska 10', '02000', 5);
 
 INSERT INTO Product
-(id_product, product_name, manufacturer, characteristics, category_number)
+(id_product, name, manufacturer, characteristics, category_number)
 VALUES
     (1, 'Milk 2.5%', 'Yagotynske', '1L package', 1),
     (2, 'Bread White', 'Kyiv Bakery', '500g', 2),
     (3, 'Orange Juice', 'Sandora', '1L', 3);
 
 INSERT INTO Store_Product
-(UPC, UPC_prom, id_product, selling_price, product_count, promotional_product)
+(UPC, UPC_prom, id_product, selling_price, products_number, promotional_product)
 VALUES
     ('UPC001', NULL, 1, 52.00, 40, FALSE),
     ('UPC002', NULL, 2, 28.00, 60, FALSE),
