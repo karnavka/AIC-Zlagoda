@@ -7,6 +7,17 @@ public class Product {
     private String characteristics;
     private int category_number;
 
+    public Product() {
+    }
+
+    public Product(int id_product, String name, String manufacturer, String characteristics, int category_number) {
+        this.id_product = id_product;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.characteristics = characteristics;
+        this.category_number = category_number;
+    }
+
     public int getId_product() {
         return id_product;
     }

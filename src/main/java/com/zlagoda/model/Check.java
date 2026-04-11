@@ -1,4 +1,5 @@
 package com.zlagoda.model;
+
 import java.time.LocalDateTime;
 
 public class Check {
@@ -8,6 +9,18 @@ public class Check {
     private LocalDateTime print_date;
     private double sum_total;
     private double vat;
+
+    public Check() {
+    }
+
+    public Check(String check_number, String id_employee, String card_number, LocalDateTime print_date, double sum_total, double vat) {
+        this.check_number = check_number;
+        this.id_employee = id_employee;
+        this.card_number = card_number;
+        this.print_date = print_date;
+        this.sum_total = sum_total;
+        this.vat = vat;
+    }
 
     public String getCheck_number() {
         return check_number;
