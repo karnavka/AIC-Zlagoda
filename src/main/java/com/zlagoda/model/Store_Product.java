@@ -8,6 +8,18 @@ public class Store_Product {
     private int products_number;
     private boolean promotional_product;
 
+    public Store_Product() {
+    }
+
+    public Store_Product(String UPC, String UPC_prom, int id_product, double selling_price, int products_number, boolean promotional_product) {
+        this.UPC = UPC;
+        this.UPC_prom = UPC_prom;
+        this.id_product = id_product;
+        this.selling_price = selling_price;
+        this.products_number = products_number;
+        this.promotional_product = promotional_product;
+    }
+
     public String getUPC() {
         return UPC;
     }

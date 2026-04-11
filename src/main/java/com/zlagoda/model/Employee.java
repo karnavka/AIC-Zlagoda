@@ -1,4 +1,5 @@
 package com.zlagoda.model;
+
 import java.time.LocalDate;
 
 public class Employee {
@@ -14,6 +15,24 @@ public class Employee {
     private String city;
     private String street;
     private String zip_code;
+
+    public Employee() {
+    }
+
+    public Employee(String id_employee, String surname, String name, String patronymic, String role, double salary, LocalDate date_of_birth, LocalDate date_of_start, String phone_number, String city, String street, String zip_code) {
+        this.id_employee = id_employee;
+        this.surname = surname;
+        this.name = name;
+        this.patronymic = patronymic;
+        this.role = role;
+        this.salary = salary;
+        this.date_of_birth = date_of_birth;
+        this.date_of_start = date_of_start;
+        this.phone_number = phone_number;
+        this.city = city;
+        this.street = street;
+        this.zip_code = zip_code;
+    }
 
     public String getId_employee() {
         return id_employee;

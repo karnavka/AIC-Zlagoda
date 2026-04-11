@@ -6,6 +6,16 @@ public class Sale {
     private int product_number;
     private double selling_price;
 
+    public Sale() {
+    }
+
+    public Sale(String check_number, String UPC, int product_number, double selling_price) {
+        this.check_number = check_number;
+        this.UPC = UPC;
+        this.product_number = product_number;
+        this.selling_price = selling_price;
+    }
+
     public String getCheck_number() {
         return check_number;
     }
