@@ -5,11 +5,13 @@ services:
     image: mysql:8.4
     container_name: zlagoda_mysql
     restart: always
+    env_file:
+      - .env
     environment:
-      MYSQL_DATABASE: zlagoda_db
-      MYSQL_USER: zlagoda_user
-      MYSQL_PASSWORD: zlagoda_pass
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
