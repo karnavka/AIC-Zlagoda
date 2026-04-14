@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/cashier-main.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.ManagerMainController">
+<BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/cashier-main.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.CashierMainController">
     <top>
         <BorderPane style="-fx-padding: 10;">
             <left>
