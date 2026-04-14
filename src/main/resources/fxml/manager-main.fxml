@@ -6,11 +6,29 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.VBox?>
 <BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/manager-main.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.ManagerMainController">
-        <top>
-            <Label prefHeight="28.0" prefWidth="96.0" text="Вікно менеджера" BorderPane.alignment="CENTER" />
-        </top>
-   <left>
+    <top>
+        <BorderPane style="-fx-padding: 10;">
+            <left>
+               <VBox>
+                   <Label text="ZLAGODA" />
+                   <Label text="мініспермаркет" />
+                </VBox>
+            </left>
+            <right>
+                <ImageView fitWidth="40" fitHeight="40" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/black-cat-icon.png"/>
+                    </image>
+                </ImageView>
+            </right>
+        </BorderPane>
+    </top>
+   <center>
             <TabPane side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                 <tabs>
                     <Tab text="Працівники">
@@ -43,5 +61,5 @@
             <Cursor fx:constant="HAND" />
          </cursor>
             </TabPane>
-   </left>
+   </center>
     </BorderPane>
