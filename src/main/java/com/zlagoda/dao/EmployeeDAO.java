@@ -12,7 +12,7 @@ import java.util.List;
 public class EmployeeDAO {
 
     public void addEmployee(Employee employee) throws SQLException {
-        String sql = "INSERT INTO employee " +
+        String sql = "INSERT INTO Employee " +
                 "(id_employee, surname, name, patronymic, role, salary, date_of_birth, date_of_start, phone_number, city, street, zip_code) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -37,7 +37,7 @@ public class EmployeeDAO {
     }
 
     public void updateEmployee(Employee employee) throws SQLException {
-        String sql = "UPDATE employee SET " +
+        String sql = "UPDATE Employee SET " +
                 "surname = ?, name = ?, patronymic = ?, role = ?, salary = ?, " +
                 "date_of_birth = ?, date_of_start = ?, phone_number = ?, city = ?, street = ?, zip_code = ? " +
                 "WHERE id_employee = ?";
@@ -63,13 +63,12 @@ public class EmployeeDAO {
     }
 
     public void deleteEmployee(String id_employee) throws SQLException {
-        String sql = "DELETE FROM employee WHERE id_employee = ?";
+        String sql = "DELETE FROM Employee WHERE id_employee = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, id_employee);
-
             statement.executeUpdate();
         }
     }
@@ -77,7 +76,7 @@ public class EmployeeDAO {
     public List<Employee> getAllEmployeesOrderBySurname() throws SQLException {
         List<Employee> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM employee ORDER BY surname";
+        String sql = "SELECT * FROM Employee ORDER BY surname";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -106,7 +105,7 @@ public class EmployeeDAO {
     }
 
     public Employee getEmployeeById(String id_employee) throws SQLException {
-        String sql = "SELECT * FROM employee WHERE id_employee = ?";
+        String sql = "SELECT * FROM Employee WHERE id_employee = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -139,7 +138,7 @@ public class EmployeeDAO {
     public List<Employee> getEmployeesByRole(String role) throws SQLException {
         List<Employee> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM employee WHERE role = ? ORDER BY surname";
+        String sql = "SELECT * FROM Employee WHERE role = ? ORDER BY surname";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -172,7 +171,7 @@ public class EmployeeDAO {
     public List<Employee> searchEmployeeContactsBySurname(String surname) throws SQLException {
         List<Employee> list = new ArrayList<>();
 
-        String sql = "SELECT phone_number, city, street, zip_code FROM employee WHERE surname LIKE ?";
+        String sql = "SELECT phone_number, city, street, zip_code FROM Employee WHERE surname LIKE ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

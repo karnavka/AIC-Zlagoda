@@ -9,12 +9,12 @@ public class Customer_Card {
     private String city;
     private String street;
     private String zip_code;
-    private double percent;
+    private int percent;
 
     public Customer_Card() {
     }
 
-    public Customer_Card(String card_number, String surname, String name, String patronymic, String phone_number, String city, String street, String zip_code, double percent) {
+    public Customer_Card(String card_number, String surname, String name, String patronymic, String phone_number, String city, String street, String zip_code, int percent) {
         this.card_number = card_number;
         this.surname = surname;
         this.name = name;
@@ -90,11 +90,11 @@ public class Customer_Card {
         this.zip_code = zip_code;
     }
 
-    public double getPercent() {
+    public int getPercent() {
         return percent;
     }
 
-    public void setPercent(double percent) {
+    public void setPercent(int percent) {
         this.percent = percent;
     }
 }
