@@ -25,7 +25,7 @@ public class CategoryDAO {
     }
 
     public void updateCategory(Category category) throws SQLException {
-        String sql = "UPDATE category SET name = ? WHERE category_number = ?";
+        String sql = "UPDATE Category SET name = ? WHERE category_number = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -51,7 +51,7 @@ public class CategoryDAO {
     public List<Category> getAllCategoriesOrderByName() throws SQLException {
         List<Category> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM category ORDER BY name";
+        String sql = "SELECT * FROM Category ORDER BY name";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
