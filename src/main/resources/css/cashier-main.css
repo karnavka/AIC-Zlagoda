@@ -1,0 +1,10 @@
+
+.tab-pane .tab-label {
+    -fx-font-size: 20px;
+}
+.tab-pane {
+    -fx-tab-min-width: 70px;
+    -fx-tab-max-width: 80px;
+    -fx-tab-min-height: 50px;
+    -fx-tab-max-height: 80px;
+}
