@@ -4,7 +4,6 @@ import javafx.animation.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,33 +12,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 
 public class MainApp extends Application {
 
-   /* @Override
-    public void start(Stage primaryStage) throws IOException {
-      //  System.out.println("slavaUkraini -> " + BCrypt.hashpw("slavaUkraini", BCrypt.gensalt()));
-      //  System.out.println("HeroyamSlava -> " + BCrypt.hashpw("HeroyamSlava", BCrypt.gensalt()));
-        FXMLLoader loader = new FXMLLoader(
-                MainApp.class.getResource("/fxml/login.fxml")
-        );
-
-        Scene scene = new Scene(loader.load(), 900, 600);
-
-        primaryStage.setTitle("Zlagoda AIS");
-        primaryStage.setScene(scene);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(500);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-}*/    @Override
+     @Override
    public void start(Stage stage) {
        Group root = new Group();
        Scene scene = new Scene(root, 800, 500, Color.BLACK);
@@ -106,8 +84,12 @@ public class MainApp extends Application {
         textTransition.setToAngle(360);
 
 
+        FillTransition fillText = new FillTransition(Duration.millis(3000), text);
+        fillText.setToValue(Color.RED);
+
+
         ParallelTransition transition = new ParallelTransition(
-                translate, fill, rotate, scale, textTransition);
+                translate, fill, rotate, scale, textTransition, fillText);
         transition.setCycleCount(1);
         transition.setAutoReverse(true);
         return transition;
