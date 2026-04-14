@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -20,7 +21,7 @@ public class MainApp extends Application {
      @Override
    public void start(Stage stage) {
        Group root = new Group();
-       Scene scene = new Scene(root, 800, 500, Color.BLACK);
+       Scene scene = new Scene(root, 900, 600, Color.BLACK);
 
        stage.setMinWidth(800);
        stage.setMinHeight(500);
@@ -38,8 +39,8 @@ public class MainApp extends Application {
 
                stage.setTitle("Zlagoda AIS");
                stage.setScene(loginScene);
-               stage.setMinWidth(800);
-               stage.setMinHeight(500);
+               stage.setMinWidth(900);
+               stage.setMinHeight(600);
                stage.show();
 
            } catch (IOException e) {
@@ -62,6 +63,12 @@ public class MainApp extends Application {
         text.setFont(Font.font("Times new roman", FontWeight.BOLD, 50));
         text.setX(200);
         text.setY(250);
+        DropShadow ds1 = new DropShadow();
+        ds1.setOffsetY(4.0f);
+        ds1.setOffsetX(4.0f);
+        ds1.setColor(Color.CORAL);
+        text.setEffect(ds1);
+
         root.getChildren().add(text);
 
 
