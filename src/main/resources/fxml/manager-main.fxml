@@ -33,27 +33,27 @@
                 <tabs>
                     <Tab text="Працівники">
                         <content>
-                            <Label text="Працівники" />
+                            <fx:include source="manager/employees.fxml"/>
                         </content>
                     </Tab>
                     <Tab text="Клієнти">
                         <content>
-                            <Label text="Клієнти" />
+                            <fx:include source="manager/clients.fxml"/>
                         </content>
                     </Tab>
                     <Tab text="Товари">
                         <content>
-                            <Label text="Товари" />
+                            <fx:include source="manager/products.fxml"/>
                         </content>
                     </Tab>
                     <Tab text="Чеки">
                         <content>
-                            <Label text="Чеки" />
+                            <fx:include source="manager/checks.fxml"/>
                         </content>
                     </Tab>
                     <Tab text="Звіти">
                         <content>
-                            <Label text="Звіти" />
+                            <fx:include source="manager/reports.fxml"/>
                         </content>
                     </Tab>
                 </tabs>

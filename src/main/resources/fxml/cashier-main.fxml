@@ -32,22 +32,22 @@
             <tabs>
                 <Tab text="Продаж">
                     <content>
-                        <Label text="Продаж" />
+                        <fx:include source="cashier/sales.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="Товари">
                     <content>
-                        <Label text="Товари" />
+                        <fx:include source="cashier/products.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="Клієнти">
                     <content>
-                        <Label text="Клієнти" />
+                        <fx:include source="cashier/clients.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="Чеки">
                     <content>
-                        <Label text="Чеки" />
+                        <fx:include source="cashier/checks.fxml"/>
                     </content>
                 </Tab>
 
