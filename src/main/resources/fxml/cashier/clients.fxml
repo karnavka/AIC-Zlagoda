@@ -37,12 +37,18 @@
 
     <TableView fx:id="clientsTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="cardNumberColumn" prefWidth="150.0" text="НОМЕР КАРТИ"/>
-            <TableColumn fx:id="pibColumn" prefWidth="300.0" text="ПІБ"/>
-            <TableColumn fx:id="phoneColumn" prefWidth="200.0" text="ТЕЛЕФОН"/>
+            <TableColumn fx:id="cardNumberColumn" prefWidth="120.0" text="НОМЕР КАРТИ" />
+            <TableColumn fx:id="surnameColumn" prefWidth="120.0" text="ПРІЗВИЩЕ" />
+            <TableColumn fx:id="nameColumn" prefWidth="120.0" text="ІМ'Я" />
+            <TableColumn fx:id="patronymicColumn" prefWidth="120.0" text="ПО-БАТЬКОВІ" />
+            <TableColumn fx:id="phoneColumn" prefWidth="130.0" text="ТЕЛЕФОН" />
+            <TableColumn fx:id="cityColumn" prefWidth="100.0" text="МІСТО" />
+            <TableColumn fx:id="streetColumn" prefWidth="150.0" text="ВУЛИЦЯ" />
+            <TableColumn fx:id="zipColumn" prefWidth="80.0" text="ІНДЕКС" />
+            <TableColumn fx:id="percentColumn" prefWidth="80.0" text="ЗНИЖКА (%)" />
         </columns>
         <placeholder>
-            <Label text="РЕЗУЛЬТАТ ПОШУКУ (по дефолту всі клієнти)"/>
+            <Label text="Постійних клієнтів не знайдено..."/>
         </placeholder>
     </TableView>
 
