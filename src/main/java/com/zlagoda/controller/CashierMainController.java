@@ -6,21 +6,21 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.MouseEvent;
 
 public class CashierMainController {
-    @FXML
-    private void handleProfileClick(MouseEvent event) {
-        ContextMenu profileMenu = new ContextMenu();
+    private final ContextMenu profileMenu = new ContextMenu();
 
+    @FXML
+    public void initialize() {
         MenuItem infoItem = new MenuItem("Мій профіль: Касир Піпяо");
+        infoItem.setDisable(true);
+        infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+
         MenuItem settingsItem = new MenuItem("Налаштування");
         MenuItem logoutItem = new MenuItem("Вийти з системи");
 
-        infoItem.setDisable(true);
-        infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold;");
-
-        // ЛОГІКА ВИХОДУ
         logoutItem.setOnAction(e -> {
             try {
                 javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/login.fxml"));
@@ -28,10 +28,7 @@ public class CashierMainController {
 
                 javafx.stage.Stage stage = (javafx.stage.Stage) ((MenuItem)e.getSource()).getParentPopup().getOwnerWindow();
 
-                // Якщо попередній спосіб не спрацює в ContextMenu, можна використати Node з івенту:
-                // javafx.stage.Stage stage = (javafx.stage.Stage) ((Node)event.getSource()).getScene().getWindow();
 
-                // 3. Встановлюємо нову сцену
                 stage.setScene(new javafx.scene.Scene(root));
                 stage.centerOnScreen(); // Опціонально: центруємо вікно
                 stage.show();
@@ -42,9 +39,19 @@ public class CashierMainController {
             }
         });
 
-        profileMenu.getItems().addAll(infoItem, settingsItem, new javafx.scene.control.SeparatorMenuItem(), logoutItem);
+        profileMenu.getItems().addAll(infoItem, settingsItem, new SeparatorMenuItem(), logoutItem);
 
-        javafx.scene.Node source = (javafx.scene.Node) event.getSource();
-        profileMenu.show(source, event.getScreenX(), event.getScreenY());
+        profileMenu.setAutoHide(true);
+    }
+
+    @FXML
+    private void handleProfileClick(MouseEvent event) {
+        if (profileMenu.isShowing()) {
+            profileMenu.hide();
+        } else {
+            Node source = (Node) event.getSource();
+            profileMenu.show(source, event.getScreenX(), event.getScreenY());
+        }
     }
 }
+
