@@ -1,11 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zlagoda.controller.cashier.CashierProductsController">
-    <Label text="Products for cashier" />
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.zlagoda.controller.cashier.CashierProductsController"
+      style="-fx-background-color: white;">
 
-</StackPane>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="📦 ТОВАРИ">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <TextField fx:id="nameSearchField" promptText="НАЗВА ..." HBox.hgrow="ALWAYS" />
+        <ComboBox fx:id="categoryComboBox" prefWidth="150.0" promptText="КАТЕГОРІЯ..." />
+        <ComboBox fx:id="allComboBox" prefWidth="80.0" promptText="усі" />
+        <Button fx:id="searchButton" mnemonicParsing="false" text="ЗНАЙТИ" />
+        <Button fx:id="clearButton" mnemonicParsing="false" text="ОЧИСТИТИ" />
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="5.0">
+        <Label text="СОРТУВАТИ ЗА:" />
+        <ComboBox fx:id="sortComboBox" prefWidth="120.0" promptText="НАЗВА" />
+    </HBox>
+
+    <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" prefWidth="150.0" text="UPC" />
+            <TableColumn fx:id="nameColumn" prefWidth="450.0" text="НАЗВА ТОВАРУ" />
+        </columns>
+        <placeholder>
+            <Label text="ТАБЛИЦЯ РЕЗУЛЬТАТІВ ПОШУКУ" />
+        </placeholder>
+    </TableView>
+
+    <VBox fx:id="detailsBox" managed="false" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 5; -fx-padding: 15;" visible="false">
+        <Label text="ДЕТАЛІ ВИБРАНОГО ТОВАРУ">
+            <font>
+                <Font name="System Italic" size="12.0" />
+            </font>
+        </Label>
+
+        <HBox spacing="40.0">
+            <GridPane hgap="10.0" vgap="8.0" HBox.hgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                </columnConstraints>
+                <children>
+                    <Label text="UPC :" GridPane.rowIndex="0" />
+                    <Label fx:id="upcLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="НАЗВА :" GridPane.rowIndex="1" />
+                    <Label fx:id="nameLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="ВИРОБНИК :" GridPane.rowIndex="2" />
+                    <Label fx:id="manufacturerLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                    <Label text="ХАРАКТЕРИСТИКИ :" GridPane.rowIndex="3" />
+                    <Label fx:id="characteristicsLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                </children>
+            </GridPane>
+
+            <GridPane hgap="10.0" vgap="8.0" HBox.hgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0" />
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+                </columnConstraints>
+                <children>
+                    <Label text="К-ТЬ В НАЯВНОСТІ :" GridPane.rowIndex="0" />
+                    <Label fx:id="stockLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                    <Label text="ЦІНА :" GridPane.rowIndex="1" />
+                    <Label fx:id="priceLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                    <Label text="*АКЦІЙНА ЦІНА :" GridPane.rowIndex="2" />
+                    <Label fx:id="promoPriceLabel" text="---" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                </children>
+            </GridPane>
+        </HBox>
+    </VBox>
+
+</VBox>
