@@ -1,11 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zlagoda.controller.cashier.CashierClientsController">
-    <Label text="Clients for cashier" />
+<VBox spacing="15.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.cashier.CashierClientsController">
 
-</StackPane>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="👥 КЛІЄНТИ">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="15.0">
+        <TextField fx:id="lastNameSearchField" prefHeight="30.0" prefWidth="400.0" promptText="ПРІЗВИЩЕ..."
+                   HBox.hgrow="ALWAYS"/>
+        <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ"/>
+        <Button fx:id="clearButton" mnemonicParsing="false" prefHeight="30.0" text="ОЧИСТИТИ"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="5.0">
+        <Label text="СОРТУВАТИ ЗА:"/>
+        <ComboBox fx:id="sortComboBox" prefWidth="120.0" promptText="ПРІЗВИЩЕ"/>
+    </HBox>
+
+    <TableView fx:id="clientsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="cardNumberColumn" prefWidth="150.0" text="НОМЕР КАРТИ"/>
+            <TableColumn fx:id="pibColumn" prefWidth="300.0" text="ПІБ"/>
+            <TableColumn fx:id="phoneColumn" prefWidth="200.0" text="ТЕЛЕФОН"/>
+        </columns>
+        <placeholder>
+            <Label text="РЕЗУЛЬТАТ ПОШУКУ (по дефолту всі клієнти)"/>
+        </placeholder>
+    </TableView>
+
+    <Button fx:id="addClientButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0"
+            text="+ ДОДАТИ КЛІЄНТА"/>
+
+    <VBox fx:id="editClientBox" managed="false" spacing="20.0"
+          style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 25; -fx-background-color: #fafafa;"
+          visible="false">
+
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <Label text="РЕДАГУВАННЯ / ДОДАВАННЯ КЛІЄНТА" style="-fx-font-weight: bold; -fx-text-fill: #666666;">
+                <font>
+                    <Font name="System Italic" size="13.0"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="cancelEditButton" mnemonicParsing="false" style="-fx-background-radius: 5;"
+                    text="СКАСУВАТИ"/>
+        </HBox>
+
+        <GridPane hgap="25.0" vgap="15.0">
+            <columnConstraints>
+                <ColumnConstraints minWidth="120.0" prefWidth="120.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="150.0"/>
+                <ColumnConstraints minWidth="100.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="150.0"/>
+            </columnConstraints>
+
+            <children>
+                <Label text="НОМЕР КАРТИ :" GridPane.rowIndex="0"/>
+
+                <TextField fx:id="cardNumberField"
+                           promptText="Введіть номер..."
+                           prefHeight="30.0"
+                           style="-fx-font-weight: bold;"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="0"/>
+
+                <Label text="ПРІЗВИЩЕ :" GridPane.rowIndex="1"/>
+                <TextField fx:id="lastNameField" promptText="Прізвище..." prefHeight="30.0" GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+
+                <Label text="ІМ'Я :" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <TextField fx:id="firstNameField" promptText="Ім'я..." prefHeight="30.0" GridPane.columnIndex="3"
+                           GridPane.rowIndex="1"/>
+
+                <Label text="ПО-БАТЬКОВІ :" GridPane.rowIndex="2"/>
+                <TextField fx:id="patronymicField" promptText="По-батькові..." prefHeight="30.0"
+                           GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2"/>
+
+                <Label text="ТЕЛЕФОН :" GridPane.rowIndex="3"/>
+                <HBox alignment="CENTER_LEFT" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <children>
+                        <Label text="+380" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="phoneField" promptText="00 000 00 00" prefHeight="30.0" HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+
+                <Label text="АДРЕСА :" GridPane.rowIndex="4"/>
+                <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4">
+                    <children>
+                        <TextField fx:id="cityField" promptText="Місто" prefHeight="30.0" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="streetField" promptText="Вулиця" prefHeight="30.0" HBox.hgrow="ALWAYS"/>
+                        <TextField fx:id="zipField" promptText="Індекс" prefHeight="30.0" prefWidth="100.0"/>
+                    </children>
+                </HBox>
+            </children>
+        </GridPane>
+
+        <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-padding: 10 0 0 0;">
+            <Label text="ВІДСОТОК ЗНИЖКИ :"/>
+            <TextField fx:id="discountPercentField" prefWidth="60.0" prefHeight="30.0" promptText="0"
+                       alignment="CENTER"/>
+            <Label>
+                <text>%</text>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="saveClientButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"
+                    text="ЗБЕРЕГТИ"/>
+        </HBox>
+    </VBox>
+
+</VBox>
