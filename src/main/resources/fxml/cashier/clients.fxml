@@ -58,10 +58,9 @@
           visible="false">
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="РЕДАГУВАННЯ / ДОДАВАННЯ КЛІЄНТА" style="-fx-font-weight: bold; -fx-text-fill: #666666;">
-                <font>
-                    <Font name="System Italic" size="13.0"/>
-                </font>
+            <Label text="РЕДАГУВАННЯ / ДОДАВАННЯ КЛІЄНТА"
+                   mouseTransparent="true"
+                   style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #666666; -fx-opacity: 1.0;">
             </Label>
             <Region HBox.hgrow="ALWAYS"/>
             <Button fx:id="cancelEditButton" mnemonicParsing="false" style="-fx-background-radius: 5;"
@@ -86,17 +85,22 @@
                            GridPane.columnIndex="1"
                            GridPane.rowIndex="0"/>
 
-                <Label text="ПРІЗВИЩЕ :" GridPane.rowIndex="1"/>
-                <TextField fx:id="lastNameField" promptText="Прізвище..." prefHeight="30.0" GridPane.columnIndex="1"
-                           GridPane.rowIndex="1"/>
+                <Label text="ПІБ КЛІЄНТА :" GridPane.rowIndex="1"/>
 
-                <Label text="ІМ'Я :" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <TextField fx:id="firstNameField" promptText="Ім'я..." prefHeight="30.0" GridPane.columnIndex="3"
-                           GridPane.rowIndex="1"/>
+                <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Прізвище" style="-fx-font-size: 10px; -fx-text-fill: #888888;"/>
+                    <TextField fx:id="lastNameField" promptText="Прізвище..." prefHeight="30.0"/>
+                </VBox>
 
-                <Label text="ПО-БАТЬКОВІ :" GridPane.rowIndex="2"/>
-                <TextField fx:id="patronymicField" promptText="По-батькові..." prefHeight="30.0"
-                           GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2"/>
+                <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Label text="Ім'я" style="-fx-font-size: 10px; -fx-text-fill: #888888;"/>
+                    <TextField fx:id="firstNameField" promptText="Ім'я..." prefHeight="30.0"/>
+                </VBox>
+
+                <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                    <Label text="По-батькові" style="-fx-font-size: 10px; -fx-text-fill: #888888;"/>
+                    <TextField fx:id="patronymicField" promptText="По-батькові..." prefHeight="30.0"/>
+                </VBox>
 
                 <Label text="ТЕЛЕФОН :" GridPane.rowIndex="3"/>
                 <HBox alignment="CENTER_LEFT" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
