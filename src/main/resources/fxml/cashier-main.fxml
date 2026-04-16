@@ -56,7 +56,7 @@
             </right>
         </BorderPane>
     </top>
-    <left>
+    <center>
         <TabPane prefHeight="549.0" prefWidth="900.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
                  BorderPane.alignment="CENTER">
             <tabs>
@@ -86,5 +86,5 @@
                 <Cursor fx:constant="HAND"/>
             </cursor>
         </TabPane>
-    </left>
+    </center>
 </BorderPane>
