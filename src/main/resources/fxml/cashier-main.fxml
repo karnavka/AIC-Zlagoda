@@ -10,13 +10,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Region?>
-<BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/cashier-main.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.CashierMainController">
+<?import javafx.scene.text.Font?>
+<BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/cashier-main.css" xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.CashierMainController">
     <top>
         <BorderPane style="-fx-padding: 10; -fx-border-color: #cacaca; -fx-border-width: 0 0 1 0;">
             <left>
-                <VBox>
-                    <Label text="ZLAGODA" />
-                    <Label text="мінісупермаркет" />
+                <VBox alignment="CENTER_LEFT" spacing="-2">
+                    <Label text="ZLAGODA">
+                        <font>
+                            <Font name="System Bold" size="23.0"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                            -fx-letter-spacing: 1px;
+                        </style>
+                    </Label>
+                    <Label text="МІНІСУПЕРМАРКЕТ">
+                        <font>
+                            <Font name="System" size="10.0"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #7f8c8d;
+                            -fx-font-weight: bold;
+                            -fx-border-color: #27ae60; /* Зелена лінія під брендом */
+                            -fx-border-width: 2 0 0 0;
+                            -fx-padding: 2 0 0 0;
+                        </style>
+                    </Label>
                 </VBox>
             </left>
             <right>
@@ -36,7 +57,8 @@
         </BorderPane>
     </top>
     <left>
-        <TabPane prefHeight="549.0" prefWidth="900.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <TabPane prefHeight="549.0" prefWidth="900.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
+                 BorderPane.alignment="CENTER">
             <tabs>
                 <Tab text="Продаж">
                     <content>
@@ -61,7 +83,7 @@
 
             </tabs>
             <cursor>
-                <Cursor fx:constant="HAND" />
+                <Cursor fx:constant="HAND"/>
             </cursor>
         </TabPane>
     </left>

@@ -12,14 +12,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.text.Font?>
 <BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/manager-main.css" xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.ManagerMainController">
     <top>
         <BorderPane style="-fx-padding: 10; -fx-border-color: #cacaca; -fx-border-width: 0 0 1 0;">
             <left>
-                <VBox>
-                    <Label text="ZLAGODA"/>
-                    <Label text="мініспермаркет"/>
+                <VBox alignment="CENTER_LEFT" spacing="-2">
+                    <Label text="ZLAGODA">
+                        <font>
+                            <Font name="System Bold" size="23.0"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #2c3e50;
+                            -fx-letter-spacing: 1px;
+                        </style>
+                    </Label>
+                    <Label text="МІНІСУПЕРМАРКЕТ">
+                        <font>
+                            <Font name="System" size="10.0"/>
+                        </font>
+                        <style>
+                            -fx-text-fill: #7f8c8d;
+                            -fx-font-weight: bold;
+                            -fx-border-color: #27ae60; /* Зелена лінія під брендом */
+                            -fx-border-width: 2 0 0 0;
+                            -fx-padding: 2 0 0 0;
+                        </style>
+                    </Label>
                 </VBox>
             </left>
             <right>
