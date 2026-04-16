@@ -30,11 +30,6 @@
         <Button fx:id="clearButton" mnemonicParsing="false" prefHeight="30.0" text="ОЧИСТИТИ"/>
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="5.0">
-        <Label text="СОРТУВАТИ ЗА:"/>
-        <ComboBox fx:id="sortComboBox" prefWidth="120.0" promptText="ПРІЗВИЩЕ"/>
-    </HBox>
-
     <TableView fx:id="clientsTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="cardNumberColumn" prefWidth="120.0" text="НОМЕР КАРТИ" />
@@ -50,6 +45,9 @@
         <placeholder>
             <Label text="Постійних клієнтів не знайдено..."/>
         </placeholder>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
     </TableView>
 
     <Button fx:id="addClientButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0"
