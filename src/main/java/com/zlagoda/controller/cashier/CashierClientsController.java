@@ -119,19 +119,31 @@ public class CashierClientsController {
             showAlert("Помилка пошуку", "Не вдалося виконати запит до бази: " + e.getMessage());
         }
     }
-
     private void handleSave() {
+        String cardNumber = cardNumberField.getText().trim();
+        String surname = lastNameField.getText().trim();
+        String name = firstNameField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String percentRaw = discountPercentField.getText().trim();
+
+        if (cardNumber.isEmpty() || surname.isEmpty() || name.isEmpty() || phone.isEmpty()) {
+            showAlert("Помилка заповнення", "Номер карти, Прізвище, Ім'я та Телефон - ОБОВ'ЯЗКОВІ ПОЛЯ!");
+            return;
+        }
+
         try {
             Customer_Card card = new Customer_Card();
-            card.setCard_number(cardNumberField.getText());
-            card.setSurname(lastNameField.getText());
-            card.setName(firstNameField.getText());
-            card.setPatronymic(patronymicField.getText());
-            card.setPhone_number("+380" + phoneField.getText());
-            card.setCity(cityField.getText());
-            card.setStreet(streetField.getText());
-            card.setZip_code(zipField.getText());
-            card.setPercent(Integer.parseInt(discountPercentField.getText()));
+
+            card.setCard_number(cardNumber);
+            card.setSurname(surname);
+            card.setName(name);
+            card.setPhone_number("+380" + phone);
+            card.setPercent(percentRaw.isEmpty() ? 0 : Integer.parseInt(percentRaw));
+
+            card.setPatronymic(patronymicField.getText().trim());
+            card.setCity(cityField.getText().trim());
+            card.setStreet(streetField.getText().trim());
+            card.setZip_code(zipField.getText().trim());
 
             if (isEditMode) {
                 customerDAO.updateCustomerCard(card);
@@ -142,7 +154,7 @@ public class CashierClientsController {
             loadClients();
             hideEditBox();
         } catch (Exception e) {
-            showAlert("Помилка збереження", "Перевірте правильність заповнення полів!");
+            showAlert("Помилка збереження", "пупупу");
         }
     }
 
