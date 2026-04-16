@@ -43,7 +43,7 @@
             <TableColumn fx:id="percentColumn" prefWidth="80.0" text="ЗНИЖКА (%)" />
         </columns>
         <placeholder>
-            <Label text="Постійних клієнтів не знайдено..."/>
+            <Label text="Постійних клієнтів не знайдено...+"/>
         </placeholder>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

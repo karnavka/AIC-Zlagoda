@@ -54,12 +54,6 @@ public class CashierClientsController {
             loadClients();
         });
 
-        cardNumberField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                cardNumberField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-        });
-
         phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 phoneField.setText(newValue.replaceAll("[^\\d]", ""));
