@@ -8,3 +8,29 @@
     -fx-tab-min-height: 50px;
     -fx-tab-max-height: 80px;
 }
+/* Стиль випадаючого меню */
+.minimal-profile-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 5);
+    -fx-min-width: 180;
+}
+
+.minimal-profile-menu .menu-item {
+    -fx-padding: 8 20 8 20;
+}
+
+.minimal-profile-menu .menu-item:focused {
+    -fx-background-color: #f8f9fa;
+}
+
+.minimal-profile-menu .menu-item .label {
+    -fx-text-fill: #34495e;
+}
+
+.minimal-profile-menu .separator .line {
+    -fx-border-color: #f1f1f1;
+}
