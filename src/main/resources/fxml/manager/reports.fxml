@@ -1,11 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zlagoda.controller.manager.ManagerReportsController">
-    <Label text="Reposts for manager" />
+<VBox spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.manager.ManagerReportsController">
 
-</StackPane>
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <Label text="📊 ЗВІТИ">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <Separator />
+
+    <VBox spacing="15.0">
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
+            <Label text="• Звіт з інформацією про всіх працівників" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
+            <Button fx:id="printEmployeesReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+                    style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
+            <Label text="• Звіт з інформацією про всіх постійних клієнтів" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
+            <Button fx:id="printClientsReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+                    style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
+            <Label text="• Звіт з інформацією про всі товари" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
+            <Button fx:id="printProductsReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+                    style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
+            <Label text="• Звіт про реалізовані товари за певний період" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
+            <HBox spacing="10.0" alignment="CENTER_RIGHT">
+                <DatePicker fx:id="reportDatePicker" prefWidth="150.0" promptText="Оберіть дату"/>
+                <Button fx:id="printSalesReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+                        style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+            </HBox>
+        </HBox>
+
+    </VBox>
+
+    <Region VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="CENTER" style="-fx-padding: 10;">
+        <Label text="Всі звіти генеруються у форматі для друку або PDF" style="-fx-text-fill: #999999; -fx-font-style: italic;"/>
+    </HBox>
+
+</VBox>

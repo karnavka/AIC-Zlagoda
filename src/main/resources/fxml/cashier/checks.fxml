@@ -27,7 +27,6 @@
                         <Label text="ПО" />
                         <DatePicker fx:id="endDatePicker" prefWidth="130.0" />
                         <Button fx:id="searchByDateButton" mnemonicParsing="false" text="ЗНАЙТИ" />
-                        <Button fx:id="clearFilterButton" mnemonicParsing="false" text="ОЧИСТИТИ" />
                 </HBox>
 
                 <TableView fx:id="checksTable" VBox.vgrow="ALWAYS">
