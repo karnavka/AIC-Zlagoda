@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17"
-           fx:controller="com.zlagoda.controller.cashier.CashierChecksController">
+<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.cashier.CashierChecksController">
 
         <VBox spacing="15.0" style="-fx-background-color: white;">
                 <padding>
@@ -26,7 +33,7 @@
                         <DatePicker fx:id="startDatePicker" prefWidth="130.0" />
                         <Label text="ПО" />
                         <DatePicker fx:id="endDatePicker" prefWidth="130.0" />
-                        <Button fx:id="searchByDateButton" mnemonicParsing="false" text="ЗНАЙТИ" />
+                        <Button fx:id="searchByDateButton" mnemonicParsing="false" onAction="#searchByDate" text="ЗНАЙТИ" />
                 </HBox>
 
                 <TableView fx:id="checksTable" VBox.vgrow="ALWAYS">
@@ -48,18 +55,16 @@
                         <Button fx:id="findSpecificCheckButton" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ" />
                 </HBox>
 
-                <VBox fx:id="checkDetailsBox" managed="false" spacing="10.0"
-                      style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: #fafafa;"
-                      visible="false">
+                <VBox fx:id="checkDetailsBox" managed="false" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: #fafafa;" visible="false">
 
                         <HBox alignment="CENTER_LEFT">
-                                <Label text="ІНФОРМАЦІЯ ПРО ЧЕК № " style="-fx-font-weight: bold;" />
-                                <Label fx:id="detailsCheckNumberLabel" text="---" style="-fx-font-weight: bold;" />
+                                <Label style="-fx-font-weight: bold;" text="ІНФОРМАЦІЯ ПРО ЧЕК № " />
+                                <Label fx:id="detailsCheckNumberLabel" style="-fx-font-weight: bold;" text="---" />
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Button onAction="#handleCloseDetails" text="ЗАКРИТИ" />
                         </HBox>
 
-                        <Label text="ДЕТАЛІ ТОВАРІВ:" style="-fx-font-size: 11px; -fx-text-fill: gray;" />
+                        <Label style="-fx-font-size: 11px; -fx-text-fill: gray;" text="ДЕТАЛІ ТОВАРІВ:" />
                         <TableView fx:id="checkItemsTable" prefHeight="150.0">
                                 <columns>
                                         <TableColumn fx:id="itemNameColumn" prefWidth="300.0" text="НАЗВА ТОВАРУ" />
