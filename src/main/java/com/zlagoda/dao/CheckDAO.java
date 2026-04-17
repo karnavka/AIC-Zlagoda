@@ -10,7 +10,7 @@ import java.util.List;
 public class CheckDAO {
 
     public void addCheck(Check check) throws SQLException {
-        String sql = "INSERT INTO Check " +
+        String sql = "INSERT INTO Receipt " +
                 "(check_number, id_employee, card_number, print_date, sum_total, vat) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -35,7 +35,7 @@ public class CheckDAO {
     }
 
     public void updateCheck(Check check) throws SQLException {
-        String sql = "UPDATE Check SET " +
+        String sql = "UPDATE Receipt SET " +
                 "id_employee = ?, card_number = ?, print_date = ?, sum_total = ?, vat = ? " +
                 "WHERE check_number = ?";
 
@@ -64,7 +64,7 @@ public class CheckDAO {
     public List<Check> getChecksByPeriod(LocalDateTime start, LocalDateTime end) throws SQLException {
         List<Check> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Check WHERE print_date BETWEEN ? AND ?";
+        String sql = "SELECT * FROM Receipt WHERE print_date BETWEEN ? AND ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -93,7 +93,7 @@ public class CheckDAO {
     public List<Check> getChecksByEmployeeAndPeriod(String id_employee, LocalDateTime start, LocalDateTime end) throws SQLException {
         List<Check> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Check WHERE id_employee = ? AND print_date BETWEEN ? AND ?";
+        String sql = "SELECT * FROM Receipt WHERE id_employee = ? AND print_date BETWEEN ? AND ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -123,7 +123,7 @@ public class CheckDAO {
     public List<Check> getTodayChecksByEmployee(String id_employee) throws SQLException {
         List<Check> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Check WHERE id_employee = ? AND DATE(print_date) = CURRENT_DATE";
+        String sql = "SELECT * FROM Receipt WHERE id_employee = ? AND DATE(print_date) = CURRENT_DATE";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -149,7 +149,7 @@ public class CheckDAO {
     }
 
     public double getCheckSumByPeriod(LocalDateTime start, LocalDateTime end) throws SQLException {
-        String sql = "SELECT SUM(sum_total) FROM Check WHERE print_date BETWEEN ? AND ?";
+        String sql = "SELECT SUM(sum_total) FROM Receipt WHERE print_date BETWEEN ? AND ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -167,7 +167,7 @@ public class CheckDAO {
     }
 
     public double getCheckSumByEmployeeAndPeriod(String id_employee, LocalDateTime start, LocalDateTime end) throws SQLException {
-        String sql = "SELECT SUM(sum_total) FROM Check WHERE id_employee = ? AND print_date BETWEEN ? AND ?";
+        String sql = "SELECT SUM(sum_total) FROM Receipt WHERE id_employee = ? AND print_date BETWEEN ? AND ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

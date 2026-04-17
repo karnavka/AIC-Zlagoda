@@ -56,7 +56,7 @@ CREATE TABLE Store_Product (
                                    ON DELETE NO ACTION
 );
 
-CREATE TABLE Сheck (
+CREATE TABLE Receipt (
                          check_number VARCHAR(10) NOT NULL PRIMARY KEY,
                          id_employee VARCHAR(10) NOT NULL,
                          card_number VARCHAR(13) NULL,

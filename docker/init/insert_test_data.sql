@@ -34,3 +34,8 @@ INSERT INTO users (username, password_hash, role, employee_id)
 VALUES
     ('manager', '$2a$10$meuvb5wIomHoSdliVxjiWO2wP4FfbiX094SctaUwYz9JjIti.a2IK', 'MANAGER', 'E001'),
     ('cashier', '$2a$10$COs0H4YrU6u2QEhsXDRi/u4V//SHFTADmQKqKQ4hqvWxlTtAmZw4i', 'CASHIER', 'E002');
+
+INSERT INTO Receipt(check_number,id_employee,card_number,print_date, sum_total,vat)
+VALUES
+    ('CH001', 'E002', 'C001', '2026-04-17 16:30:00' ,'500', '20'),
+    ('CH002', 'E002', NULL, '2026-04-17 16:30:00' ,'300' , '20');
