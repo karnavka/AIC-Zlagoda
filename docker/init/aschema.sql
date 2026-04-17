@@ -93,3 +93,17 @@ CREATE TABLE users (
                        role VARCHAR(20) NOT NULL,
                        FOREIGN KEY (employee_id) REFERENCES Employee(id_employee)
 );
+
+CREATE VIEW check_details_view AS
+SELECT
+    r.check_number,
+    r.print_date,
+    r.id_employee,
+    r.card_number,
+    p.name,
+    s.product_number,
+    s.selling_price
+FROM Receipt r
+JOIN Sale s ON r.check_number = s.check_number
+JOIN Store_Product sp ON s.UPC = sp.UPC
+JOIN Product p ON sp.id_product = p.id_product;

@@ -1,5 +1,6 @@
 package com.zlagoda.dao;
 
+import com.zlagoda.dto.CheckDetailsDTO;
 import com.zlagoda.model.Check;
 import com.zlagoda.util.DatabaseConnection;
 import java.sql.*;
@@ -183,5 +184,36 @@ public class CheckDAO {
             }
         }
         return 0;
+    }
+
+    public List<CheckDetailsDTO> getCheckDetails(String checkNumber) throws SQLException {
+
+        List<CheckDetailsDTO> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM check_details_view WHERE check_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, checkNumber);
+            ResultSet rs = ps.executeQuery();
+
+            List<CheckDetailsDTO> result = new ArrayList<>();
+
+            while (rs.next()) {
+                CheckDetailsDTO dto = new CheckDetailsDTO();
+
+                dto.setCheck_number(rs.getString("check_number"));
+                dto.setPrint_date(rs.getTimestamp("print_date").toLocalDateTime());
+                dto.setId_employee(rs.getString("id_employee"));
+                dto.setCard_number(rs.getString("card_number"));
+                dto.setName(rs.getString("product_name"));
+                dto.setProduct_number(rs.getInt("product_number"));
+                dto.setSelling_price(rs.getDouble("selling_price"));
+
+                result.add(dto);
+            }
+            return result;
+        }
     }
 }
