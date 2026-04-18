@@ -45,8 +45,6 @@
             </TableView>
 
             <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                <Button fx:id="deleteCategoryButton" text="ВИДАЛИТИ" style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000;"/>
-                <Button fx:id="editCategoryButton" text="РЕДАГУВАТИ"/>
                 <Button fx:id="addCategoryButton" text="ДОДАТИ"/>
             </HBox>
 
@@ -94,8 +92,6 @@
             </TableView>
 
             <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                <Button fx:id="deleteProductButton" text="ВИДАЛИТИ" style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000;"/>
-                <Button fx:id="editProductButton" text="РЕДАГУВАТИ"/>
                 <Button fx:id="addProductButton" text="ДОДАТИ"/>
             </HBox>
 
@@ -119,6 +115,11 @@
                     </children>
                 </GridPane>
                 <HBox spacing="10.0" alignment="CENTER_RIGHT">
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="deleteClientButton"
+                            prefHeight="35.0" prefWidth="120.0"
+                            style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000; -fx-font-weight: bold;"
+                            text="ВИДАЛИТИ"/>
                     <Button fx:id="cancelProductEdit" text="СКАСУВАТИ"/>
                     <Button fx:id="saveProductButton" text="ЗБЕРЕГТИ" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
                 </HBox>
