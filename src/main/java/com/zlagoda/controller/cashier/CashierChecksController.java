@@ -2,6 +2,7 @@ package com.zlagoda.controller.cashier;
 
 import com.zlagoda.dao.CheckDAO;
 import com.zlagoda.dao.Customer_CardDAO;
+import com.zlagoda.dto.CheckDetailsDTO;
 import com.zlagoda.model.Check;
 import com.zlagoda.model.Customer_Card;
 import com.zlagoda.model.Employee;
@@ -22,7 +23,19 @@ import java.util.List;
 public class CashierChecksController {
     private final CheckDAO checkDAO = new CheckDAO();
     private final ObservableList<Check> checkList = FXCollections.observableArrayList();
+    private final ObservableList<CheckDetailsDTO> checkDetails  = FXCollections.observableArrayList();
 
+
+    @FXML
+    private Label detailsCheckNumberLabel;
+    @FXML
+    private TableView<CheckDetailsDTO> checkItemsTable;
+    @FXML
+    private TableColumn<CheckDetailsDTO, String> itemNameColumn;
+    @FXML
+    private TableColumn<CheckDetailsDTO, Integer> itemQuantityColumn;
+    @FXML
+    private TableColumn<CheckDetailsDTO, Double> itemPriceColumn;
 
     @FXML
     private TextField searchCheckNumberField;
@@ -52,17 +65,30 @@ public class CashierChecksController {
     @FXML
     public void initialize() {
         setupTable();
+        setupDetailsTable();
+        checksTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                showDetailBox(newVal);
+            }
+        });
     }
 
     public void initData(User user) {
         this.currentUser = user;
         loadChecks();
+
     }
 
     private void setupTable() {
         checkNumberColumn.setCellValueFactory(new PropertyValueFactory<>("check_number"));
         checkDateColumn.setCellValueFactory(new PropertyValueFactory<>("print_date"));
         totalSumColumn.setCellValueFactory(new PropertyValueFactory<>("sum_total"));
+    }
+
+    private void setupDetailsTable() {
+        itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        itemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("product_number"));
+        itemPriceColumn.setCellValueFactory(new PropertyValueFactory<>("selling_price"));
     }
 
     private void loadChecks() {
@@ -101,6 +127,25 @@ public class CashierChecksController {
         }
     }
 
+    private void showDetailBox(Check check) {
+        try {
+            if (check == null) {
+                return;
+            }
+
+            List<CheckDetailsDTO> results = checkDAO.getCheckDetails(check.getCheck_number());
+            checkDetails.setAll(results);
+            checkItemsTable.setItems(checkDetails);
+            detailsCheckNumberLabel.setText(check.getCheck_number());
+
+            //detailsCheckNumberLabel.setText(check.getCheck_number());
+            checkDetailsBox.setVisible(true);
+            checkDetailsBox.setManaged(true);
+
+        } catch (SQLException e) {
+            showAlert("Помилка пошуку", "Не вдалося виконати запит до бази: " + e.getMessage());
+        }
+    }
 
     @FXML
     private void handleCloseDetails() {
