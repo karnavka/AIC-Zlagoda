@@ -21,7 +21,7 @@ CREATE TABLE Employee (
                           patronymic VARCHAR(50) NULL,
                           role VARCHAR(10) NOT NULL,
                           salary DECIMAL(13,4) NOT NULL CHECK (salary >= 0),
-                          date_of_birth DATE NOT NULL CHECK (date_of_birth <= (CURRENT_DATE - INTERVAL 18 YEAR)),
+                          date_of_birth DATE NOT NULL,
                           date_of_start DATE NOT NULL,
                           phone_number VARCHAR(13) NOT NULL CHECK (CHAR_LENGTH(phone_number) <= 13),
                           city VARCHAR(50) NOT NULL,
