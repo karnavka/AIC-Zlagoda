@@ -58,7 +58,7 @@
           visible="false">
 
         <HBox alignment="CENTER_LEFT" spacing="10.0">
-            <Label text="РЕДАГУВАННЯ / ДОДАВАННЯ КЛІЄНТА"
+            <Label text="ДОДАВАННЯ/РЕДАГУВАННЯ"
                    mouseTransparent="true"
                    style="-fx-font-weight: bold; -fx-font-size: 13px; -fx-text-fill: #666666; -fx-opacity: 1.0;">
             </Label>
