@@ -8,6 +8,7 @@ public class CheckDetailsDTO {
     private LocalDateTime print_date;
     private String id_employee;
     private String card_number;
+    private String UPC;
     private String name;
     private int product_number;
     private double selling_price;
@@ -42,6 +43,14 @@ public class CheckDetailsDTO {
 
     public void setCard_number(String card_number) {
         this.card_number = card_number;
+    }
+
+    public String getUPC() {
+        return UPC;
+    }
+
+    public void setUPC(String UPC) {
+        this.UPC = UPC;
     }
 
     public String getName() {

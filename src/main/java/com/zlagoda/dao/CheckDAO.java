@@ -207,6 +207,7 @@ public class CheckDAO {
                 dto.setPrint_date(rs.getTimestamp("print_date").toLocalDateTime());
                 dto.setId_employee(rs.getString("id_employee"));
                 dto.setCard_number(rs.getString("card_number"));
+                dto.setUPC(rs.getString("UPC"));
                 dto.setName(rs.getString("product_name"));
                 dto.setProduct_number(rs.getInt("product_number"));
                 dto.setSelling_price(rs.getDouble("selling_price"));

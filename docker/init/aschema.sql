@@ -100,6 +100,7 @@ SELECT
     r.print_date,
     r.id_employee,
     r.card_number,
+    s.UPC,
     p.name,
     s.product_number,
     s.selling_price
