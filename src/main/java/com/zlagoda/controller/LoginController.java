@@ -56,8 +56,8 @@ public class LoginController {
             }
 
             switch (user.getRole()) {
-                case "MANAGER" -> openScene(event, "/fxml/manager-main.fxml", "Manager");
-                case "CASHIER" -> openScene(event, "/fxml/cashier-main.fxml", "Cashier");
+                case "MANAGER" -> openScene(event, "/fxml/manager-main.fxml", "Manager", user);
+                case "CASHIER" -> openScene(event, "/fxml/cashier-main.fxml", "Cashier", user);
                 default -> errorLabel.setText("Unknown user role");
             }
 
@@ -70,9 +70,17 @@ public class LoginController {
         }
     }
 
-    private void openScene(ActionEvent event, String fxmlPath, String title) throws IOException {
+    private void openScene(ActionEvent event, String fxmlPath, String title, User user) throws IOException {
         FXMLLoader loader = new FXMLLoader(MainApp.class.getResource(fxmlPath));
         Scene scene = new Scene(loader.load(), 1100, 700);
+
+        Object controller = loader.getController();
+
+        if (controller instanceof ManagerMainController managerController) {
+            managerController.initData(user);
+        } else if (controller instanceof CashierMainController cashierController) {
+            cashierController.initData(user);
+        }
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setTitle(title);

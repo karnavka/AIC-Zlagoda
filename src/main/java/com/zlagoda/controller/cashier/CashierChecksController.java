@@ -4,6 +4,8 @@ import com.zlagoda.dao.CheckDAO;
 import com.zlagoda.dao.Customer_CardDAO;
 import com.zlagoda.model.Check;
 import com.zlagoda.model.Customer_Card;
+import com.zlagoda.model.Employee;
+import com.zlagoda.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,10 +46,16 @@ public class CashierChecksController {
     @FXML
     private Pane checkDetailsBox;
 
+    private User currentUser;
+    private Employee currentEmployee;
 
     @FXML
     public void initialize() {
         setupTable();
+    }
+
+    public void initData(User user) {
+        this.currentUser = user;
         loadChecks();
     }
 
@@ -58,15 +66,22 @@ public class CashierChecksController {
     }
 
     private void loadChecks() {
+        if (currentUser == null) {
+            System.out.println("returning empty checks");
+            return;
+        }
+
         try {
-            //ЗАГЛУШКА
-            if(checkDAO.getTodayChecksByEmployee("E002")!=null){
-            checkList.setAll(checkDAO.getTodayChecksByEmployee("E002"));
-            checksTable.setItems(checkList);}
+            checkList.setAll(checkDAO.getTodayChecksByEmployee(currentUser.getEmployeeId()));
+            checksTable.setItems(checkList);
+            System.out.println("printing checks");
+            System.out.println(currentUser.getEmployeeId());
+            System.out.println(checkList.size());
         } catch (SQLException e) {
-         //   showAlert("Помилка БД", e.getMessage());
+            showAlert("Помилка БД", e.getMessage());
         }
     }
+
 
     public void searchByDate(ActionEvent actionEvent) {
         LocalDate startDate = startDatePicker.getValue();
@@ -78,7 +93,7 @@ public class CashierChecksController {
         LocalDateTime start = startDate.atStartOfDay();
         LocalDateTime end = endDate.plusDays(1).atStartOfDay();
         try {
-            List<Check> results = checkDAO.getChecksByPeriod(start, end);
+            List<Check> results = checkDAO.getChecksByEmployeeAndPeriod(currentUser.getEmployeeId(), start, end);
             checkList.setAll(results);
             checksTable.setItems(checkList);
         } catch (SQLException e) {

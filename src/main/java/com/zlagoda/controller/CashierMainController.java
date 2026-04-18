@@ -1,6 +1,10 @@
 package com.zlagoda.controller;
 
 
+import com.zlagoda.controller.cashier.CashierChecksController;
+import com.zlagoda.dao.EmployeeDAO;
+import com.zlagoda.model.Employee;
+import com.zlagoda.model.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,31 +17,61 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class CashierMainController {
     private final ContextMenu profileMenu = new ContextMenu();
+    @FXML
+    private Label employeeNameLabel;
+
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
+
+    private User currentUser;
+    private Employee currentEmployee;
+
+
+    @FXML
+    private CashierChecksController checksIncludeController;
 
     @FXML
     public void initialize() {
         // Контейнер для стилізації через CSS
         profileMenu.getStyleClass().add("minimal-profile-menu");
-
-        // Інформаційний пункт (Ім'я)
-        MenuItem infoItem = new MenuItem("Касир Піпяо");
-        infoItem.setDisable(true);
-        infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-padding: 10 20 5 20; -fx-text-fill: #2c3e50;");
-
-        // Роль
-        MenuItem roleItem = new MenuItem("Працівник (Manager)");
-        roleItem.setDisable(true);
-        roleItem.setStyle("-fx-opacity: 0.7; -fx-font-size: 11px; -fx-padding: 0 20 10 20;");
-
-        MenuItem settingsItem = new MenuItem("⚙ Налаштування");
-        MenuItem logoutItem = new MenuItem("🚪 Вийти");
-
-        logoutItem.setOnAction(e -> handleLogout());
-
-        profileMenu.getItems().addAll(infoItem, roleItem, new SeparatorMenuItem(), settingsItem, logoutItem);
         profileMenu.setAutoHide(true);
+    }
+    public void initData(User user) {
+        this.currentUser = user;
+        if (checksIncludeController != null) {
+            checksIncludeController.initData(user);
+        }
+        try {
+            this.currentEmployee = employeeDAO.getEmployeeById(user.getEmployeeId());
+
+            if (currentEmployee != null) {
+                String fullName = currentEmployee.getSurname() + " " + currentEmployee.getName();
+                employeeNameLabel.setText(fullName);
+
+                // Інформаційний пункт (Ім'я)
+                MenuItem infoItem = new MenuItem("Мій профіль: " + fullName);
+                infoItem.setDisable(true);
+                infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-padding: 10 20 5 20; -fx-text-fill: #2c3e50;");
+
+                // Роль
+                MenuItem roleItem = new MenuItem("Працівник (Manager)");
+                roleItem.setDisable(true);
+                roleItem.setStyle("-fx-opacity: 0.7; -fx-font-size: 11px; -fx-padding: 0 20 10 20;");
+
+                MenuItem settingsItem = new MenuItem("⚙ Налаштування");
+                MenuItem logoutItem = new MenuItem("🚪 Вийти");
+
+                logoutItem.setOnAction(e -> handleLogout());
+
+                profileMenu.getItems().setAll(infoItem, settingsItem, new SeparatorMenuItem(), logoutItem);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

@@ -42,7 +42,7 @@
             </left>
             <right>
                 <HBox alignment="CENTER" spacing="10" style="-fx-cursor: hand;" onMouseClicked="#handleProfileClick">
-                    <Label text="Cashier" style="-fx-font-weight: bold; -fx-text-fill: #555555;"/>
+                    <Label fx:id="employeeNameLabel" text="Cashier" style="-fx-font-weight: bold; -fx-text-fill: #555555;"/>
 
                     <StackPane styleClass="profile-container">
                         <ImageView fx:id="userImageView" fitWidth="42" fitHeight="42" preserveRatio="true">
@@ -77,7 +77,7 @@
                 </Tab>
                 <Tab text="Чеки">
                     <content>
-                        <fx:include source="cashier/checks.fxml"/>
+                        <fx:include fx:id="checksInclude" source="cashier/checks.fxml"/>
                     </content>
                 </Tab>
 
