@@ -63,7 +63,14 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Button onAction="#handleCloseDetails" text="ЗАКРИТИ" />
                         </HBox>
-
+                    <HBox alignment="CENTER_LEFT">
+                        <Label style="-fx-font-weight: bold;" text="Касир:  " />
+                        <Label fx:id="cashierID" style="-fx-font-weight: bold;" text="---" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label style="-fx-font-weight: bold;" text="Дата друку:  " />
+                    <Label fx:id="printDate" style="-fx-font-weight: bold;" text="---" />
+                    </HBox>
                         <Label style="-fx-font-size: 11px; -fx-text-fill: gray;" text="ДЕТАЛІ ТОВАРІВ:" />
                         <TableView fx:id="checkItemsTable" prefHeight="150.0">
                                 <columns>
@@ -75,6 +82,10 @@
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                 </columnResizePolicy>
                         </TableView>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label style="-fx-font-weight: bold;" text="ЗАГАЛЬНА СУМА:  " />
+                    <Label fx:id="sumTotal" style="-fx-font-weight: bold;" text="---" />
+                    </HBox>
                 </VBox>
         </VBox>
 </StackPane>

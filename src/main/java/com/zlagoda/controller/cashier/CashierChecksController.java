@@ -2,6 +2,7 @@ package com.zlagoda.controller.cashier;
 
 import com.zlagoda.dao.CheckDAO;
 import com.zlagoda.dao.Customer_CardDAO;
+import com.zlagoda.dao.EmployeeDAO;
 import com.zlagoda.dto.CheckDetailsDTO;
 import com.zlagoda.model.Check;
 import com.zlagoda.model.Customer_Card;
@@ -24,8 +25,12 @@ public class CashierChecksController {
     private final CheckDAO checkDAO = new CheckDAO();
     private final ObservableList<Check> checkList = FXCollections.observableArrayList();
     private final ObservableList<CheckDetailsDTO> checkDetails  = FXCollections.observableArrayList();
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 
-
+    @FXML
+    private Label cashierID;
+    @FXML
+    private Label printDate;
     @FXML
     private Label detailsCheckNumberLabel;
     @FXML
@@ -36,6 +41,8 @@ public class CashierChecksController {
     private TableColumn<CheckDetailsDTO, Integer> itemQuantityColumn;
     @FXML
     private TableColumn<CheckDetailsDTO, Double> itemPriceColumn;
+    @FXML
+    private Label sumTotal;
 
     @FXML
     private TextField searchCheckNumberField;
@@ -43,11 +50,6 @@ public class CashierChecksController {
     private DatePicker startDatePicker;
     @FXML
     private DatePicker endDatePicker;
-    @FXML
-    private Button searchByDateButton;
-    @FXML
-    private Button todayChecksButton;
-
     @FXML
     private TableView<Check> checksTable;
     @FXML
@@ -75,6 +77,11 @@ public class CashierChecksController {
 
     public void initData(User user) {
         this.currentUser = user;
+        try {
+            this.currentEmployee = employeeDAO.getEmployeeById(user.getEmployeeId());
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         loadChecks();
 
     }
@@ -137,6 +144,9 @@ public class CashierChecksController {
             checkDetails.setAll(results);
             checkItemsTable.setItems(checkDetails);
             detailsCheckNumberLabel.setText(check.getCheck_number());
+            cashierID.setText(currentEmployee.getName()+" "+currentEmployee.getSurname());
+            printDate.setText(check.getPrint_date().toString());
+            sumTotal.setText(Double.toString(check.getSum_total()));
 
             //detailsCheckNumberLabel.setText(check.getCheck_number());
             checkDetailsBox.setVisible(true);
@@ -160,5 +170,7 @@ public class CashierChecksController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+
 
 }
