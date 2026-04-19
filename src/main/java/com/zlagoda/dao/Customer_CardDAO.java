@@ -155,4 +155,31 @@ public class Customer_CardDAO {
         }
         return list;
     }
+    public Customer_Card getCustomerCardById(String cardNumber) throws SQLException {
+        String sql = "SELECT * FROM Customer_Card WHERE card_number = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, cardNumber);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    Customer_Card card = new Customer_Card();
+                    card.setCard_number(rs.getString("card_number"));
+                    card.setSurname(rs.getString("surname"));
+                    card.setName(rs.getString("name"));
+                    card.setPatronymic(rs.getString("patronymic"));
+                    card.setPhone_number(rs.getString("phone_number"));
+                    card.setCity(rs.getString("city"));
+                    card.setStreet(rs.getString("street"));
+                    card.setZip_code(rs.getString("zip_code"));
+                    card.setPercent(rs.getInt("percent"));
+                    return card;
+                }
+            }
+        }
+
+        return null;
+    }
 }
