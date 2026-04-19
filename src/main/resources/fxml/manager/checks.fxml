@@ -37,7 +37,7 @@
     </HBox>
 
     <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-        <TableView fx:id="checksTable" VBox.vgrow="ALWAYS">
+        <TableView fx:id="checksTable" minHeight="250.0" prefHeight="320.0" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="numberColumn" prefWidth="100.0" text="НОМЕР" />
                 <TableColumn fx:id="dateColumn" prefWidth="150.0" text="ДАТА" />
