@@ -6,9 +6,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// тут не всі запити є, але більшість
-// я потім додам до запитів join, щоб нам виводилася назва товару завжди з таблиці Product
-
 public class Store_ProductDAO {
 
     public void addStoreProduct(Store_Product storeProduct) throws SQLException {
@@ -93,7 +90,6 @@ public class Store_ProductDAO {
         return list;
     }
 
-    // дописати
     public Store_Product getStoreProductByUPC(String upc) throws SQLException {
         String sql = "SELECT upc, selling_price, products_number FROM Store_Product WHERE upc = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -106,6 +102,23 @@ public class Store_ProductDAO {
                     sp.setSelling_price(rs.getDouble("selling_price"));
                     sp.setProducts_number(rs.getInt("products_number"));
                     return sp;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Store_Product getFullStoreProductByUPC(String upc) throws SQLException {
+        String sql = "SELECT * FROM Store_Product WHERE upc = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, upc);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return mapStoreProduct(rs);
                 }
             }
         }
