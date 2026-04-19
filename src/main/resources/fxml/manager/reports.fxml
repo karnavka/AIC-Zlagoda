@@ -5,7 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.manager.ManagerReportsController">
+<VBox spacing="20.0" style="-fx-background-color: white;"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.zlagoda.controller.manager.ManagerReportsController">
 
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
@@ -14,49 +17,63 @@
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <Label text="📊 ЗВІТИ">
             <font>
-                <Font name="System Bold" size="20.0"/>
+                <Font name="System Bold" size="22.0"/>
             </font>
         </Label>
         <Region HBox.hgrow="ALWAYS"/>
     </HBox>
 
-    <Separator />
+    <Separator/>
 
-    <VBox spacing="15.0">
+    <VBox spacing="12.0">
 
-        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
-            <Label text="• Звіт з інформацією про всіх працівників" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
-            <Button fx:id="printEmployeesReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee;">
+            <Label text="• Звіт з інформацією про всіх працівників" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button onAction="#handlePrintEmployeesReport" prefWidth="120.0" text="ЗВІТ 📥"
                     style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
         </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
-            <Label text="• Звіт з інформацією про всіх постійних клієнтів" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
-            <Button fx:id="printClientsReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee;">
+            <Label text="• Звіт з інформацією про всіх постійних клієнтів" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button onAction="#handlePrintClientsReport" prefWidth="120.0" text="ЗВІТ 📥"
                     style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
         </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
-            <Label text="• Звіт з інформацією про всі товари" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
-            <Button fx:id="printProductsReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee;">
+            <Label text="• Звіт з інформацією про всі категорії товарів" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button onAction="#handlePrintCategoriesReport" prefWidth="120.0" text="ЗВІТ 📥"
                     style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
         </HBox>
 
-        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee; -fx-border-radius: 8;">
-            <Label text="• Звіт про реалізовані товари за певний період" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-size: 14px;"/>
-            <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                <DatePicker fx:id="reportDatePicker" prefWidth="150.0" promptText="Оберіть дату"/>
-                <Button fx:id="printSalesReport" mnemonicParsing="false" prefWidth="120.0" text="ЗВІТ 📥"
-                        style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
-            </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee;">
+            <Label text="• Звіт з інформацією про всі товари" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button onAction="#handlePrintProductsReport" prefWidth="120.0" text="ЗВІТ 📥"
+                    style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #eeeeee;">
+            <Label text="• Звіт з інформацією про товари у магазині" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button onAction="#handlePrintStoreProductsReport" prefWidth="120.0" text="ЗВІТ 📥"
+                    style="-fx-background-color: #e3f2fd; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0"
+              style="-fx-background-color: #f1f8e9; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #dcedc8;">
+            <VBox HBox.hgrow="ALWAYS">
+                <Label text="• Звіт по чеках за вказаний період" style="-fx-font-weight: bold;"/>
+                <Label text="Оберіть діапазон дат для аналізу продажів"
+                       style="-fx-font-size: 11px; -fx-text-fill: #666666;"/>
+            </VBox>
+            <DatePicker fx:id="reportStartDatePicker" promptText="З..." prefWidth="110.0"/>
+            <DatePicker fx:id="reportEndDatePicker" promptText="По..." prefWidth="110.0"/>
+            <Button onAction="#handlePrintChecksReport" prefWidth="120.0" text="ЧЕКИ 📄"
+                    style="-fx-background-color: #8bc34a; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </HBox>
 
     </VBox>
-
-    <Region VBox.vgrow="ALWAYS" />
-
-    <HBox alignment="CENTER" style="-fx-padding: 10;">
-        <Label text="Всі звіти генеруються у форматі для друку або PDF" style="-fx-text-fill: #999999; -fx-font-style: italic;"/>
-    </HBox>
-
 </VBox>
