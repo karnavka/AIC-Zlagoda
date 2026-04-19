@@ -112,7 +112,7 @@ public class ManagerReportsController {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
 
-        String fontPath = "D:\\Work\\Nonna\\унік\\bd\\arial\\ARIAL.TTF";
+        String fontPath = "src/main/resources/ARIAL.TTF";
         PdfFont ukrainianFont = PdfFontFactory.createFont(fontPath, "Identity-H");
 
         document.setFont(ukrainianFont);
