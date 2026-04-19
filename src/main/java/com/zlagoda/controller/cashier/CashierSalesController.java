@@ -76,6 +76,10 @@ public class CashierSalesController {
             System.out.println(e.getMessage());
         }
 
+        clientCardField.textProperty().addListener((obs, oldValue, newValue) -> {
+            updateReceiptSummary();
+        });
+
     }
 
     private void setupTable() {
@@ -184,13 +188,32 @@ System.out.println("Searching for UPC");
         check.setCard_number(clientCardField.getText().trim().isEmpty() ? null : clientCardField.getText().trim());
         check.setPrint_date(java.time.LocalDateTime.now());
 
-        double total = 0;
+        double totalRaw = 0.0;
         for (CheckDetailsDTO item : productDetails) {
-            total += item.getProduct_number() * item.getSelling_price();
+            totalRaw += item.getProduct_number() * item.getSelling_price();
         }
 
-        check.setSum_total(total);
-        check.setVat(total * 0.2);
+        int discountPercent = 0;
+        String cardNumber = clientCardField.getText().trim();
+
+        if (!cardNumber.isEmpty()) {
+            try {
+                Customer_Card card = customerCardDAO.getCustomerCardById(cardNumber);
+                if (card != null) {
+                    discountPercent = card.getPercent();
+                }
+            } catch (SQLException e) {
+                showAlert("Помилка БД", e.getMessage());
+                return;
+            }
+        }
+
+        double discountAmount = totalRaw * discountPercent / 100.0;
+        double totalFinal = totalRaw - discountAmount;
+        double vat = totalFinal * 0.2;
+
+        check.setSum_total(totalFinal);
+        check.setVat(vat);
 
         try {
             check.setCheck_number(generateUniqueCheckNumber());
@@ -207,9 +230,7 @@ System.out.println("Searching for UPC");
             }
 
             checkNumberLabel.setText(check.getCheck_number());
-            productDetails.clear();
             clearReceiptForm();
-            salesTable.refresh();
 
         } catch (SQLException e) {
             e.printStackTrace();
