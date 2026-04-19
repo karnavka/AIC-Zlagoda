@@ -43,16 +43,13 @@ public class ManagerMainController {
                 String fullName = currentEmployee.getSurname() + " " + currentEmployee.getName();
                 employeeNameLabel.setText(fullName);
 
-                // 1. Заголовок меню (Роль + ПІБ)
                 MenuItem infoItem = new MenuItem("Менеджер: " + fullName);
                 infoItem.setDisable(true);
                 infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-padding: 10 20 5 20; -fx-text-fill: #2c3e50;");
 
-                // 2. Пункт детальної інформації (красиве вікно)
                 MenuItem detailsItem = new MenuItem("ℹ Детальна інформація");
                 detailsItem.setOnAction(e -> showEmployeeDetails());
 
-                // 3. Пункт виходу
                 MenuItem logoutItem = new MenuItem("🚪 Вийти з системи");
                 logoutItem.setOnAction(e -> handleLogout());
 
@@ -70,19 +67,16 @@ public class ManagerMainController {
         alert.setTitle("Профіль менеджера");
         alert.setHeaderText(null);
 
-        // Контейнер-сітка для оформлення «картки»
         GridPane grid = new GridPane();
         grid.setHgap(25);
         grid.setVgap(12);
         grid.setPadding(new Insets(25));
 
-        // Дані з твоїми геттерами
         addInfoRow(grid, 0, "ID МЕНЕДЖЕРА:", currentEmployee.getId_employee());
         addInfoRow(grid, 1, "ПРІЗВИЩЕ:", currentEmployee.getSurname());
         addInfoRow(grid, 2, "ІМ'Я:", currentEmployee.getName());
         addInfoRow(grid, 3, "ПО БАТЬКОВІ:", currentEmployee.getPatronymic() != null ? currentEmployee.getPatronymic() : "-");
 
-        // Акцент на ролі
         Label roleLabel = new Label("ПОСАДА:");
         roleLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-weight: bold; -fx-font-size: 10px;");
         Label roleValue = new Label("МЕНЕДЖЕР");
@@ -101,7 +95,6 @@ public class ManagerMainController {
         alert.getDialogPane().setStyle("-fx-background-color: white;");
         alert.getDialogPane().setMinWidth(480);
 
-        // Кнопка OK у синьому кольорі для менеджера
         Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;");
 
@@ -125,7 +118,6 @@ public class ManagerMainController {
         if (profileMenu.isShowing()) {
             profileMenu.hide();
         } else {
-            // Позиціонування під іконкою (котиком)
             profileMenu.show(source, event.getScreenX() - 120, event.getScreenY() + 10);
         }
     }

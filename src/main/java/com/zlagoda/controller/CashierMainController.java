@@ -49,7 +49,6 @@ public class CashierMainController {
                 String fullName = currentEmployee.getSurname() + " " + currentEmployee.getName();
                 employeeNameLabel.setText(fullName);
 
-                // Заголовок меню: Касир + ПІБ
                 MenuItem infoItem = new MenuItem("Касир: " + fullName);
                 infoItem.setDisable(true);
                 infoItem.setStyle("-fx-opacity: 1.0; -fx-font-weight: bold; -fx-padding: 10 20 5 20; -fx-text-fill: #2c3e50;");
@@ -85,7 +84,6 @@ public class CashierMainController {
         addInfoRow(grid, 2, "ІМ'Я:", currentEmployee.getName());
         addInfoRow(grid, 3, "ПО БАТЬКОВІ:", currentEmployee.getPatronymic() != null ? currentEmployee.getPatronymic() : "-");
 
-        // Стилізація ролі касира (зелений колір)
         Label roleLabel = new Label("ПОСАДА:");
         roleLabel.setStyle("-fx-text-fill: #95a5a6; -fx-font-weight: bold; -fx-font-size: 10px;");
         Label roleValue = new Label("КАСИР");
@@ -104,7 +102,6 @@ public class CashierMainController {
         alert.getDialogPane().setStyle("-fx-background-color: white;");
         alert.getDialogPane().setMinWidth(480);
 
-        // Кнопка OK у зеленому кольорі
         Button okButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;");
 
