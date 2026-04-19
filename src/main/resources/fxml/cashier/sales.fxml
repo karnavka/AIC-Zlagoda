@@ -116,7 +116,6 @@
                 <padding>
                     <Insets top="15.0"/>
                 </padding>
-                <Button fx:id="cancelButton" onAction="#cancelReciept" mnemonicParsing="false" prefWidth="110.0" text="СКАСУВАТИ"/>
                 <Button fx:id="createButton" onAction="#addReciept" mnemonicParsing="false" prefWidth="130.0"
                         style="-fx-background-color: #f0f0f0; -fx-border-color: #888888; -fx-border-radius: 3;"
                         text="СТВОРИТИ"/>

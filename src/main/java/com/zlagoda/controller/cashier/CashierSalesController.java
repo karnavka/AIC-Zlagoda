@@ -1,9 +1,6 @@
 package com.zlagoda.controller.cashier;
 
-import com.zlagoda.dao.CheckDAO;
-import com.zlagoda.dao.EmployeeDAO;
-import com.zlagoda.dao.ProductDAO;
-import com.zlagoda.dao.Store_ProductDAO;
+import com.zlagoda.dao.*;
 import com.zlagoda.dto.CheckDetailsDTO;
 import com.zlagoda.model.*;
 import javafx.collections.FXCollections;
@@ -23,6 +20,8 @@ public class CashierSalesController {
     private final ProductDAO productDAO = new ProductDAO();
     private final Store_ProductDAO storeProductDAO = new Store_ProductDAO();
     private final ObservableList<CheckDetailsDTO> productDetails  = FXCollections.observableArrayList();
+    private final   CheckDAO checkDAO = new CheckDAO();
+    private final Customer_CardDAO customerCardDAO = new Customer_CardDAO();
    // private final ObservableList<Product> productList = FXCollections.observableArrayList();
 
     public TextField upcInputField;
@@ -49,8 +48,7 @@ public class CashierSalesController {
     public Label discountAmountLabel;
     public Label totalFinalLabel;
     public Label vatLabel;
-    public Button cancelButton;
-    public Button createButton;
+
     @FXML
     private TextField upcField;
 
@@ -162,30 +160,61 @@ System.out.println("Searching for UPC");
 
             salesTable.setItems(productDetails);
             salesTable.refresh();
+            updateReceiptSummary();
             upcInputField.clear();
 
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Помилка БД", e.getMessage());
         }
-    }
 
-    @FXML
-    private void onCancel() {
-        table.getItems().clear();
-    }
 
-    @FXML
-    private void onCreate() {
-        System.out.println("Чек створено");
     }
 
 
-
-    public void cancelReciept(ActionEvent actionEvent) {
-    }
 
     public void addReciept(ActionEvent actionEvent) {
+        if (productDetails.isEmpty()) {
+            showAlert("Помилка", "Чек порожній.");
+            return;
+        }
+
+        Check check = new Check();
+        check.setId_employee(currentUser.getEmployeeId());
+        check.setCard_number(clientCardField.getText().trim().isEmpty() ? null : clientCardField.getText().trim());
+        check.setPrint_date(java.time.LocalDateTime.now());
+
+        double total = 0;
+        for (CheckDetailsDTO item : productDetails) {
+            total += item.getProduct_number() * item.getSelling_price();
+        }
+
+        check.setSum_total(total);
+        check.setVat(total * 0.2);
+
+        try {
+            check.setCheck_number(generateUniqueCheckNumber());
+            checkDAO.addCheck(check);
+
+            SaleDAO saleDAO = new SaleDAO();
+            for (CheckDetailsDTO item : productDetails) {
+                Sale sale = new Sale();
+                sale.setCheck_number(check.getCheck_number());
+                sale.setUPC(item.getUPC());
+                sale.setProduct_number(item.getProduct_number());
+                sale.setSelling_price(item.getSelling_price());
+                saleDAO.addSale(sale);
+            }
+
+            checkNumberLabel.setText(check.getCheck_number());
+            productDetails.clear();
+            clearReceiptForm();
+            salesTable.refresh();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Помилка БД", e.getMessage());
+        }
     }
 
 
@@ -194,5 +223,75 @@ System.out.println("Searching for UPC");
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    private String generateUniqueCheckNumber() throws SQLException {
+        String checkNumber;
+
+        do {
+            checkNumber = generateRandomCheckNumber();
+        } while (checkDAO.existsByCheckNumber(checkNumber));
+
+        return checkNumber;
+    }
+
+    private static final String CHECK_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private String generateRandomCheckNumber() {
+        java.util.Random random = new java.util.Random();
+        StringBuilder sb = new StringBuilder(10);
+
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(CHECK_CHARS.length());
+            sb.append(CHECK_CHARS.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
+    private void updateReceiptSummary() {
+        double totalRaw = 0.0;
+
+        for (CheckDetailsDTO item : productDetails) {
+            totalRaw += item.getProduct_number() * item.getSelling_price();
+        }
+
+        int discountPercent = 0;
+        String cardNumber = clientCardField.getText().trim();
+
+        if (!cardNumber.isEmpty()) {
+            try {
+                Customer_Card card = customerCardDAO.getCustomerCardById(cardNumber);
+                if (card != null) {
+                    discountPercent = card.getPercent();
+                }
+            } catch (SQLException e) {
+                showAlert("Помилка БД", e.getMessage());
+                return;
+            }
+        }
+
+        double discountAmount = totalRaw * discountPercent / 100.0;
+        double totalFinal = totalRaw - discountAmount;
+        double vat = totalFinal * 0.2;
+
+        discountPercentLabel.setText(discountPercent + "%");
+        totalRawLabel.setText(String.format("%.2f", totalRaw));
+        discountAmountLabel.setText(String.format("%.2f", discountAmount));
+        totalFinalLabel.setText(String.format("%.2f", totalFinal));
+        vatLabel.setText(String.format("%.2f", vat));
+    }
+    private void clearReceiptForm() {
+        productDetails.clear();
+        salesTable.refresh();
+
+        upcInputField.clear();
+        clientCardField.clear();
+
+        discountPercentLabel.setText("0%");
+        totalRawLabel.setText("0.00");
+        discountAmountLabel.setText("0.00");
+        totalFinalLabel.setText("0.00");
+        vatLabel.setText("0.00");
+
+        checkNumberLabel.setText("");
     }
 }

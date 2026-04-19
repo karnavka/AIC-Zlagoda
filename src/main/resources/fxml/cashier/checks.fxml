@@ -28,7 +28,7 @@
 
                 <HBox alignment="CENTER_LEFT" spacing="15.0">
                         <Label text="ЧЕКИ:" />
-                        <Button fx:id="todayChecksButton" mnemonicParsing="false" text="СЬОГОДНІШНІ" />
+                        <Button fx:id="todayChecksButton" onAction="#resetToTodaysChecks" mnemonicParsing="false" text="СЬОГОДНІШНІ" />
                         <Label text="З" />
                         <DatePicker fx:id="startDatePicker" prefWidth="130.0" />
                         <Label text="ПО" />
@@ -52,7 +52,7 @@
 
                 <HBox alignment="CENTER_LEFT" spacing="15.0">
                         <TextField fx:id="searchCheckNumberField" prefHeight="30.0" prefWidth="250.0" promptText="ВВЕДІТЬ НОМЕР ЧЕКУ..." />
-                        <Button fx:id="findSpecificCheckButton" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ" />
+                        <Button fx:id="findSpecificCheckButton" onAction="#showSpecificCheckDetails" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ" />
                 </HBox>
 
                 <VBox fx:id="checkDetailsBox" managed="false" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: #fafafa;" visible="false">

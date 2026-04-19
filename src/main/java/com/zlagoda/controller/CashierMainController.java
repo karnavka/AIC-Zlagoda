@@ -21,6 +21,7 @@ import java.sql.SQLException;
 
 public class CashierMainController {
     private final ContextMenu profileMenu = new ContextMenu();
+    public Tab checksTab;
 
     @FXML
     private Label employeeNameLabel;
@@ -33,6 +34,12 @@ public class CashierMainController {
     private CashierChecksController checksIncludeController;
     @FXML
     private CashierSalesController salesIncludeController;
+    @FXML
+    private void handleChecksTabSelected() {
+        if (checksTab.isSelected() && checksIncludeController != null) {
+            checksIncludeController.refreshTodayChecks();
+        }
+    }
     @FXML
     public void initialize() {
         profileMenu.getStyleClass().add("minimal-profile-menu");

@@ -75,7 +75,7 @@
                         <fx:include source="cashier/clients.fxml"/>
                     </content>
                 </Tab>
-                <Tab text="Чеки">
+                <Tab fx:id="checksTab" text="Чеки" onSelectionChanged="#handleChecksTabSelected">
                     <content>
                         <fx:include fx:id="checksInclude" source="cashier/checks.fxml"/>
                     </content>

@@ -55,7 +55,7 @@ public class CashierChecksController {
     @FXML
     private TableColumn<Check, String> checkNumberColumn;
     @FXML
-    private TableColumn<Check, String> checkDateColumn;
+    private TableColumn<Check, LocalDateTime> checkDateColumn;
     @FXML
     private TableColumn<Check, Double> totalSumColumn;
     @FXML
@@ -90,8 +90,19 @@ public class CashierChecksController {
         checkNumberColumn.setCellValueFactory(new PropertyValueFactory<>("check_number"));
         checkDateColumn.setCellValueFactory(new PropertyValueFactory<>("print_date"));
         totalSumColumn.setCellValueFactory(new PropertyValueFactory<>("sum_total"));
-    }
 
+        checkDateColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDateTime item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString().replace('T', ' '));
+                }
+            }
+        });
+    }
     private void setupDetailsTable() {
         itemNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         itemQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("product_number"));
@@ -136,19 +147,23 @@ public class CashierChecksController {
 
     private void showDetailBox(Check check) {
         try {
-            if (check == null) {
-                return;
-            }
+            if (check == null) return;
 
             List<CheckDetailsDTO> results = checkDAO.getCheckDetails(check.getCheck_number());
             checkDetails.setAll(results);
             checkItemsTable.setItems(checkDetails);
-            detailsCheckNumberLabel.setText(check.getCheck_number());
-            cashierID.setText(currentEmployee.getName()+" "+currentEmployee.getSurname());
-            printDate.setText(check.getPrint_date().toString());
-            sumTotal.setText(Double.toString(check.getSum_total()));
 
-            //detailsCheckNumberLabel.setText(check.getCheck_number());
+            detailsCheckNumberLabel.setText(check.getCheck_number());
+
+            if (currentEmployee != null) {
+                cashierID.setText(currentEmployee.getName() + " " + currentEmployee.getSurname());
+            } else {
+                cashierID.setText(check.getId_employee());
+            }
+
+            printDate.setText(check.getPrint_date().toString().replace('T', ' '));
+            sumTotal.setText(String.valueOf(check.getSum_total()));
+
             checkDetailsBox.setVisible(true);
             checkDetailsBox.setManaged(true);
 
@@ -171,6 +186,50 @@ public class CashierChecksController {
         alert.showAndWait();
     }
 
+    public void refreshTodayChecks() {
+        loadChecks();
+    }
 
+    @FXML
+    public void resetToTodaysChecks(ActionEvent actionEvent) {
+        startDatePicker.setValue(null);
+        endDatePicker.setValue(null);
+        searchCheckNumberField.clear();
 
+        checkDetailsBox.setVisible(false);
+        checkDetailsBox.setManaged(false);
+
+        loadChecks();
+    }
+
+    @FXML
+    public void showSpecificCheckDetails(ActionEvent actionEvent) {
+        String checkNumber = searchCheckNumberField.getText().trim();
+
+        if (checkNumber.isEmpty()) {
+            showAlert("Помилка", "Введіть номер чеку.");
+            return;
+        }
+
+        try {
+            Check check = checkDAO.getCheckByNumberAndEmployee(checkNumber, currentUser.getEmployeeId());
+
+            if (check == null) {
+                showAlert("Не знайдено", "Чек з таким номером не знайдено.");
+                return;
+            }
+
+            if (!checkList.contains(check)) {
+                checkList.add(check);
+                checksTable.setItems(checkList);
+            }
+
+            checksTable.getSelectionModel().select(check);
+            checksTable.scrollTo(check);
+            showDetailBox(check);
+
+        } catch (SQLException e) {
+            showAlert("Помилка БД", e.getMessage());
+        }
+    }
 }

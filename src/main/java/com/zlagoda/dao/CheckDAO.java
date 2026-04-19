@@ -4,6 +4,7 @@ import com.zlagoda.dto.CheckDetailsDTO;
 import com.zlagoda.model.Check;
 import com.zlagoda.util.DatabaseConnection;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,12 +125,25 @@ public class CheckDAO {
     public List<Check> getTodayChecksByEmployee(String id_employee) throws SQLException {
         List<Check> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM Receipt WHERE id_employee = ? AND DATE(print_date) = CURRENT_DATE";
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        String sql = """
+        SELECT *
+        FROM Receipt
+        WHERE id_employee = ?
+          AND print_date >= ?
+          AND print_date < ?
+        ORDER BY print_date DESC
+    """;
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, id_employee);
+            statement.setTimestamp(2, Timestamp.valueOf(start));
+            statement.setTimestamp(3, Timestamp.valueOf(end));
 
             ResultSet rs = statement.executeQuery();
 
@@ -229,5 +243,34 @@ public class CheckDAO {
                 return rs.next();
             }
         }
+    }
+    public Check getCheckByNumberAndEmployee(String checkNumber, String employeeId) throws SQLException {
+        String sql = """
+        SELECT *
+        FROM Receipt
+        WHERE check_number = ? AND id_employee = ?
+    """;
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, checkNumber);
+            statement.setString(2, employeeId);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                Check check = new Check();
+                check.setCheck_number(rs.getString("check_number"));
+                check.setId_employee(rs.getString("id_employee"));
+                check.setCard_number(rs.getString("card_number"));
+                check.setPrint_date(rs.getTimestamp("print_date").toLocalDateTime());
+                check.setSum_total(rs.getDouble("sum_total"));
+                check.setVat(rs.getDouble("vat"));
+                return check;
+            }
+        }
+
+        return null;
     }
 }
