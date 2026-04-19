@@ -62,7 +62,7 @@
             <tabs>
                 <Tab text="Продаж">
                     <content>
-                        <fx:include source="cashier/sales.fxml"/>
+                        <fx:include fx:id="salesInclude" source="cashier/sales.fxml"/>
                     </content>
                 </Tab>
                 <Tab text="Товари">

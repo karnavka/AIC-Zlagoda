@@ -95,7 +95,7 @@ public class Store_ProductDAO {
 
     // дописати
     public Store_Product getStoreProductByUPC(String upc) throws SQLException {
-        String sql = "SELECT upc, selling_price, products_number FROM Store_Product WHERE upc = ?";
+        String sql = "SELECT upc, id_product, selling_price, products_number FROM Store_Product WHERE upc = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, upc);
@@ -103,6 +103,7 @@ public class Store_ProductDAO {
                 if (rs.next()) {
                     Store_Product sp = new Store_Product();
                     sp.setUPC(rs.getString("upc"));
+                    sp.setId_product(rs.getInt("id_product"));
                     sp.setSelling_price(rs.getDouble("selling_price"));
                     sp.setProducts_number(rs.getInt("products_number"));
                     return sp;

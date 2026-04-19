@@ -82,6 +82,29 @@ public class ProductDAO {
         return list;
     }
 
+    public Product getProductById(int id) throws SQLException {
+        String sql = "SELECT * FROM Product WHERE id_product = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    Product product = new Product();
+                    product.setId_product(rs.getInt("id_product"));
+                    product.setName(rs.getString("name"));
+                    product.setManufacturer(rs.getString("manufacturer"));
+                    product.setCharacteristics(rs.getString("characteristics"));
+                    product.setCategory_number(rs.getInt("category_number"));
+                    return product;
+                }
+            }
+        }
+        return null;
+    }
+
     public List<Product> getProductsByCategoryName(String categoryName) throws SQLException {
         List<Product> list = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.zlagoda.controller;
 
 
 import com.zlagoda.controller.cashier.CashierChecksController;
+import com.zlagoda.controller.cashier.CashierSalesController;
 import com.zlagoda.dao.EmployeeDAO;
 import com.zlagoda.model.Employee;
 import com.zlagoda.model.User;
@@ -32,7 +33,8 @@ public class CashierMainController {
 
     @FXML
     private CashierChecksController checksIncludeController;
-
+    @FXML
+    private CashierSalesController salesIncludeController;
     @FXML
     public void initialize() {
         // Контейнер для стилізації через CSS
@@ -43,6 +45,7 @@ public class CashierMainController {
         this.currentUser = user;
         if (checksIncludeController != null) {
             checksIncludeController.initData(user);
+            salesIncludeController.initData(user);
         }
         try {
             this.currentEmployee = employeeDAO.getEmployeeById(user.getEmployeeId());
