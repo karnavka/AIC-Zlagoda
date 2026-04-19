@@ -217,17 +217,17 @@ public class CheckDAO {
             return result;
         }
     }
-    public String getLastCheckNumber() throws SQLException {
-        String sql = "SELECT check_number FROM Receipt ORDER BY check_number DESC LIMIT 1";
+    public boolean existsByCheckNumber(String checkNumber) throws SQLException {
+        String sql = "SELECT 1 FROM Receipt WHERE check_number = ? LIMIT 1";
 
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet rs = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            if (rs.next()) {
-                return rs.getString("check_number");
+            statement.setString(1, checkNumber);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
             }
         }
-        return null;
     }
 }
