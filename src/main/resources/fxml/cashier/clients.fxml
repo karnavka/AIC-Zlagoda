@@ -130,10 +130,6 @@
                 <text>%</text>
             </Label>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="deleteClientButton"
-                    prefHeight="35.0" prefWidth="120.0"
-                    style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000; -fx-font-weight: bold;"
-                    text="ВИДАЛИТИ"/>
             <Button fx:id="saveClientButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="150.0"
                     style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"
                     text="ЗБЕРЕГТИ"/>
