@@ -33,7 +33,7 @@
 
         <Region HBox.hgrow="ALWAYS"/>
 
-        <Button fx:id="searchButton" mnemonicParsing="false" prefWidth="100.0" text="ЗНАЙТИ"/>
+        <Button fx:id="searchButton" onAction="#searchCheck" mnemonicParsing="false" prefWidth="100.0" text="ЗНАЙТИ"/>
     </HBox>
 
     <VBox spacing="5.0" VBox.vgrow="ALWAYS">
@@ -75,7 +75,7 @@
         </TableView>
 
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
-            <Button fx:id="deleteCheckButton" mnemonicParsing="false"
+            <Button fx:id="deleteCheckButton" onAction="#deleteCheck" mnemonicParsing="false"
                     style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000;" text="ВИДАЛИТИ ЧЕК"/>
         </HBox>
     </VBox>

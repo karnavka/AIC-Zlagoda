@@ -61,7 +61,7 @@ public class CheckDAO {
         }
     }
 
-    // ще видалення !
+    // ще видалення ! --додалааа
 
     public List<Check> getChecksByPeriod(LocalDateTime start, LocalDateTime end) throws SQLException {
         List<Check> list = new ArrayList<>();
@@ -272,5 +272,37 @@ public class CheckDAO {
         }
 
         return null;
+    }
+    public void deleteCheck(String checkNumber) throws SQLException {
+        String deleteSalesSql = "DELETE FROM Sale WHERE check_number = ?";
+        String deleteReceiptSql = "DELETE FROM Receipt WHERE check_number = ?";
+
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.getConnection();
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement salesStmt = connection.prepareStatement(deleteSalesSql);
+                 PreparedStatement receiptStmt = connection.prepareStatement(deleteReceiptSql)) {
+
+                salesStmt.setString(1, checkNumber);
+                salesStmt.executeUpdate();
+
+                receiptStmt.setString(1, checkNumber);
+                receiptStmt.executeUpdate();
+            }
+
+            connection.commit();
+        } catch (SQLException e) {
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
     }
 }
