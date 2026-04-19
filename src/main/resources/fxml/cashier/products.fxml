@@ -25,8 +25,8 @@
         <TextField fx:id="nameSearchField" promptText="НАЗВА ..." HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="categoryComboBox" prefWidth="150.0" promptText="КАТЕГОРІЯ..." />
         <ComboBox fx:id="allComboBox" prefWidth="80.0" promptText="усі" />
-        <Button fx:id="searchButton" mnemonicParsing="false" text="ЗНАЙТИ" />
-        <Button fx:id="clearButton" mnemonicParsing="false" text="ОЧИСТИТИ" />
+        <Button fx:id="searchButton" onAction="#searchProduct"  mnemonicParsing="false" text="ЗНАЙТИ" />
+        <Button fx:id="clearButton" onAction="#clearButton"  mnemonicParsing="false" text="ОЧИСТИТИ" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="5.0">

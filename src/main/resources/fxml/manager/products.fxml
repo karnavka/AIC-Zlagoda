@@ -22,7 +22,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <HBox alignment="CENTER_RIGHT" spacing="10.0">
             <TextField fx:id="productSearchField" prefHeight="30.0" prefWidth="250.0" promptText="ПОШУК ТОВАРУ (UPC)..."/>
-            <Button fx:id="searchProductButton" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ"/>
+            <Button fx:id="searchProductButton" onAction="#searchProduct" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ"/>
         </HBox>
     </HBox>
 
@@ -92,7 +92,7 @@
             </TableView>
 
             <HBox spacing="10.0" alignment="CENTER_RIGHT">
-                <Button fx:id="addProductButton" text="ДОДАТИ"/>
+                <Button fx:id="addProductButton" onAction="#addProduct"  text="ДОДАТИ"/>
             </HBox>
 
             <VBox fx:id="editProductBox" managed="false" visible="false" spacing="10.0"
@@ -116,12 +116,12 @@
                 </GridPane>
                 <HBox spacing="10.0" alignment="CENTER_RIGHT">
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="deleteClientButton"
+                    <Button fx:id="deleteClientButton" onAction="#deleteProduct"
                             prefHeight="35.0" prefWidth="120.0"
                             style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000; -fx-font-weight: bold;"
                             text="ВИДАЛИТИ"/>
-                    <Button fx:id="cancelProductEdit" text="СКАСУВАТИ"/>
-                    <Button fx:id="saveProductButton" text="ЗБЕРЕГТИ" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    <Button fx:id="cancelProductEdit" onAction="#cancelProductEdit" text="СКАСУВАТИ"/>
+                    <Button fx:id="saveProductButton"   onAction="#saveProductEdit" text="ЗБЕРЕГТИ" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
                 </HBox>
             </VBox>
         </VBox>
