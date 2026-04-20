@@ -42,10 +42,6 @@
                        prefHeight="30.0"
                        prefWidth="250.0"
                        promptText="ПОШУК ТОВАРУ (UPC)..."/>
-            <Button text="ЗНАЙТИ"
-                    mnemonicParsing="false"
-                    prefHeight="30.0"
-                    onAction="#searchProduct"/>
         </HBox>
     </HBox>
 
@@ -63,6 +59,9 @@
                         style="-fx-background-color: transparent; -fx-text-fill: #e09ed4; -fx-font-size: 12px; -fx-underline: true;"/>
             </HBox>
             <TableView fx:id="categoriesTable" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets top="9.0" />
+                </VBox.margin>
                 <columns>
                     <TableColumn fx:id="catIdColumn" text="ID" prefWidth="70.0"/>
                     <TableColumn fx:id="catNameColumn" text="НАЗВА КАТЕГОРІЇ" prefWidth="280.0"/>
@@ -123,7 +122,9 @@
             </HBox>
 
             <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
-                <columns>
+                <VBox.margin>
+                    <Insets top="9.0" />
+                </VBox.margin>                <columns>
                     <TableColumn fx:id="upcColumn" text="UPC" prefWidth="120.0"/>
                     <TableColumn fx:id="productNameColumn" text="НАЗВА" prefWidth="240.0"/>
                     <TableColumn fx:id="priceColumn" text="ЦІНА" prefWidth="100.0"/>
