@@ -1,87 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane prefHeight="600" prefWidth="900" stylesheets="@/css/cashier-main.css" xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.CashierMainController">
+
+<BorderPane prefHeight="600" prefWidth="900"
+            stylesheets="@/css/cashier-main.css"
+            styleClass="root"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.zlagoda.controller.CashierMainController">
+
     <top>
-        <BorderPane style="-fx-padding: 10; -fx-border-color: #cacaca; -fx-border-width: 0 0 1 0;">
+        <BorderPane styleClass="top-bar">
             <left>
                 <VBox alignment="CENTER_LEFT" spacing="-2">
-                    <Label text="ZLAGODA">
+                    <Label text="ZLAGODA" styleClass="brand-title">
                         <font>
                             <Font name="System Bold" size="23.0"/>
                         </font>
-                        <style>
-                            -fx-text-fill: #2c3e50;
-                            -fx-letter-spacing: 1px;
-                        </style>
                     </Label>
-                    <Label text="МІНІСУПЕРМАРКЕТ">
+
+                    <Label text="МІНІСУПЕРМАРКЕТ" styleClass="brand-subtitle">
                         <font>
                             <Font name="System" size="10.0"/>
                         </font>
-                        <style>
-                            -fx-text-fill: #7f8c8d;
-                            -fx-font-weight: bold;
-                            -fx-border-color: #27ae60; /* Зелена лінія під брендом */
-                            -fx-border-width: 2 0 0 0;
-                            -fx-padding: 2 0 0 0;
-                        </style>
                     </Label>
                 </VBox>
             </left>
+
             <right>
-                <HBox alignment="CENTER" spacing="10" style="-fx-cursor: hand;" onMouseClicked="#handleProfileClick">
-                    <Label fx:id="employeeNameLabel" text="Cashier" style="-fx-font-weight: bold; -fx-text-fill: #555555;"/>
+                <HBox alignment="CENTER"
+                      spacing="10"
+                      style="-fx-cursor: hand;"
+                      onMouseClicked="#handleProfileClick">
+
+                    <Label fx:id="employeeNameLabel"
+                           text="Cashier"
+                           styleClass="employee-name"/>
 
                     <StackPane styleClass="profile-container">
-                        <ImageView fx:id="userImageView" fitWidth="42" fitHeight="42" preserveRatio="true">
+                        <ImageView fx:id="userImageView"
+                                   fitWidth="42"
+                                   fitHeight="42"
+                                   preserveRatio="true">
                             <image>
                                 <Image url="@/images/black-cat-icon.png"/>
                             </image>
                         </ImageView>
-                        <Region styleClass="profile-overlay" prefWidth="42" prefHeight="42"/>
+
+                        <Region styleClass="profile-overlay"
+                                prefWidth="42"
+                                prefHeight="42"/>
                     </StackPane>
                 </HBox>
             </right>
         </BorderPane>
     </top>
+
     <center>
-        <TabPane prefHeight="549.0" prefWidth="900.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
+        <TabPane prefHeight="549.0"
+                 prefWidth="900.0"
+                 side="LEFT"
+                 tabClosingPolicy="UNAVAILABLE"
                  BorderPane.alignment="CENTER">
+
             <tabs>
                 <Tab text="Продаж">
                     <content>
                         <fx:include fx:id="salesInclude" source="cashier/sales.fxml"/>
                     </content>
                 </Tab>
+
                 <Tab text="Товари">
                     <content>
                         <fx:include source="cashier/products.fxml"/>
                     </content>
                 </Tab>
+
                 <Tab text="Клієнти">
                     <content>
                         <fx:include source="cashier/clients.fxml"/>
                     </content>
                 </Tab>
-                <Tab fx:id="checksTab" text="Чеки" onSelectionChanged="#handleChecksTabSelected">
+
+                <Tab fx:id="checksTab"
+                     text="Чеки"
+                     onSelectionChanged="#handleChecksTabSelected">
                     <content>
                         <fx:include fx:id="checksInclude" source="cashier/checks.fxml"/>
                     </content>
                 </Tab>
-
             </tabs>
+
             <cursor>
                 <Cursor fx:constant="HAND"/>
             </cursor>
