@@ -86,6 +86,11 @@
                         <fx:include source="manager/reports.fxml"/>
                     </content>
                 </Tab>
+                <Tab text="Статистика">
+                    <content>
+                        <fx:include source="manager/statistics.fxml"/>
+                    </content>
+                </Tab>
             </tabs>
             <cursor>
                 <Cursor fx:constant="HAND"/>
