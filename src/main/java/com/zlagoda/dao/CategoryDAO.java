@@ -75,7 +75,7 @@ public class CategoryDAO {
                 "JOIN Store_Product sp ON s.UPC = sp.UPC " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
                 "JOIN Category cat ON p.category_number = cat.category_number " +
-                "JOIN Check c ON s.check_number = c.check_number " +
+                "JOIN Receipt r ON s.check_number = r.check_number " +
                 "WHERE c.print_date BETWEEN ? AND ? " +
                 "GROUP BY cat.category_number, cat.name";
 
@@ -106,7 +106,7 @@ public class CategoryDAO {
                 "AND NOT EXISTS ( " +
                 "SELECT * FROM Store_Product sp " +
                 "JOIN Sale s ON sp.UPC = s.UPC " +
-                "JOIN Check ch ON s.check_number = ch.check_number " +
+                "JOIN Receipt r ON s.check_number = r.check_number " +
                 "WHERE sp.id_product = p.id_product " +
                 "AND ch.print_date BETWEEN ? AND ? " +
                 ") " +

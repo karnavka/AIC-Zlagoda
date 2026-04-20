@@ -194,11 +194,11 @@ public class EmployeeDAO {
 
     public List<EmployeeStat> getEmployeeSalesStats(LocalDate start, LocalDate end) throws SQLException {
         List<EmployeeStat> list = new ArrayList<>();
-        String sql = "SELECT e.id_employee, e.surname, e.name, SUM(s.product_number) AS total_products, SUM(ch.sum) AS total_sales " +
+        String sql = "SELECT e.id_employee, e.surname, e.name, SUM(s.product_number) AS total_products, SUM(r.sum) AS total_sales " +
                 "FROM Employee e " +
-                "JOIN Check ch ON e.id_employee = ch.id_employee " +
-                "JOIN Sale s ON ch.check_number = s.check_number " +
-                "WHERE ch.print_date BETWEEN ? AND ? " +
+                "JOIN Receipt r ON e.id_employee = r.id_employee " +
+                "JOIN Sale s ON r.check_number = s.check_number " +
+                "WHERE r.print_date BETWEEN ? AND ? " +
                 "GROUP BY e.id_employee, e.surname, e.name " +
                 "ORDER BY total_sales DESC";
 
@@ -230,13 +230,13 @@ public class EmployeeDAO {
                 "FROM Employee e " +
                 "WHERE NOT EXISTS ( " +
                 "SELECT DISTINCT ch.print_date " +
-                "FROM Check ch " +
-                "WHERE ch.print_date BETWEEN ? AND ? " +
+                "FROM Receipt r " +
+                "WHERE r.print_date BETWEEN ? AND ? " +
                 "AND NOT EXISTS ( " +
                 "SELECT * " +
-                "FROM Check ch2 " +
-                "WHERE ch2.id_employee = e.id_employee " +
-                "AND ch2.print_date = ch.print_date " +
+                "FROM Receipt r2 " +
+                "WHERE r2.id_employee = e.id_employee " +
+                "AND r2.print_date = r.print_date " +
                 ") " +
                 ")";
 

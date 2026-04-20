@@ -196,8 +196,8 @@ public class ProductDAO {
                 "FROM Sale s " +
                 "JOIN Store_Product sp ON s.UPC = sp.UPC " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
-                "JOIN Check c ON s.check_number = c.check_number " +
-                "WHERE c.print_date BETWEEN ? AND ? " +
+                "JOIN Receipt r ON s.check_number = r.check_number " +
+                "WHERE r.print_date BETWEEN ? AND ? " +
                 "GROUP BY sp.UPC, p.name " +
                 "ORDER BY total_sales DESC";
 
@@ -232,9 +232,9 @@ public class ProductDAO {
                 "WHERE sp.id_product = p.id_product " +
                 "AND NOT EXISTS ( " +
                 "SELECT * FROM Sale s " +
-                "JOIN Check ch ON s.check_number = ch.check_number " +
+                "JOIN Receipt r ON s.check_number = r.check_number " +
                 "WHERE s.UPC = sp.UPC " +
-                "AND ch.print_date BETWEEN ? AND ? " +
+                "AND r.print_date BETWEEN ? AND ? " +
                 ") " +
                 ")";
 
