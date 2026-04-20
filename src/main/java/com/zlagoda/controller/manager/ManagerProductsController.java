@@ -82,9 +82,7 @@ public class ManagerProductsController {
         hideCategoryEditBox();
         hideProductEditBox();
 
-        loadCategories();
-        loadProducts();
-        applyProductFilters();
+        refreshAllData();
     }
 
     private void setupCategoryTable() {
@@ -94,10 +92,14 @@ public class ManagerProductsController {
     }
 
     private void setupProductsTable() {
-        upcColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getUpc()));
-        productNameColumn.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getProductName()));
-        priceColumn.setCellValueFactory(cell -> new SimpleDoubleProperty(cell.getValue().getPrice()).asObject());
-        amountColumn.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getAmount()).asObject());
+        upcColumn.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getUpc()));
+        productNameColumn.setCellValueFactory(cell ->
+                new SimpleStringProperty(cell.getValue().getProductName()));
+        priceColumn.setCellValueFactory(cell ->
+                new SimpleDoubleProperty(cell.getValue().getPrice()).asObject());
+        amountColumn.setCellValueFactory(cell ->
+                new SimpleIntegerProperty(cell.getValue().getAmount()).asObject());
 
         productsTable.setItems(visibleProductRows);
     }
@@ -147,6 +149,12 @@ public class ManagerProductsController {
         });
     }
 
+    private void refreshAllData() {
+        loadCategories();
+        loadProducts();
+        applyProductFilters();
+    }
+
     private void loadCategories() {
         try {
             List<Category> categories = categoryDAO.getAllCategoriesOrderByName();
@@ -159,7 +167,6 @@ public class ManagerProductsController {
     private void loadProducts() {
         try {
             List<StoreProductDTO> storeProducts = storeProductDAO.getAllStoreProductsOrderByName();
-
             allProductRows.clear();
 
             for (StoreProductDTO sp : storeProducts) {
@@ -174,10 +181,8 @@ public class ManagerProductsController {
                         sp.isPromotional(),
                         sp.getUpcProm()
                 );
-
                 allProductRows.add(row);
             }
-
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
         }
@@ -190,7 +195,7 @@ public class ManagerProductsController {
 
         String filterValue = filterComboBox.getValue() == null
                 ? "Усі"
-                : filterValueSafe(filterComboBox.getValue());
+                : filterComboBox.getValue();
 
         List<ProductRow> filtered = new ArrayList<>();
 
@@ -216,10 +221,6 @@ public class ManagerProductsController {
         }
 
         visibleProductRows.setAll(filtered);
-    }
-
-    private String filterValueSafe(String value) {
-        return value == null ? "Усі" : value;
     }
 
     public void searchProduct(javafx.event.ActionEvent actionEvent) {
@@ -248,8 +249,7 @@ public class ManagerProductsController {
 
         try {
             storeProductDAO.deleteStoreProduct(selectedProductRow.getUpc());
-            loadProducts();
-            applyProductFilters();
+            refreshAllData();
             hideProductEditBox();
         } catch (SQLException e) {
             showAlert("Помилка видалення", e.getMessage());
@@ -293,7 +293,7 @@ public class ManagerProductsController {
 
                 Product existingProduct = findProductByRow(selectedProductRow);
                 if (existingProduct == null) {
-                    showAlert("Помилка", "Не вдалося знайти відповідний Product у базі.");
+                    showAlert("Помилка", "Не вдалося знайти Product для цього товару.");
                     return;
                 }
 
@@ -348,8 +348,7 @@ public class ManagerProductsController {
                 storeProductDAO.addStoreProduct(storeProduct);
             }
 
-            loadProducts();
-            applyProductFilters();
+            refreshAllData();
             hideProductEditBox();
 
         } catch (NumberFormatException e) {
@@ -384,8 +383,8 @@ public class ManagerProductsController {
                 categoryDAO.addCategory(category);
             }
 
-            loadCategories();
             hideCategoryEditBox();
+            refreshAllData();
 
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
@@ -477,7 +476,6 @@ public class ManagerProductsController {
 
             editUpcField.clear();
             editUpcField.setEditable(true);
-
             editProductNameField.clear();
             editManufacturerField.clear();
             editCharacteristicsField.clear();
@@ -490,7 +488,6 @@ public class ManagerProductsController {
 
             editUpcField.setText(row.getUpc());
             editUpcField.setEditable(false);
-
             editProductNameField.setText(row.getProductName());
             editManufacturerField.setText(row.getManufacturer());
             editCharacteristicsField.setText(row.getCharacteristics());
@@ -507,7 +504,6 @@ public class ManagerProductsController {
 
         editUpcField.clear();
         editUpcField.setEditable(true);
-
         editProductNameField.clear();
         editManufacturerField.clear();
         editCharacteristicsField.clear();
