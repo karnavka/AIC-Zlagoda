@@ -283,4 +283,57 @@ public class EmployeeDAO {
         public double getTotal_sales() { return total_sales; }
     }
 
+    public List<Employee> searchEmployees(String surname, String role) throws SQLException {
+        List<Employee> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM Employee WHERE 1=1");
+
+        if (surname != null && !surname.isEmpty()) {
+            sql.append(" AND surname LIKE ?");
+        }
+
+        if (role != null && !role.equals("Всі ролі")) {
+            sql.append(" AND role = ?");
+        }
+
+        sql.append(" ORDER BY surname");
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+
+            if (surname != null && !surname.isEmpty()) {
+                statement.setString(paramIndex++, surname + "%");
+            }
+
+            if (role != null && !role.equals("Всі ролі")) {
+                statement.setString(paramIndex++, role);
+            }
+
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+
+                employee.setId_employee(rs.getString("id_employee"));
+                employee.setSurname(rs.getString("surname"));
+                employee.setName(rs.getString("name"));
+                employee.setPatronymic(rs.getString("patronymic"));
+                employee.setRole(rs.getString("role"));
+                employee.setSalary(rs.getDouble("salary"));
+                employee.setDate_of_birth(rs.getDate("date_of_birth").toLocalDate());
+                employee.setDate_of_start(rs.getDate("date_of_start").toLocalDate());
+                employee.setPhone_number(rs.getString("phone_number"));
+                employee.setCity(rs.getString("city"));
+                employee.setStreet(rs.getString("street"));
+                employee.setZip_code(rs.getString("zip_code"));
+
+                list.add(employee);
+            }
+        }
+
+        return list;
+    }
+
 }

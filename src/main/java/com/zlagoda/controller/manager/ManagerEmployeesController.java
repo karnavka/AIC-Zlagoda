@@ -17,6 +17,7 @@ public class ManagerEmployeesController {
 
     private final EmployeeDAO employeeDAO = new EmployeeDAO();
     private final ObservableList<Employee> employeeList = FXCollections.observableArrayList();
+    public ComboBox roleSearchComboBox;
 
     private Employee selectedEmployee;
     private boolean editMode = false;
@@ -62,6 +63,7 @@ public class ManagerEmployeesController {
                 showEditBox();
             }
         });
+        roleSearchComboBox.setValue("Всі ролі");
     }
 
     private void setupTable() {
@@ -89,24 +91,15 @@ public class ManagerEmployeesController {
     }
 
     @FXML
-    public void searchEmployee(ActionEvent actionEvent) {
-        String search = lastNameSearchField.getText().trim().toLowerCase();
-
-        if (search.isEmpty()) {
-            loadAllEmployees();
-            return;
-        }
+    private void searchEmployee() {
+        String surname = lastNameSearchField.getText();
+        String role = roleSearchComboBox.getValue().toString();
 
         try {
-            List<Employee> allEmployees = employeeDAO.getAllEmployeesOrderBySurname();
-            employeeList.setAll(
-                    allEmployees.stream()
-                            .filter(e -> e.getSurname() != null &&
-                                    e.getSurname().toLowerCase().startsWith(search))
-                            .toList()
-            );
+            List<Employee> employees = employeeDAO.searchEmployees(surname, role);
+            employeesTable.setItems(FXCollections.observableArrayList(employees));
         } catch (SQLException e) {
-            showError("Помилка БД", e.getMessage());
+            e.printStackTrace();
         }
     }
 
