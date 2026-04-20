@@ -6,8 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -18,89 +19,126 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-     @Override
-   public void start(Stage stage) {
-       Group root = new Group();
-       Scene scene = new Scene(root, 900, 600, Color.BLACK);
+    @Override
+    public void start(Stage stage) {
+        Group root = new Group();
 
-       stage.setMinWidth(800);
-       stage.setMinHeight(500);
-       stage.setTitle("JavaFX Scene Graph Demo");
-       stage.setScene(scene);
-       stage.show();
-       ParallelTransition transition = introTransition(root);
-       transition.setOnFinished(event -> {
-           try {
-               FXMLLoader loader = new FXMLLoader(
-                       MainApp.class.getResource("/fxml/login.fxml")
-               );
+        Scene scene = new Scene(root, 900, 600, Color.web("#160822"));
 
-               Scene loginScene = new Scene(loader.load(), 900, 600);
+        stage.setMinWidth(800);
+        stage.setMinHeight(500);
+        stage.setTitle("JavaFX Scene Graph Demo");
+        stage.setScene(scene);
+        stage.show();
 
-               stage.setTitle("Zlagoda AIS");
-               stage.setScene(loginScene);
-               stage.setMinWidth(900);
-               stage.setMinHeight(600);
-               stage.show();
+        ParallelTransition transition = introTransition(root);
 
-           } catch (IOException e) {
-               e.printStackTrace();
-           }
-       });
-       transition.play();
-   }
+        transition.setOnFinished(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        MainApp.class.getResource("/fxml/login.fxml")
+                );
+
+                Scene loginScene = new Scene(loader.load(), 900, 600);
+
+                stage.setTitle("Zlagoda AIS");
+                stage.setScene(loginScene);
+                stage.setMinWidth(900);
+                stage.setMinHeight(600);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        transition.play();
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    private ParallelTransition introTransition(Group root){
-        Rectangle r = new Rectangle(0, 0, 250, 250);
-        r.setFill(Color.BLUE);
-        root.getChildren().add(r);
+    private ParallelTransition introTransition(Group root) {
+        Image ponyImage = new Image(
+                MainApp.class.getResource("/images/pony.gif").toExternalForm()
+        );
+
+        ImageView ponyView = new ImageView(ponyImage);
+        ponyView.setFitWidth(250);
+        ponyView.setFitHeight(250);
+        ponyView.setPreserveRatio(true);
+        ponyView.setX(40);
+        ponyView.setY(40);
+
+        DropShadow ponyShadow = new DropShadow();
+        ponyShadow.setRadius(25);
+        ponyShadow.setColor(Color.web("#d88cff"));
+        ponyView.setEffect(ponyShadow);
+
         Text text = new Text("Welcome to Zlagoda");
-        text.setFill(Color.GREEN);
-        text.setFont(Font.font("Times new roman", FontWeight.BOLD, 50));
-        text.setX(220);
-        text.setY(300);
-        DropShadow ds1 = new DropShadow();
-        ds1.setOffsetY(4.0f);
-        ds1.setOffsetX(4.0f);
-        ds1.setColor(Color.CORAL);
-        text.setEffect(ds1);
+        text.setFill(Color.web("#f4dcff"));
+        text.setFont(Font.font("Times New Roman", FontWeight.BOLD, 50));
+        text.setX(230);
+        text.setY(320);
 
-        root.getChildren().add(text);
+        DropShadow textShadow = new DropShadow();
+        textShadow.setOffsetY(3.0);
+        textShadow.setOffsetX(3.0);
+        textShadow.setRadius(15);
+        textShadow.setColor(Color.web("#9a4dff"));
+        text.setEffect(textShadow);
 
+        root.getChildren().addAll(ponyView, text);
 
         TranslateTransition translate =
-                new TranslateTransition(Duration.millis(2000), r);
-        translate.setToX(800);
-        translate.setToY(500);
+                new TranslateTransition(Duration.millis(2200), ponyView);
+        translate.setToX(620);
+        translate.setToY(280);
 
-        FillTransition fill = new FillTransition(Duration.millis(2000), r);
-        fill.setToValue(Color.RED);
-
-        RotateTransition rotate = new RotateTransition(Duration.millis(2000), r);
+        RotateTransition rotate =
+                new RotateTransition(Duration.millis(2200), ponyView);
         rotate.setToAngle(360);
 
-        ScaleTransition scale = new ScaleTransition(Duration.millis(2000), r);
-        scale.setToX(0.1);
-        scale.setToY(0.1);
+        ScaleTransition scale =
+                new ScaleTransition(Duration.millis(2200), ponyView);
+        scale.setToX(0.4);
+        scale.setToY(0.4);
 
-        RotateTransition textTransition = new RotateTransition(Duration.millis(2000), text);
-        textTransition.setToAngle(360);
+        FadeTransition fadePony =
+                new FadeTransition(Duration.millis(2200), ponyView);
+        fadePony.setFromValue(1.0);
+        fadePony.setToValue(0.75);
+
+        RotateTransition textRotate =
+                new RotateTransition(Duration.millis(1900), text);
+        textRotate.setToAngle(360);
 
 
-        FillTransition fillText = new FillTransition(Duration.millis(3000), text);
-        fillText.setToValue(Color.RED);
 
+        FillTransition fillText =
+                new FillTransition(Duration.millis(2200), text);
+        fillText.setToValue(Color.web("#ffb3ff"));
+
+        FadeTransition fadeText =
+                new FadeTransition(Duration.millis(2200), text);
+        fadeText.setFromValue(1.0);
+        fadeText.setToValue(0.85);
 
         ParallelTransition transition = new ParallelTransition(
-                translate, fill, rotate, scale, textTransition, fillText);
+                translate,
+                rotate,
+                scale,
+                fadePony,
+                textRotate,
+
+                fillText,
+                fadeText
+        );
+
         transition.setCycleCount(1);
         transition.setAutoReverse(true);
+
         return transition;
     }
-
-
 }
