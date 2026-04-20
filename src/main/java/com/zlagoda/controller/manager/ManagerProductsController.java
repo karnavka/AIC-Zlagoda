@@ -516,6 +516,17 @@ public class ManagerProductsController {
         selectedProductRow = null;
     }
 
+    public void showAllCategories(javafx.event.ActionEvent actionEvent) {
+        selectedCategory = null;
+        categoriesTable.getSelectionModel().clearSelection();
+        editCategoryBox.setVisible(false);
+        editCategoryBox.setManaged(false);
+        categoryNameField.clear();
+        productSearchField.clear();
+        filterComboBox.setValue("Усі");
+        applyProductFilters();
+    }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -523,6 +534,8 @@ public class ManagerProductsController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+
 
     public static class ProductRow {
         private final String upc;

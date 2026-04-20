@@ -50,11 +50,18 @@
     </HBox>
 
     <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-
         <VBox spacing="10.0" prefWidth="380.0">
-            <Label text="КАТЕГОРІЇ"
-                   style="-fx-font-weight: bold; -fx-text-fill: #555555;"/>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="КАТЕГОРІЇ"
+                       style="-fx-font-weight: bold; -fx-text-fill: #555555;"/>
 
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="showAllCategoriesButton"
+                        text="ПОКАЗАТИ ВСІ"
+                        onAction="#showAllCategories"
+                        style="-fx-background-color: transparent; -fx-text-fill: #e09ed4; -fx-font-size: 12px; -fx-underline: true;"/>
+            </HBox>
             <TableView fx:id="categoriesTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="catIdColumn" text="ID" prefWidth="70.0"/>
