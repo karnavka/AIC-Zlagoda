@@ -30,30 +30,55 @@ public class ManagerChecksController {
 
     @FXML
     private DatePicker startDatePicker;
+
     @FXML
     private DatePicker endDatePicker;
+
     @FXML
     private ComboBox<Employee> cashierComboBox;
+
     @FXML
     private TableView<Check> checksTable;
+
     @FXML
     private TableColumn<Check, String> numberColumn;
+
     @FXML
     private TableColumn<Check, LocalDateTime> dateColumn;
+
     @FXML
     private TableColumn<Check, String> cashierColumn;
+
     @FXML
     private TableColumn<Check, Double> totalColumn;
+
     @FXML
-    private Label totalSumLabel;
+    private Label searchTotalSumLabel;
+
     @FXML
     private VBox detailsBox;
+
+    @FXML
+    private Label detailsCheckNumberLabel;
+
+    @FXML
+    private Label cashierID;
+
+    @FXML
+    private Label printDate;
+
+    @FXML
+    private Label totalSumLabel;
+
     @FXML
     private TableView<CheckDetailsDTO> checkItemsTable;
+
     @FXML
     private TableColumn<CheckDetailsDTO, String> itemNameColumn;
+
     @FXML
     private TableColumn<CheckDetailsDTO, Integer> itemQuantityColumn;
+
     @FXML
     private TableColumn<CheckDetailsDTO, Double> itemPriceColumn;
 
@@ -123,9 +148,6 @@ public class ManagerChecksController {
         try {
             cashierComboBox.getItems().clear();
             cashierComboBox.getItems().add(null);
-
-            // якщо в БД role зберігається як "cashier", залиш так
-            // якщо як "Cashier" або "КАСИР" — підстав свій варіант
             cashierComboBox.getItems().addAll(employeeDAO.getEmployeesByRole("cashier"));
 
             cashierComboBox.setCellFactory(cb -> new ListCell<>() {
@@ -200,7 +222,7 @@ public class ManagerChecksController {
             }
 
             checkList.setAll(results);
-            totalSumLabel.setText(String.format("%.2f", total));
+            searchTotalSumLabel.setText(String.format("%.2f", total));
             hideDetails();
 
         } catch (SQLException e) {
@@ -212,8 +234,27 @@ public class ManagerChecksController {
         try {
             List<CheckDetailsDTO> details = checkDAO.getCheckDetails(check.getCheck_number());
             checkItemsList.setAll(details);
+
+            detailsCheckNumberLabel.setText(check.getCheck_number());
+
+            Employee cashier = employeeDAO.getEmployeeById(check.getId_employee());
+            if (cashier != null) {
+                cashierID.setText(check.getId_employee() + " - " + cashier.getSurname());
+            } else {
+                cashierID.setText(check.getId_employee());
+            }
+
+            if (check.getPrint_date() != null) {
+                printDate.setText(check.getPrint_date().toString().replace('T', ' '));
+            } else {
+                printDate.setText("---");
+            }
+
+            totalSumLabel.setText(String.format("%.2f", check.getSum_total()));
+
             detailsBox.setVisible(true);
             detailsBox.setManaged(true);
+
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
         }
@@ -221,6 +262,10 @@ public class ManagerChecksController {
 
     private void hideDetails() {
         checkItemsList.clear();
+        detailsCheckNumberLabel.setText("---");
+        cashierID.setText("---");
+        printDate.setText("---");
+        totalSumLabel.setText("0.00");
         detailsBox.setVisible(false);
         detailsBox.setManaged(false);
     }
@@ -248,16 +293,23 @@ public class ManagerChecksController {
             checkDAO.deleteCheck(selectedCheck.getCheck_number());
             checkList.remove(selectedCheck);
             hideDetails();
+            checksTable.getSelectionModel().clearSelection();
 
             double newTotal = 0.0;
             for (Check check : checkList) {
                 newTotal += check.getSum_total();
             }
-            totalSumLabel.setText(String.format("%.2f", newTotal));
+            searchTotalSumLabel.setText(String.format("%.2f", newTotal));
 
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
         }
+    }
+
+    @FXML
+    private void handleCloseDetails() {
+        hideDetails();
+        checksTable.getSelectionModel().clearSelection();
     }
 
     private void showAlert(String title, String content) {
