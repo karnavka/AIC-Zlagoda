@@ -15,7 +15,7 @@
     </padding>
 
     <HBox alignment="CENTER_LEFT" spacing="10.0">
-        <Label text="📊 ЗВІТИ">
+        <Label text="📝 ЗВІТИ">
             <font>
                 <Font name="System Bold" size="22.0"/>
             </font>

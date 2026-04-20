@@ -41,11 +41,6 @@
                             <children>
                                 <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАТЕГОРІЇ" />
                                 <TableView VBox.vgrow="ALWAYS">
-                                    <columns>
-                                        <TableColumn prefWidth="75.0" text="НОМЕР" />
-                                        <TableColumn prefWidth="150.0" text="НАЗВА" />
-                                        <TableColumn prefWidth="120.0" text="К-ТЬ ПРОДАНИХ" />
-                                    </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>
@@ -57,12 +52,6 @@
                             <children>
                                 <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАСИРИ" />
                                 <TableView VBox.vgrow="ALWAYS">
-                                    <columns>
-                                        <TableColumn prefWidth="50.0" text="ID" />
-                                        <TableColumn prefWidth="150.0" text="ПРІЗВИЩЕ" />
-                                        <TableColumn prefWidth="100.0" text="К-ТЬ ТОВАРІВ" />
-                                        <TableColumn prefWidth="100.0" text="СУМА" />
-                                    </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                     </columnResizePolicy>

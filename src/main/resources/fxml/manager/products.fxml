@@ -209,14 +209,14 @@
 
                 <HBox alignment="CENTER_RIGHT" spacing="10.0">
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="СКАСУВАТИ"
-                            onAction="#cancelProductEdit"/>
                     <Button fx:id="deleteProductButton"
                             text="ВИДАЛИТИ"
                             prefHeight="35.0"
                             prefWidth="120.0"
                             onAction="#deleteProduct"
                             style="-fx-background-color: #ffcccc; -fx-text-fill: #cc0000; -fx-font-weight: bold;"/>
+                    <Button text="СКАСУВАТИ"
+                            onAction="#cancelProductEdit"/>
                     <Button text="ЗБЕРЕГТИ"
                             onAction="#saveProductEdit"
                             style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>

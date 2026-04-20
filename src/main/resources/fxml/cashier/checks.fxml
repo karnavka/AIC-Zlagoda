@@ -13,79 +13,88 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.cashier.CashierChecksController">
+<StackPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.zlagoda.controller.cashier.CashierChecksController">
 
-        <VBox spacing="15.0" style="-fx-background-color: white;">
-                <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                </padding>
+    <VBox spacing="15.0" style="-fx-background-color: white;">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
 
-                <Label text="📑 ЧЕКИ">
-                        <font>
-                                <Font name="System Bold" size="18.0" />
-                        </font>
-                </Label>
+        <Label text="📑 ЧЕКИ">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+        </Label>
 
-                <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <Label text="ЧЕКИ:" />
-                        <Button fx:id="todayChecksButton" onAction="#resetToTodaysChecks" mnemonicParsing="false" text="СЬОГОДНІШНІ" />
-                        <Label text="З" />
-                        <DatePicker fx:id="startDatePicker" prefWidth="130.0" />
-                        <Label text="ПО" />
-                        <DatePicker fx:id="endDatePicker" prefWidth="130.0" />
-                        <Button fx:id="searchByDateButton" mnemonicParsing="false" onAction="#searchByDate" text="ЗНАЙТИ" />
-                </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <Label text="ЧЕКИ:"/>
+            <Button fx:id="todayChecksButton" onAction="#resetToTodaysChecks" mnemonicParsing="false"
+                    text="СЬОГОДНІШНІ"/>
+            <Label text="З"/>
+            <DatePicker fx:id="startDatePicker" prefWidth="130.0"/>
+            <Label text="ПО"/>
+            <DatePicker fx:id="endDatePicker" prefWidth="130.0"/>
+            <Button fx:id="searchByDateButton" mnemonicParsing="false" onAction="#searchByDate" text="ЗНАЙТИ"/>
+        </HBox>
 
-                <TableView fx:id="checksTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                                <TableColumn fx:id="checkNumberColumn" prefWidth="150.0" text="НОМЕР ЧЕКУ" />
-                                <TableColumn fx:id="checkDateColumn" prefWidth="200.0" text="ДАТА ТА ЧАС" />
-                                <TableColumn fx:id="totalSumColumn" prefWidth="150.0" text="СУМА" />
-                        </columns>
-                        <placeholder>
-                                <Label text="ПО ДЕФОЛТУ СЬОГОДНІШНІ ЧЕКИ / РЕЗУЛЬТАТИ ПОШУКУ ЗА ПЕРІОД" />
-                        </placeholder>
-                        <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
-                </TableView>
+        <TableView fx:id="checksTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="checkNumberColumn" prefWidth="150.0" text="НОМЕР ЧЕКУ"/>
+                <TableColumn fx:id="checkDateColumn" prefWidth="200.0" text="ДАТА ТА ЧАС"/>
+                <TableColumn fx:id="totalSumColumn" prefWidth="150.0" text="СУМА"/>
+            </columns>
+            <placeholder>
+                <Label text="ПО ДЕФОЛТУ СЬОГОДНІШНІ ЧЕКИ / РЕЗУЛЬТАТИ ПОШУКУ ЗА ПЕРІОД"/>
+            </placeholder>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
 
-                <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <TextField fx:id="searchCheckNumberField" prefHeight="30.0" prefWidth="250.0" promptText="ВВЕДІТЬ НОМЕР ЧЕКУ..." />
-                        <Button fx:id="findSpecificCheckButton" onAction="#showSpecificCheckDetails" mnemonicParsing="false" prefHeight="30.0" text="ЗНАЙТИ" />
-                </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <TextField fx:id="searchCheckNumberField" prefHeight="30.0" prefWidth="250.0"
+                       promptText="ВВЕДІТЬ НОМЕР ЧЕКУ..."/>
+            <Button fx:id="findSpecificCheckButton" onAction="#showSpecificCheckDetails" mnemonicParsing="false"
+                    prefHeight="30.0" text="ЗНАЙТИ"/>
+        </HBox>
 
-                <VBox fx:id="checkDetailsBox" managed="false" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: #fafafa;" visible="false">
+        <VBox fx:id="checkDetailsBox" managed="false" spacing="10.0"
+              style="-fx-border-color: #cccccc; -fx-border-radius: 8; -fx-padding: 15; -fx-background-color: #fafafa;"
+              visible="false">
 
-                        <HBox alignment="CENTER_LEFT">
-                                <Label style="-fx-font-weight: bold;" text="ІНФОРМАЦІЯ ПРО ЧЕК № " />
-                                <Label fx:id="detailsCheckNumberLabel" style="-fx-font-weight: bold;" text="---" />
-                                <Region HBox.hgrow="ALWAYS" />
-                                <Button onAction="#handleCloseDetails" text="ЗАКРИТИ" />
-                        </HBox>
-                    <HBox alignment="CENTER_LEFT">
-                        <Label style="-fx-font-weight: bold;" text="Касир:  " />
-                        <Label fx:id="cashierID" style="-fx-font-weight: bold;" text="---" />
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT">
-                        <Label style="-fx-font-weight: bold;" text="Дата друку:  " />
-                    <Label fx:id="printDate" style="-fx-font-weight: bold;" text="---" />
-                    </HBox>
-                        <Label style="-fx-font-size: 11px; -fx-text-fill: gray;" text="ДЕТАЛІ ТОВАРІВ:" />
-                        <TableView fx:id="checkItemsTable" prefHeight="150.0">
-                                <columns>
-                                        <TableColumn fx:id="itemNameColumn" prefWidth="300.0" text="НАЗВА ТОВАРУ" />
-                                        <TableColumn fx:id="itemQuantityColumn" text="К-ТЬ" />
-                                        <TableColumn fx:id="itemPriceColumn" text="ЦІНА" />
-                                </columns>
-                                <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                </columnResizePolicy>
-                        </TableView>
-                    <HBox alignment="CENTER_LEFT">
-                        <Label style="-fx-font-weight: bold;" text="ЗАГАЛЬНА СУМА:  " />
-                    <Label fx:id="sumTotal" style="-fx-font-weight: bold;" text="---" />
-                    </HBox>
-                </VBox>
+            <HBox alignment="CENTER_LEFT">
+                <Label style="-fx-font-weight: bold;" text="ІНФОРМАЦІЯ ПРО ЧЕК № "/>
+                <Label fx:id="detailsCheckNumberLabel" style="-fx-font-weight: bold;" text="---"/>
+                <Label style="-fx-font-weight: bold;" text=" | ДЕТАЛІ ТОВАРІВ"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button onAction="#handleCloseDetails" text="ЗАКРИТИ"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label style="-fx-font-weight: bold;" text="Касир:  "/>
+                <Label fx:id="cashierID" style="-fx-font-weight: bold;" text="---"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label style="-fx-font-weight: bold;" text="Дата друку:  "/>
+                <Label fx:id="printDate" style="-fx-font-weight: bold;" text="---"/>
+            </HBox>
+
+            <TableView fx:id="checkItemsTable" prefHeight="350.0">
+                <columns>
+                    <TableColumn fx:id="itemNameColumn" prefWidth="300.0" text="НАЗВА ТОВАРУ"/>
+                    <TableColumn fx:id="itemQuantityColumn" text="К-ТЬ"/>
+                    <TableColumn fx:id="itemPriceColumn" text="ЦІНА"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <HBox alignment="CENTER_LEFT">
+                <Label style="-fx-font-weight: bold;" text="ЗАГАЛЬНА СУМА:  "/>
+                <Label fx:id="sumTotal" style="-fx-font-weight: bold;" text="---"/>
+            </HBox>
         </VBox>
+    </VBox>
 </StackPane>
