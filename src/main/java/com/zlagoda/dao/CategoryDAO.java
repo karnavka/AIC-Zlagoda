@@ -148,6 +148,19 @@ public class CategoryDAO {
         public int getTotalNumber() { return totalNumber; }
     }
 
+    public boolean hasProductsInCategory(int categoryNumber) throws SQLException {
+        String sql = "SELECT 1 FROM Product WHERE category_number = ? LIMIT 1";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, categoryNumber);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
     // Касир для Олі в EmployeeDAO
     /*
     public List<EmployeeStat> getEmployeeSalesStats(LocalDate start, LocalDate end) throws SQLException {
