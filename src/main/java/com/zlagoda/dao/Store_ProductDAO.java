@@ -255,4 +255,17 @@ public class Store_ProductDAO {
         sp.setPromotional_product(rs.getBoolean("promotional_product"));
         return sp;
     }
+    public boolean existsByProductId(int idProduct) throws SQLException {
+        String sql = "SELECT 1 FROM Store_Product WHERE id_product = ? LIMIT 1";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, idProduct);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.zlagoda.controller.manager;
 import com.zlagoda.dao.CategoryDAO;
 import com.zlagoda.dao.ProductDAO;
 import com.zlagoda.dao.Store_ProductDAO;
+import com.zlagoda.dto.ProductCatalogDTO;
 import com.zlagoda.dto.StoreProductDTO;
 import com.zlagoda.model.Category;
 import com.zlagoda.model.Product;
@@ -53,6 +54,8 @@ public class ManagerProductsController {
     @FXML private TextField editAmountField;
     @FXML private CheckBox promotionalCheckBox;
     @FXML private TextField upcPromField;
+
+    @FXML private Button deleteCategoryButton;
 
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final ProductDAO productDAO = new ProductDAO();
@@ -121,7 +124,10 @@ public class ManagerProductsController {
             }
         });
 
-        filterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyProductFilters());
+        filterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            loadProducts();
+            applyProductFilters();
+        });
 
         addCategoryButton.setOnAction(e -> {
             categoryEditMode = false;
@@ -166,23 +172,52 @@ public class ManagerProductsController {
 
     private void loadProducts() {
         try {
-            List<StoreProductDTO> storeProducts = storeProductDAO.getAllStoreProductsOrderByName();
+            String filterValue = filterComboBox.getValue() == null ? "Усі" : filterComboBox.getValue();
+
             allProductRows.clear();
 
-            for (StoreProductDTO sp : storeProducts) {
-                ProductRow row = new ProductRow(
-                        sp.getUpc(),
-                        sp.getProductName(),
-                        sp.getSellingPrice(),
-                        sp.getProductsNumber(),
-                        sp.getCategoryName(),
-                        sp.getManufacturer(),
-                        sp.getCharacteristics(),
-                        sp.isPromotional(),
-                        sp.getUpcProm()
-                );
-                allProductRows.add(row);
+            if ("Усі".equals(filterValue)) {
+                List<ProductCatalogDTO> products = productDAO.getAllProductsWithCategoryName();
+
+                for (ProductCatalogDTO p : products) {
+                    ProductRow row = new ProductRow(
+                            null,                    // upc
+                            p.getProductName(),
+                            0.0,                     // price
+                            0,                       // amount
+                            p.getCategoryName(),
+                            p.getManufacturer(),
+                            p.getCharacteristics(),
+                            false,                   // promotional
+                            null                     // upcProm
+                    );
+                    allProductRows.add(row);
+                }
+
+            } else {
+                List<StoreProductDTO> storeProducts = switch (filterValue) {
+                    case "Наявні" -> storeProductDAO.getAllStoreProductsOrderByName();
+                    case "Акційні" -> storeProductDAO.getPromotionalProductsOrderByName();
+                    case "Не акційні" -> storeProductDAO.getNonPromotionalProductsOrderByName();
+                    default -> storeProductDAO.getAllStoreProductsOrderByName();
+                };
+
+                for (StoreProductDTO sp : storeProducts) {
+                    ProductRow row = new ProductRow(
+                            sp.getUpc(),
+                            sp.getProductName(),
+                            sp.getSellingPrice(),
+                            sp.getProductsNumber(),
+                            sp.getCategoryName(),
+                            sp.getManufacturer(),
+                            sp.getCharacteristics(),
+                            sp.isPromotional(),
+                            sp.getUpcProm()
+                    );
+                    allProductRows.add(row);
+                }
             }
+
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
         }
@@ -238,19 +273,66 @@ public class ManagerProductsController {
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Підтвердження");
-        confirm.setHeaderText(null);
-        confirm.setContentText("Видалити товар з UPC " + selectedProductRow.getUpc() + "?");
-
-        if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
-            return;
-        }
+        String filterValue = filterComboBox.getValue() == null ? "Усі" : filterComboBox.getValue();
 
         try {
-            storeProductDAO.deleteStoreProduct(selectedProductRow.getUpc());
+            Product product = findProductByRow(selectedProductRow);
+            if (product == null) {
+                showAlert("Помилка", "Не вдалося знайти товар у таблиці Product.");
+                return;
+            }
+
+            if ("Усі".equals(filterValue)) {
+                boolean existsInStore = storeProductDAO.existsByProductId(product.getId_product());
+
+                if (existsInStore) {
+                    showAlert(
+                            "Неможливо видалити",
+                            "Цей товар є у Store_Product. Спочатку видаліть його зі складу."
+                    );
+                    return;
+                }
+
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Підтвердження");
+                confirm.setHeaderText(null);
+                confirm.setContentText("Видалити товар \"" + selectedProductRow.getProductName() + "\" з Product?");
+
+                if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                    return;
+                }
+
+                productDAO.deleteProduct(product.getId_product());
+
+            } else if ("Наявні".equals(filterValue)
+                    || "Акційні".equals(filterValue)
+                    || "Не акційні".equals(filterValue)) {
+
+                Store_Product storeProduct = storeProductDAO.getFullStoreProductByUPC(selectedProductRow.getUpc());
+                if (storeProduct == null) {
+                    showAlert("Помилка", "Не вдалося знайти товар у Store_Product.");
+                    return;
+                }
+
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+                confirm.setTitle("Підтвердження");
+                confirm.setHeaderText(null);
+                confirm.setContentText("Видалити товар з UPC " + selectedProductRow.getUpc() + " зі Store_Product?");
+
+                if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                    return;
+                }
+
+                storeProductDAO.deleteStoreProduct(selectedProductRow.getUpc());
+
+            } else {
+                showAlert("Помилка", "Невідомий режим фільтра.");
+                return;
+            }
+
             refreshAllData();
             hideProductEditBox();
+
         } catch (SQLException e) {
             showAlert("Помилка видалення", e.getMessage());
         }
@@ -453,9 +535,15 @@ public class ManagerProductsController {
         if (category == null) {
             categoryEditMode = false;
             categoryNameField.clear();
+
+            deleteCategoryButton.setVisible(false);
+            deleteCategoryButton.setManaged(false);
         } else {
             categoryEditMode = true;
             categoryNameField.setText(category.getName());
+
+            deleteCategoryButton.setVisible(true);
+            deleteCategoryButton.setManaged(true);
         }
     }
 
@@ -463,6 +551,10 @@ public class ManagerProductsController {
         editCategoryBox.setVisible(false);
         editCategoryBox.setManaged(false);
         categoryNameField.clear();
+
+        deleteCategoryButton.setVisible(false);
+        deleteCategoryButton.setManaged(false);
+
         categoriesTable.getSelectionModel().clearSelection();
         selectedCategory = null;
     }
@@ -497,7 +589,41 @@ public class ManagerProductsController {
             upcPromField.setText(row.getUpcProm() == null ? "" : row.getUpcProm());
         }
     }
+    public void deleteCategory(javafx.event.ActionEvent actionEvent) {
+        if (selectedCategory == null || !categoryEditMode) {
+            showAlert("Помилка", "Оберіть категорію для видалення.");
+            return;
+        }
 
+        try {
+            boolean hasProducts = categoryDAO.hasProductsInCategory(selectedCategory.getCategory_number());
+
+            if (hasProducts) {
+                showAlert(
+                        "Неможливо видалити",
+                        "У цій категорії є товари в Product. Спочатку видаліть їх."
+                );
+                return;
+            }
+
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Підтвердження");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Видалити категорію \"" + selectedCategory.getName() + "\"?");
+
+            if (confirm.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+                return;
+            }
+
+            categoryDAO.deleteCategory(selectedCategory.getCategory_number());
+
+            hideCategoryEditBox();
+            refreshAllData();
+
+        } catch (SQLException e) {
+            showAlert("Помилка БД", e.getMessage());
+        }
+    }
     private void hideProductEditBox() {
         editProductBox.setVisible(false);
         editProductBox.setManaged(false);

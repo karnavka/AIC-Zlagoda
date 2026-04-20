@@ -1,5 +1,6 @@
 package com.zlagoda.dao;
 
+import com.zlagoda.dto.ProductCatalogDTO;
 import com.zlagoda.model.Product;
 import com.zlagoda.util.DatabaseConnection;
 
@@ -158,6 +159,33 @@ public class ProductDAO {
                 list.add(product);
             }
         }
+        return list;
+    }
+    public List<ProductCatalogDTO> getAllProductsWithCategoryName() throws SQLException {
+        List<ProductCatalogDTO> list = new ArrayList<>();
+
+        String sql = "SELECT p.id_product, p.name, p.manufacturer, p.characteristics, " +
+                "p.category_number, c.name AS category_name " +
+                "FROM Product p " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "ORDER BY p.name";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+
+            while (rs.next()) {
+                ProductCatalogDTO dto = new ProductCatalogDTO();
+                dto.setIdProduct(rs.getInt("id_product"));
+                dto.setProductName(rs.getString("name"));
+                dto.setManufacturer(rs.getString("manufacturer"));
+                dto.setCharacteristics(rs.getString("characteristics"));
+                dto.setCategoryNumber(rs.getInt("category_number"));
+                dto.setCategoryName(rs.getString("category_name"));
+                list.add(dto);
+            }
+        }
+
         return list;
     }
 }
