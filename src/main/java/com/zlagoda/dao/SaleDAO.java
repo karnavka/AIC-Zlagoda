@@ -82,4 +82,81 @@ public class SaleDAO {
         }
         return list;
     }
+
+    public int getTotalSoldByProductId(int productId, java.time.LocalDate dateFrom, java.time.LocalDate dateTo) throws SQLException {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COALESCE(SUM(s.product_number), 0) AS total_sold " +
+                        "FROM Sale s " +
+                        "JOIN Store_Product sp ON s.UPC = sp.UPC " +
+                        "JOIN Receipt r ON s.check_number = r.check_number " +
+                        "WHERE sp.id_product = ?"
+        );
+
+        if (dateFrom != null) {
+            sql.append(" AND DATE(r.print_date) >= ?");
+        }
+        if (dateTo != null) {
+            sql.append(" AND DATE(r.print_date) <= ?");
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+            ps.setInt(paramIndex++, productId);
+
+            if (dateFrom != null) {
+                ps.setDate(paramIndex++, Date.valueOf(dateFrom));
+            }
+            if (dateTo != null) {
+                ps.setDate(paramIndex++, Date.valueOf(dateTo));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_sold");
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    public int getTotalSoldByUpc(String upc, java.time.LocalDate dateFrom, java.time.LocalDate dateTo) throws SQLException {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COALESCE(SUM(s.product_number), 0) AS total_sold " +
+                        "FROM Sale s " +
+                        "JOIN Receipt r ON s.check_number = r.check_number " +
+                        "WHERE s.UPC = ?"
+        );
+
+        if (dateFrom != null) {
+            sql.append(" AND DATE(r.print_date) >= ?");
+        }
+        if (dateTo != null) {
+            sql.append(" AND DATE(r.print_date) <= ?");
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+            ps.setString(paramIndex++, upc);
+
+            if (dateFrom != null) {
+                ps.setDate(paramIndex++, Date.valueOf(dateFrom));
+            }
+            if (dateTo != null) {
+                ps.setDate(paramIndex++, Date.valueOf(dateTo));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_sold");
+                }
+            }
+        }
+
+        return 0;
+    }
 }

@@ -139,6 +139,9 @@
             </TableView>
 
             <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                <Button text="ПРОДАЖІ ТОВАРУ"
+                        onAction="#showProductSalesPopup"/>
+
                 <Button text="ДОДАТИ ТОВАР"
                         onAction="#addProduct"/>
             </HBox>

@@ -2,6 +2,7 @@ package com.zlagoda.controller.manager;
 
 import com.zlagoda.dao.CategoryDAO;
 import com.zlagoda.dao.ProductDAO;
+import com.zlagoda.dao.SaleDAO;
 import com.zlagoda.dao.Store_ProductDAO;
 import com.zlagoda.dto.ProductCatalogDTO;
 import com.zlagoda.dto.StoreProductDTO;
@@ -13,12 +14,17 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +62,9 @@ public class ManagerProductsController {
     @FXML private TextField upcPromField;
     @FXML private Button deleteProductButton;
     @FXML private Button deleteCategoryButton;
+
+    private final SaleDAO saleDAO = new SaleDAO();
+
 
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final ProductDAO productDAO = new ProductDAO();
@@ -671,7 +680,107 @@ public class ManagerProductsController {
         alert.showAndWait();
     }
 
+    @FXML
+    public void showProductSalesPopup(ActionEvent actionEvent) {
+        Object selectedItem = productsTable.getSelectionModel().getSelectedItem();
 
+        if (selectedItem == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Увага");
+            alert.setHeaderText(null);
+            alert.setContentText("Оберіть товар.");
+            alert.showAndWait();
+            return;
+        }
+
+        String upc = editUpcField.getText();
+
+        if (upc == null || upc.isBlank()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Помилка");
+            alert.setHeaderText(null);
+            alert.setContentText("Не вдалося визначити UPC вибраного товару.");
+            alert.showAndWait();
+            return;
+        }
+
+        String productName = editProductNameField.getText();
+        if (productName == null || productName.isBlank()) {
+            productName = "Товар";
+        }
+
+        String finalUpc = upc.trim();
+        String finalProductName = productName.trim();
+
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Продажі товару");
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+
+        Label titleLabel = new Label("Продажі товару: " + finalProductName + " (UPC: " + finalUpc + ")");
+        Label fromLabel = new Label("Дата від:");
+        DatePicker fromDatePicker = new DatePicker();
+
+        Label toLabel = new Label("Дата до:");
+        DatePicker toDatePicker = new DatePicker();
+
+        Button getSalesButton = new Button("ОТРИМАТИ КІЛЬКІСТЬ ПРОДАЖІВ ЦЬОГО ТОВАРУ");
+        Label resultLabel = new Label();
+        resultLabel.setWrapText(true);
+
+        getSalesButton.setOnAction(e -> {
+            try {
+                LocalDate dateFrom = fromDatePicker.getValue();
+                LocalDate dateTo = toDatePicker.getValue();
+
+                if (dateFrom != null && dateTo != null && dateFrom.isAfter(dateTo)) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Некоректний період");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Дата 'від' не може бути пізніше за дату 'до'.");
+                    alert.showAndWait();
+                    return;
+                }
+
+                int totalSold = saleDAO.getTotalSoldByUpc(finalUpc, dateFrom, dateTo);
+
+                String periodText;
+                if (dateFrom == null && dateTo == null) {
+                    periodText = "за весь період";
+                } else if (dateFrom != null && dateTo != null) {
+                    periodText = "за період з " + dateFrom + " до " + dateTo;
+                } else if (dateFrom != null) {
+                    periodText = "за період від " + dateFrom;
+                } else {
+                    periodText = "за період до " + dateTo;
+                }
+
+                resultLabel.setText("Кількість продажів " + periodText + ": " + totalSold);
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Помилка");
+                alert.setHeaderText(null);
+                alert.setContentText("Не вдалося отримати дані про продажі.");
+                alert.showAndWait();
+            }
+        });
+
+        VBox root = new VBox(12);
+        root.setStyle("-fx-padding: 20; -fx-background-color: white;");
+        root.getChildren().addAll(
+                titleLabel,
+                fromLabel, fromDatePicker,
+                toLabel, toDatePicker,
+                getSalesButton,
+                resultLabel
+        );
+
+        Scene scene = new Scene(root, 500, 280);
+        popupStage.setScene(scene);
+        popupStage.showAndWait();
+    }
 
     public static class ProductRow {
         private final String upc;
