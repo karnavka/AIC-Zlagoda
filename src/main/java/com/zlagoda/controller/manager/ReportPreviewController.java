@@ -23,7 +23,6 @@ public class ReportPreviewController {
     private ManagerReportsController mainController;
     private String currentType;
 
-    // --- 1. ПРАЦІВНИКИ ---
     public void setEmployeeData(List<Employee> employees, ManagerReportsController controller) {
         this.dataToSave = employees;
         this.mainController = controller;
@@ -33,7 +32,6 @@ public class ReportPreviewController {
         dateLabel.setText("Дата: " + LocalDate.now());
 
         previewTable.getColumns().clear();
-        // Для невеликої кількості колонок можна залишити автопідгін
         previewTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         addColumn("ID", "id_employee", 50);
@@ -46,7 +44,6 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(employees));
     }
 
-    // --- 2. КЛІЄНТИ (ЗІ СКРОЛОМ) ---
     public void setClientData(List<Customer_Card> clients, ManagerReportsController controller) {
         this.dataToSave = clients;
         this.mainController = controller;
@@ -57,7 +54,6 @@ public class ReportPreviewController {
 
         previewTable.getColumns().clear();
 
-        // ВАЖЛИВО: Встановлюємо UNCONSTRAINED, щоб з'явився скрол, коли колонки широкі
         previewTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
 
         // Задаємо фіксовану ширину, щоб вони не зтискалися
@@ -74,7 +70,6 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(clients));
     }
 
-    // --- 3. ЧЕКИ ---
     public void setCheckData(List<Check> checks, ManagerReportsController controller) {
         this.dataToSave = checks;
         this.mainController = controller;
@@ -94,7 +89,6 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(checks));
     }
 
-    // --- 4. КАТЕГОРІЇ ---
     public void setCategoryData(List<Category> categories, ManagerReportsController controller) {
         this.dataToSave = categories;
         this.mainController = controller;
@@ -112,7 +106,6 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(categories));
     }
 
-    // --- 5. ТОВАРИ (Загальний довідник) ---
     public void setProductData(List<Product> products, ManagerReportsController controller) {
         this.dataToSave = products;
         this.mainController = controller;
@@ -133,7 +126,6 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(products));
     }
 
-    // --- 6. ТОВАРИ У МАГАЗИНІ (З цінами та кількістю) ---
     public void setStoreProductData(List<StoreProductDTO> storeProducts, ManagerReportsController controller) {
         this.dataToSave = storeProducts;
         this.mainController = controller;
@@ -156,11 +148,10 @@ public class ReportPreviewController {
         previewTable.setItems(FXCollections.observableArrayList(storeProducts));
     }
 
-    // Оновлений допоміжний метод, що приймає ширину
     private void addColumn(String title, String property, double width) {
         TableColumn<Object, String> col = new TableColumn<>(title);
         col.setCellValueFactory(new PropertyValueFactory<>(property));
-        col.setPrefWidth(width); // Встановлюємо ширину стовпця
+        col.setPrefWidth(width);
         previewTable.getColumns().add(col);
     }
 

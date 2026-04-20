@@ -46,7 +46,6 @@ public class ManagerReportsController {
 
     private static final String ARIAL_FONT = "src/main/resources/ARIAL.TTF";
 
-    // --- 1. ЗВІТ ПО ПРАЦІВНИКАХ ---
     @FXML
     private void handlePrintEmployeesReport() {
         try {
@@ -57,7 +56,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- 2. ЗВІТ ПО КЛІЄНТАХ ---
     @FXML
     private void handlePrintClientsReport() {
         try {
@@ -68,7 +66,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- 3. ЗВІТ ПО ЧЕКАХ ЗА ПЕРІОД ---
     @FXML
     private void handlePrintChecksReport() {
         LocalDate start = reportStartDatePicker.getValue();
@@ -85,7 +82,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- 4. ЗВІТ ПО КАТЕГОРІЯХ ---
     @FXML
     private void handlePrintCategoriesReport() {
         try {
@@ -96,7 +92,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- 5. ЗВІТ ПО УСІХ ТОВАРАХ ---
     @FXML
     private void handlePrintProductsReport() {
         try {
@@ -107,7 +102,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- 6. ЗВІТ ПО ТОВАРАХ У МАГАЗИНІ ---
     @FXML
     private void handlePrintStoreProductsReport() {
         try {
@@ -119,7 +113,6 @@ public class ManagerReportsController {
         }
     }
 
-    // Універсальний метод для відкриття вікна прев'ю
     private void openPreview(java.util.function.Consumer<ReportPreviewController> dataSetter, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/manager/report_preview.fxml"));
@@ -133,7 +126,6 @@ public class ManagerReportsController {
         }
     }
 
-    // --- ФІНАЛЬНИЙ ЕКСПОРТ ---
     public void executeFinalExport(List<?> data, String type) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("Report_" + type + "_" + LocalDate.now() + ".pdf");
@@ -152,7 +144,6 @@ public class ManagerReportsController {
                 document.add(new Paragraph("Дата формування: " + LocalDate.now()).setFont(font).setTextAlignment(TextAlignment.RIGHT));
                 document.add(new Paragraph("\n"));
 
-                // Генерируємо таблицю
                 Table table = createTableByType(type, data, font);
                 if (table != null) {
                     document.add(table.useAllAvailableWidth());
@@ -160,7 +151,7 @@ public class ManagerReportsController {
 
                 document.add(new Paragraph("\nПідпис відповідальної особи: ____________________").setFont(font).setFontSize(10));
 
-                document.close(); // Важливо закрити перед відкриттям
+                document.close();
                 showOpenReportDialog(file);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -188,13 +179,11 @@ public class ManagerReportsController {
             case "CHECKS" -> createCheckPdfTable((List<Check>) data, font);
             case "CATEGORIES" -> createCategoryPdfTable((List<Category>) data, font);
             case "PRODUCTS" -> createProductPdfTable((List<Product>) data, font);
-            // ОСЬ ТУТ: змінено на StoreProductDTO
             case "STORE_PRODUCTS" -> createStoreProductPdfTable((List<com.zlagoda.dto.StoreProductDTO>) data, font);
             default -> null;
         };
     }
 
-    // --- МЕТОДИ СТВОРЕННЯ ТАБЛИЦЬ ДЛЯ НОВИХ ЗВІТІВ ---
 
     private Table createCategoryPdfTable(List<Category> data, PdfFont font) {
         Table table = new Table(UnitValue.createPercentArray(new float[]{1, 4}));
@@ -221,7 +210,7 @@ public class ManagerReportsController {
     }
 
     private Table createStoreProductPdfTable(List<com.zlagoda.dto.StoreProductDTO> data, PdfFont font) {
-        // Створюємо 6 колонок
+
         Table table = new Table(UnitValue.createPercentArray(new float[]{2, 3, 2, 1, 1, 1}));
         String[] headers = {"UPC", "Назва", "Категорія", "Ціна", "К-сть", "Акція"};
 
@@ -240,7 +229,6 @@ public class ManagerReportsController {
         return table;
     }
 
-    // --- СТАНДАРТНІ МЕТОДИ ТАБЛИЦЬ (ВЖЕ БУЛИ) ---
 
     private Table createEmployeePdfTable(List<Employee> data, PdfFont font) {
         Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 2, 2, 2}));
@@ -258,7 +246,7 @@ public class ManagerReportsController {
 
 
     private Table createClientPdfTable(List<Customer_Card> data, PdfFont font) {
-        // 9 колонок: Карта, Прізвище, Ім'я, По батькові, Телефон, Місто, Вулиця, Індекс, %
+
         Table table = new Table(UnitValue.createPercentArray(new float[]{1.5f, 1.5f, 1.2f, 1.2f, 1.5f, 1.2f, 1.5f, 1f, 0.7f}));
 
         String[] headers = {
@@ -273,7 +261,6 @@ public class ManagerReportsController {
         }
 
         for (Customer_Card c : data) {
-            // Якщо значення null, записуємо пустий рядок "" або "-"
             table.addCell(new Cell().add(new Paragraph(c.getCard_number() != null ? c.getCard_number() : "").setFont(font).setFontSize(7)));
             table.addCell(new Cell().add(new Paragraph(c.getSurname() != null ? c.getSurname() : "").setFont(font).setFontSize(7)));
             table.addCell(new Cell().add(new Paragraph(c.getName() != null ? c.getName() : "").setFont(font).setFontSize(7)));
@@ -301,7 +288,6 @@ public class ManagerReportsController {
         return table;
     }
 
-    // --- ДОПОМІЖНІ МЕТОДИ ---
 
     private void showOpenReportDialog(File file) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
