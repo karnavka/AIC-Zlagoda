@@ -2,10 +2,9 @@ package com.zlagoda.dao;
 
 import com.zlagoda.model.Employee;
 import com.zlagoda.util.DatabaseConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +49,8 @@ public class EmployeeDAO {
             statement.setString(3, employee.getPatronymic());
             statement.setString(4, employee.getRole());
             statement.setDouble(5, employee.getSalary());
-            statement.setObject(6, employee.getDate_of_birth());
-            statement.setObject(7, employee.getDate_of_start());
+            statement.setDate(6, java.sql.Date.valueOf(employee.getDate_of_birth()));
+            statement.setDate(7, java.sql.Date.valueOf(employee.getDate_of_start()));
             statement.setString(8, employee.getPhone_number());
             statement.setString(9, employee.getCity());
             statement.setString(10, employee.getStreet());
