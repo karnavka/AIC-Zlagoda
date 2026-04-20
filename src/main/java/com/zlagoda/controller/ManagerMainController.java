@@ -1,5 +1,7 @@
 package com.zlagoda.controller;
 
+import com.zlagoda.controller.cashier.CashierChecksController;
+import com.zlagoda.controller.manager.*;
 import com.zlagoda.dao.EmployeeDAO;
 import com.zlagoda.model.Employee;
 import com.zlagoda.model.User;
@@ -19,6 +21,59 @@ import java.sql.SQLException;
 
 public class ManagerMainController {
     private final ContextMenu profileMenu = new ContextMenu();
+    public Tab statsTab;
+    public Tab checkTab;
+    public Tab productsTab;
+    public Tab employeesTab;
+    public Tab clientsTab;
+    @FXML
+    private ManagerStatsController statsIncludeController;
+    @FXML
+    private ManagerProductsController productsIncludeController;
+    @FXML
+    private ManagerChecksController managerChecksController;
+    @FXML
+    private ManagerClientsController managerClientsController;
+    @FXML
+    private ManagerEmployeesController managerEmployeesController;
+
+    @FXML
+    private void handleProductsTabSelected() {
+        if (productsTab.isSelected() && productsIncludeController != null) {
+            productsIncludeController.initialize();
+        }
+
+
+    }
+
+    @FXML
+    private void handleCheckTabSelected() {
+
+        if (checkTab.isSelected() && managerChecksController != null) {
+            managerChecksController.initialize();
+        }
+
+    }
+
+    @FXML
+    private void handleClientTabSelected() {
+
+        if (clientsTab.isSelected() && managerClientsController != null) {
+            managerClientsController.initialize();
+        }
+
+
+    }
+
+    @FXML
+    private void handleEmpTabSelected() {
+
+        if (employeesTab.isSelected() && managerEmployeesController != null) {
+            managerEmployeesController.initialize();
+        }
+
+    }
+
 
     @FXML
     private Label employeeNameLabel;

@@ -61,22 +61,22 @@
     <center>
         <TabPane side="LEFT" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
-                <Tab text="Працівники">
+                <Tab text="Працівники" onSelectionChanged="#handleEmpTabSelected"  fx:id="employeesTab">
                     <content>
                         <fx:include source="manager/employees.fxml"/>
                     </content>
                 </Tab>
-                <Tab text="Клієнти">
+                <Tab text="Клієнти" onSelectionChanged="#handleClientTabSelected"  fx:id="clientsTab">
                     <content>
                         <fx:include source="manager/clients.fxml"/>
                     </content>
                 </Tab>
-                <Tab text="Товари">
+                <Tab text="Товари" onSelectionChanged="#handleProductsTabSelected" fx:id="productsTab">
                     <content>
                         <fx:include source="manager/products.fxml"/>
                     </content>
                 </Tab>
-                <Tab text="Чеки">
+                <Tab text="Чеки" onSelectionChanged="#handleCheckTabSelected"  fx:id="checkTab">
                     <content>
                         <fx:include source="manager/checks.fxml"/>
                     </content>
@@ -86,7 +86,7 @@
                         <fx:include source="manager/reports.fxml"/>
                     </content>
                 </Tab>
-                <Tab text="Статистика">
+                <Tab fx:id="statsTab" text="Статистика">
                     <content>
                         <fx:include source="manager/statistics.fxml"/>
                     </content>

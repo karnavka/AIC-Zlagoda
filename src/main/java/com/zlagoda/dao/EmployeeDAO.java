@@ -194,7 +194,10 @@ public class EmployeeDAO {
 
     public List<EmployeeStat> getEmployeeSalesStats(LocalDate start, LocalDate end) throws SQLException {
         List<EmployeeStat> list = new ArrayList<>();
-        String sql = "SELECT e.id_employee, e.surname, e.name, SUM(s.product_number) AS total_products, SUM(r.sum) AS total_sales " +
+
+        String sql = "SELECT e.id_employee, e.surname, e.name, " +
+                "SUM(s.product_number) AS total_products, " +
+                "SUM(s.product_number * s.selling_price) AS total_sales " +
                 "FROM Employee e " +
                 "JOIN Receipt r ON e.id_employee = r.id_employee " +
                 "JOIN Sale s ON r.check_number = s.check_number " +
@@ -215,11 +218,12 @@ public class EmployeeDAO {
                             rs.getString("surname"),
                             rs.getString("name"),
                             rs.getInt("total_products"),
-                            rs.getBigDecimal("total_sales").doubleValue()
+                            rs.getDouble("total_sales")
                     ));
                 }
             }
         }
+
         return list;
     }
 

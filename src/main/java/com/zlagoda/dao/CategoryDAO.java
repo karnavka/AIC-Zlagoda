@@ -70,14 +70,16 @@ public class CategoryDAO {
 
     public List<CategoryStat> getSoldProductsNumberByCategory(LocalDate start, LocalDate end) throws SQLException {
         List<CategoryStat> list = new ArrayList<>();
+
         String sql = "SELECT cat.category_number, cat.name, SUM(s.product_number) AS total_number " +
                 "FROM Sale s " +
                 "JOIN Store_Product sp ON s.UPC = sp.UPC " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
                 "JOIN Category cat ON p.category_number = cat.category_number " +
                 "JOIN Receipt r ON s.check_number = r.check_number " +
-                "WHERE c.print_date BETWEEN ? AND ? " +
-                "GROUP BY cat.category_number, cat.name";
+                "WHERE r.print_date BETWEEN ? AND ? " +
+                "GROUP BY cat.category_number, cat.name " +
+                "ORDER BY cat.name";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -95,22 +97,25 @@ public class CategoryDAO {
                 }
             }
         }
+
         return list;
     }
 
     public List<Category> getCategoriesWithNoPurchases(LocalDate start, LocalDate end) throws SQLException {
         List<Category> list = new ArrayList<>();
 
-        String sql = "SELECT cat.* FROM Category cat WHERE NOT EXISTS ( " +
-                "SELECT * FROM Product p WHERE p.category_number = cat.category_number " +
-                "AND NOT EXISTS ( " +
-                "SELECT * FROM Store_Product sp " +
-                "JOIN Sale s ON sp.UPC = s.UPC " +
-                "JOIN Receipt r ON s.check_number = r.check_number " +
-                "WHERE sp.id_product = p.id_product " +
-                "AND ch.print_date BETWEEN ? AND ? " +
+        String sql = "SELECT cat.* " +
+                "FROM Category cat " +
+                "WHERE NOT EXISTS ( " +
+                "    SELECT 1 " +
+                "    FROM Product p " +
+                "    JOIN Store_Product sp ON sp.id_product = p.id_product " +
+                "    JOIN Sale s ON sp.UPC = s.UPC " +
+                "    JOIN Receipt r ON s.check_number = r.check_number " +
+                "    WHERE p.category_number = cat.category_number " +
+                "      AND r.print_date BETWEEN ? AND ? " +
                 ") " +
-                ")";
+                "ORDER BY cat.name";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -123,11 +128,11 @@ public class CategoryDAO {
                     Category category = new Category();
                     category.setCategory_number(rs.getInt("category_number"));
                     category.setName(rs.getString("name"));
-
                     list.add(category);
                 }
             }
         }
+
         return list;
     }
 
