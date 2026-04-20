@@ -61,8 +61,8 @@ public class MainApp extends Application {
         Text text = new Text("Welcome to Zlagoda");
         text.setFill(Color.GREEN);
         text.setFont(Font.font("Times new roman", FontWeight.BOLD, 50));
-        text.setX(200);
-        text.setY(250);
+        text.setX(220);
+        text.setY(300);
         DropShadow ds1 = new DropShadow();
         ds1.setOffsetY(4.0f);
         ds1.setOffsetX(4.0f);

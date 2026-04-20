@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.StackPane?>
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.zlagoda.controller.LoginController">
+           fx:controller="com.zlagoda.controller.LoginController"
+           stylesheets="@/css/login.css"
+           styleClass="root-pane">
 
-    <VBox alignment="CENTER" spacing="12" maxWidth="320">
-        <Label text="Zlagoda AIS Login" />
+    <VBox alignment="CENTER" spacing="14" maxWidth="340" styleClass="login-box">
+        <Label text="Zlagoda AIS Login" styleClass="title-label"/>
 
-        <TextField fx:id="loginField" promptText="Login" />
-        <PasswordField fx:id="passwordField" promptText="Password" />
+        <TextField fx:id="loginField" promptText="Login" styleClass="glitter-field"/>
 
-        <Button text="Sign In" onAction="#handleLogin" />
+        <ImageView fitWidth="160" fitHeight="160" preserveRatio="true" pickOnBounds="true">
+            <image>
+                <Image url="@/images/zlagoda.gif"/>
+            </image>
+        </ImageView>
 
-        <Label fx:id="errorLabel" />
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="glitter-field"/>
+
+        <Button text="Sign In" onAction="#handleLogin" styleClass="glitter-button"/>
+
+        <Label fx:id="errorLabel" styleClass="error-label"/>
     </VBox>
 </StackPane>
