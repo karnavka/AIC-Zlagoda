@@ -60,14 +60,14 @@
     -fx-mouse-transparent: true;
 }
 
-/* Загальні тексти */
+/* Базові тексти */
 .label {
-    -fx-text-fill: #2f1247;
+    -fx-text-fill: #d4bce8;
 }
 
 .check-box,
 .radio-button {
-    -fx-text-fill: #2f1247;
+    -fx-text-fill: #d5b9f1;
 }
 
 /* Кнопки */
@@ -188,19 +188,20 @@
 /* Таблиці */
 .table-view {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
-            rgba(40,15,60,0.82);
+            linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(245,230,255,0.75)),
+            rgba(255,255,255,0.9);
     -fx-background-radius: 18;
-    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-color: rgba(150,100,200,0.25);
     -fx-border-radius: 18;
     -fx-padding: 4;
 }
 
 .table-view .column-header-background {
     -fx-background-color:
-            linear-gradient(to right, rgba(150,80,220,0.95), rgba(95,35,155,0.95));
+            linear-gradient(to right, #d88cff, #9368cc);
     -fx-background-radius: 14 14 0 0;
 }
+
 
 .table-view .column-header,
 .table-view .filler {
@@ -213,30 +214,30 @@
     -fx-font-weight: bold;
 }
 
-.table-row-cell {
-    -fx-background-color: rgba(255,255,255,0.02);
+.table-row-cell:odd {
+    -fx-background-color: rgba(245,235,255,0.85);
 }
 
-.table-row-cell:odd {
-    -fx-background-color: rgba(255,255,255,0.05);
+.table-row-cell:hover {
+    -fx-background-color: rgba(220,180,255,0.6);
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgba(216,140,255,0.45);
+    -fx-background-color: rgba(200,140,255,0.7);
 }
 
 .table-cell {
-    -fx-text-fill: #f3e7ff;
+    -fx-text-fill: #2f1247;
     -fx-border-color: transparent;
 }
 
-/* Скроли */
+/* Скрол */
 .scroll-bar:vertical,
 .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
 
 .scroll-bar .thumb {
-    -fx-background-color: rgba(220,160,255,0.55);
+    -fx-background-color: rgba(180,120,240,0.7);
     -fx-background-radius: 999;
 }

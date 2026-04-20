@@ -127,8 +127,8 @@
                 </VBox.margin>
                 <columns>
                     <TableColumn fx:id="upcColumn" text="UPC" prefWidth="120.0"/>
-                    <TableColumn fx:id="productNameColumn" text="НАЗВА" prefWidth="240.0"/>
-                    <TableColumn fx:id="priceColumn" text="ЦІНА" prefWidth="100.0"/>
+                    <TableColumn fx:id="productNameColumn" text="НАЗВА" prefWidth="200.0"/>
+                    <TableColumn fx:id="priceColumn" text="ЦІНА" prefWidth="140.0"/>
                     <TableColumn fx:id="amountColumn" text="К-СТЬ" prefWidth="100.0"/>
                 </columns>
                 <columnResizePolicy>
