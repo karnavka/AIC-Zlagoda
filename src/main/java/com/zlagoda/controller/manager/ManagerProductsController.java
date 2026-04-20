@@ -54,7 +54,7 @@ public class ManagerProductsController {
     @FXML private TextField editAmountField;
     @FXML private CheckBox promotionalCheckBox;
     @FXML private TextField upcPromField;
-
+    @FXML private Button deleteProductButton;
     @FXML private Button deleteCategoryButton;
 
     private final CategoryDAO categoryDAO = new CategoryDAO();
@@ -181,15 +181,15 @@ public class ManagerProductsController {
 
                 for (ProductCatalogDTO p : products) {
                     ProductRow row = new ProductRow(
-                            null,                    // upc
+                            null,
                             p.getProductName(),
-                            0.0,                     // price
-                            0,                       // amount
+                            0.0,
+                            0,
                             p.getCategoryName(),
                             p.getManufacturer(),
                             p.getCharacteristics(),
-                            false,                   // promotional
-                            null                     // upcProm
+                            false,
+                            null
                     );
                     allProductRows.add(row);
                 }
@@ -566,6 +566,11 @@ public class ManagerProductsController {
         if (row == null) {
             productEditMode = false;
 
+            if (deleteProductButton != null) {
+                deleteProductButton.setVisible(false);
+                deleteProductButton.setManaged(false);
+            }
+
             editUpcField.clear();
             editUpcField.setEditable(true);
             editProductNameField.clear();
@@ -577,6 +582,11 @@ public class ManagerProductsController {
             upcPromField.clear();
         } else {
             productEditMode = true;
+
+            if (deleteProductButton != null) {
+                deleteProductButton.setVisible(true);
+                deleteProductButton.setManaged(true);
+            }
 
             editUpcField.setText(row.getUpc());
             editUpcField.setEditable(false);

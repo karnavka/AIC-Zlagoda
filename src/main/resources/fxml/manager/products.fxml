@@ -151,7 +151,6 @@
 
                 <Label text="РЕДАГУВАННЯ / ДОДАВАННЯ ТОВАРУ"
                        style="-fx-font-weight: bold; -fx-font-style: italic; -fx-text-fill: #666666;"/>
-                <Button fx:id="cancelEditButton" mnemonicParsing="false" text="СКАСУВАТИ"/>
                 <GridPane hgap="10.0" vgap="10.0">
                     <columnConstraints>
                         <ColumnConstraints minWidth="110.0"/>
