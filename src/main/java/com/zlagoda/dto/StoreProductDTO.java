@@ -10,7 +10,7 @@ public class StoreProductDTO {
     private double sellingPrice;
     private int productsNumber;
     private boolean promotional;
-    private String characteristics; // для вікна деталей
+    private String characteristics;
 
     public String getUpc() { return upc; }
     public void setUpc(String upc) { this.upc = upc; }

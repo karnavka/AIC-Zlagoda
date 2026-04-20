@@ -38,7 +38,7 @@ public class CashierProductsController {
     @FXML private TableColumn<StoreProductDTO, String> promoColumn;
 
     @FXML private VBox detailsBox;
-    @FXML private Label upcLabel, manufacturerLabel, characteristicsLabel, stockLabel, priceLabel;
+    @FXML private Label upcLabel, nameLabel, manufacturerLabel, characteristicsLabel, stockLabel, priceLabel, promoPriceLabel;
 
     @FXML
     public void initialize() {
@@ -160,11 +160,23 @@ public class CashierProductsController {
     private void showDetails(StoreProductDTO dto) {
         detailsBox.setVisible(true);
         detailsBox.setManaged(true);
+
+        nameLabel.setText(dto.getProductName());
         upcLabel.setText(dto.getUpc());
         manufacturerLabel.setText(dto.getManufacturer());
         characteristicsLabel.setText(dto.getCharacteristics());
         stockLabel.setText(String.valueOf(dto.getProductsNumber()));
-        priceLabel.setText(String.format("%.2f грн", dto.getSellingPrice()));
+
+        if (dto.isPromotional()) {
+            double promoPrice = dto.getSellingPrice();
+            double basePrice = promoPrice / 0.8;
+
+            priceLabel.setText(String.format("%.2f грн", basePrice));
+            promoPriceLabel.setText(String.format("%.2f грн", promoPrice));
+        } else {
+            priceLabel.setText(String.format("%.2f грн", dto.getSellingPrice()));
+            promoPriceLabel.setText("---");
+        }
     }
 
     private void clearDetails() {
