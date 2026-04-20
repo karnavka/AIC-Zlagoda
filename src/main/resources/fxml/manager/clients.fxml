@@ -78,10 +78,24 @@
                 <Label text="НОМЕР КАРТИ :" GridPane.rowIndex="0"/>
                 <TextField fx:id="cardNumberField" promptText="Введіть номер..." prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                <Label text="ПІБ КЛІЄНТА :" GridPane.rowIndex="1"/>
-                <TextField fx:id="lastNameField" promptText="Прізвище..." prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <TextField fx:id="firstNameField" promptText="Ім'я..." prefHeight="30.0" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <TextField fx:id="patronymicField" promptText="По-батькові..." prefHeight="30.0" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                <Label text="ПІБ ПРАЦІВНИКА :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+
+                <HBox spacing="15.0" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="Прізвище" style="-fx-text-fill: #888888; -fx-font-size: 10px;"/>
+                        <TextField fx:id="lastNameField" promptText="Прізвище..." prefHeight="30.0"/>
+                    </VBox>
+
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="Ім'я" style="-fx-text-fill: #888888; -fx-font-size: 10px;"/>
+                        <TextField fx:id="firstNameField" promptText="Ім'я..." prefHeight="30.0"/>
+                    </VBox>
+
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="По-батькові" style="-fx-text-fill: #888888; -fx-font-size: 10px;"/>
+                        <TextField fx:id="patronymicField" promptText="По-батькові..." prefHeight="30.0"/>
+                    </VBox>
+                </HBox>
 
                 <Label text="ТЕЛЕФОН :" GridPane.rowIndex="2"/>
                 <HBox alignment="CENTER_LEFT" spacing="8.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
