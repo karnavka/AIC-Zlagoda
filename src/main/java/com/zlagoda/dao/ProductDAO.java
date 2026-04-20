@@ -109,10 +109,10 @@ public class ProductDAO {
         List<Product> list = new ArrayList<>();
 
         String sql = "SELECT p.* " +
-                     "FROM Product p " +
-                     "JOIN Category c ON p.category_number = c.category_number " +
-                     "WHERE c.name = ? " +
-                     "ORDER BY p.name";
+                "FROM Product p " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE c.name = ? " +
+                "ORDER BY p.name";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -187,5 +187,107 @@ public class ProductDAO {
         }
 
         return list;
+    }
+
+    public List<ProductSalesStat> getTotalSalesPerProduct(LocalDate start, LocalDate end) throws SQLException {
+        List<ProductSalesStat> list = new ArrayList<>();
+        String sql = "SELECT sp.UPC, p.name, SUM(s.product_number) AS total_number, " +
+                "SUM(s.product_number * s.selling_price) AS total_sales " +
+                "FROM Sale s " +
+                "JOIN Store_Product sp ON s.UPC = sp.UPC " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Check c ON s.check_number = c.check_number " +
+                "WHERE c.print_date BETWEEN ? AND ? " +
+                "GROUP BY sp.UPC, p.name " +
+                "ORDER BY total_sales DESC";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDate(1, Date.valueOf(start));
+            statement.setDate(2, Date.valueOf(end));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new ProductSalesStat(
+                            rs.getString("UPC"),
+                            rs.getString("name"),
+                            rs.getInt("total_number"),
+                            rs.getBigDecimal("total_sales").doubleValue()
+                    ));
+                }
+            }
+        }
+        return list;
+    }
+
+
+    public List<Product> getProductsNeverSold(LocalDate start, LocalDate end) throws SQLException {
+        List<Product> list = new ArrayList<>();
+
+        String sql = "SELECT p.* " +
+                "FROM Product p " +
+                "WHERE NOT EXISTS ( " +
+                "SELECT * FROM Store_Product sp " +
+                "WHERE sp.id_product = p.id_product " +
+                "AND NOT EXISTS ( " +
+                "SELECT * FROM Sale s " +
+                "JOIN Check ch ON s.check_number = ch.check_number " +
+                "WHERE s.UPC = sp.UPC " +
+                "AND ch.print_date BETWEEN ? AND ? " +
+                ") " +
+                ")";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDate(1, Date.valueOf(start));
+            statement.setDate(2, Date.valueOf(end));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setId_product(rs.getInt("id_product"));
+                    product.setName(rs.getString("name"));
+                    product.setManufacturer(rs.getString("manufacturer"));
+                    product.setCharacteristics(rs.getString("characteristics"));
+                    product.setCategory_number(rs.getInt("category_number"));
+
+                    list.add(product);
+                }
+            }
+        }
+        return list;
+    }
+
+
+    public static class ProductSalesStat {
+        private final String upc;
+        private final String name;
+        private final int totalNumber;
+        private final double totalSales;
+
+        public ProductSalesStat(String upc, String name, int totalNumber, double totalSales) {
+            this.upc = upc;
+            this.name = name;
+            this.totalNumber = totalNumber;
+            this.totalSales = totalSales;
+        }
+
+        public String getUpc() {
+            return upc;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getTotalNumber() {
+            return totalNumber;
+        }
+
+        public double getTotalSales() {
+            return totalSales;
+        }
     }
 }
