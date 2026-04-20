@@ -217,7 +217,9 @@ public class ManagerClientsController {
             discountPercentField.setText(String.valueOf(client.getPercent()));
         }
 
-        deleteClientButton.setDisable(!isEditMode);
+        deleteClientButton.setVisible(isEditMode);
+        deleteClientButton.setManaged(isEditMode);
+
         editClientBox.setVisible(true);
         editClientBox.setManaged(true);
         addClientButton.setVisible(false);

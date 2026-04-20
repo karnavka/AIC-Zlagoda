@@ -45,6 +45,8 @@ public class ManagerEmployeesController {
     @FXML private DatePicker birthDatePicker;
     @FXML private DatePicker startDatePicker;
 
+    @FXML private Button deleteEmployeeButton;
+
     @FXML
     public void initialize() {
         setupTable();
@@ -279,6 +281,11 @@ public class ManagerEmployeesController {
     private void showEditBox() {
         editEmployeeBox.setManaged(true);
         editEmployeeBox.setVisible(true);
+
+        if (deleteEmployeeButton != null) {
+            deleteEmployeeButton.setVisible(editMode);
+            deleteEmployeeButton.setManaged(editMode);
+        }
     }
 
     private void hideEditBox() {
