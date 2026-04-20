@@ -136,6 +136,8 @@ public class ManagerProductsController {
         filterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             loadProducts();
             applyProductFilters();
+
+            updateTableColumns();
         });
 
         addCategoryButton.setOnAction(e -> {
@@ -230,6 +232,16 @@ public class ManagerProductsController {
         } catch (SQLException e) {
             showAlert("Помилка БД", e.getMessage());
         }
+    }
+
+    private void updateTableColumns() {
+        String filter = filterComboBox.getValue();
+        boolean isCatalogMode = "Усі".equals(filter);
+
+        priceColumn.setVisible(!isCatalogMode);
+        amountColumn.setVisible(!isCatalogMode);
+
+        upcColumn.setVisible(!isCatalogMode);
     }
 
     private void applyProductFilters() {
@@ -572,6 +584,19 @@ public class ManagerProductsController {
         editProductBox.setVisible(true);
         editProductBox.setManaged(true);
 
+        String filter = filterComboBox.getValue();
+        boolean isCatalogOnly = "Усі".equals(filter);
+
+        editProductNameField.setEditable(true);
+        editManufacturerField.setEditable(true);
+        editCharacteristicsField.setEditable(true);
+
+        editUpcField.setEditable(!isCatalogOnly && !productEditMode);
+        editPriceField.setEditable(!isCatalogOnly);
+        editAmountField.setEditable(!isCatalogOnly);
+        promotionalCheckBox.setDisable(isCatalogOnly);
+        upcPromField.setEditable(!isCatalogOnly);
+
         if (row == null) {
             productEditMode = false;
 
@@ -591,6 +616,8 @@ public class ManagerProductsController {
             upcPromField.clear();
         } else {
             productEditMode = true;
+            editUpcField.setText(row.getUpc() == null ? "" : row.getUpc());
+            editProductNameField.setText(row.getProductName());
 
             if (deleteProductButton != null) {
                 deleteProductButton.setVisible(true);
