@@ -298,4 +298,46 @@ public class EmployeeDAO {
         return list;
     }
 
+
+    public List<Employee> getCashiersSoldEveryCategory(LocalDate start, LocalDate end) throws SQLException {
+        List<Employee> list = new ArrayList<>();
+
+        String sql = "SELECT e.id_employee, e.surname, e.name " +
+                "FROM Employee e " +
+                "WHERE e.role = 'cashier' " +
+                "AND NOT EXISTS ( " +
+                "SELECT cat.category_number " +
+                "FROM Category cat " +
+                "WHERE NOT EXISTS ( " +
+                "SELECT * " +
+                "FROM Receipt r " +
+                "JOIN Sale s ON r.check_number = s.check_number " +
+                "JOIN Store_Product sp ON s.UPC = sp.UPC " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "WHERE r.id_employee = e.id_employee " +
+                "AND p.category_number = cat.category_number " +
+                "AND r.print_date BETWEEN ? AND ? " +
+                ") " +
+                ")";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDate(1, Date.valueOf(start));
+            statement.setDate(2, Date.valueOf(end));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Employee employee = new Employee();
+                    employee.setId_employee(rs.getString("id_employee"));
+                    employee.setSurname(rs.getString("surname"));
+                    employee.setName(rs.getString("name"));
+                    list.add(employee);
+                }
+            }
+        }
+        return list;
+    }
+
+
 }
