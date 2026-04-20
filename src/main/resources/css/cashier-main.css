@@ -1,60 +1,58 @@
 .root {
     -fx-background-color:
-            radial-gradient(center 50% 20%, radius 90%, #4a148c 0%, #2a0d4d 45%, #160822 100%),
-            linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            radial-gradient(center 50% 20%, radius 90%, #d8c5f1 0%, #ceb8ec 45%, #c7afe8 100%),
+            linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
 }
 
 /* Верхня панель */
 .top-bar {
     -fx-padding: 10;
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.03)),
-            linear-gradient(to right, rgba(90,35,130,0.92), rgba(45,15,70,0.96));
-    -fx-border-color: rgba(255,255,255,0.18);
+            linear-gradient(to bottom, rgba(255,255,255,0.22), rgba(255,255,255,0.10)),
+            linear-gradient(to right, #ceb9eb, #c5ade6);
+    -fx-border-color: rgba(120, 90, 160, 0.22);
     -fx-border-width: 0 0 1 0;
-    -fx-effect: dropshadow(gaussian, rgba(215,150,255,0.18), 12, 0.2, 0, 2);
 }
 
 .brand-title {
-    -fx-text-fill: #f4dcff;
+    -fx-text-fill: #4b2c6f;
     -fx-letter-spacing: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(60,20,90,0.45), 6, 0.2, 0, 1);
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.35), 4, 0.15, 0, 1);
 }
 
 .brand-subtitle {
-    -fx-text-fill: #e2b8ff;
+    -fx-text-fill: #6a4d8f;
     -fx-font-weight: bold;
-    -fx-border-color: #d78cff;
+    -fx-border-color: #9f7dca;
     -fx-border-width: 2 0 0 0;
     -fx-padding: 2 0 0 0;
 }
 
 .employee-name {
     -fx-font-weight: bold;
-    -fx-text-fill: #ecd8ff;
-    -fx-effect: dropshadow(gaussian, rgba(40,10,60,0.35), 4, 0.2, 0, 1);
+    -fx-text-fill: #4f346f;
 }
 
 /* Блок аватарки */
 .profile-container {
     -fx-background-color:
-            linear-gradient(to bottom right, rgba(255,255,255,0.20), rgba(255,255,255,0.06)),
-            linear-gradient(to bottom right, rgba(130,60,190,0.75), rgba(70,25,110,0.88));
+            linear-gradient(to bottom right, rgba(255,255,255,0.35), rgba(255,255,255,0.16)),
+            linear-gradient(to bottom right, #ceb8ec, #bda1e1);
     -fx-background-radius: 999;
-    -fx-border-color: rgba(255,255,255,0.28);
+    -fx-border-color: rgba(120, 90, 160, 0.22);
     -fx-border-radius: 999;
     -fx-border-width: 1.2;
     -fx-padding: 3;
-    -fx-effect: dropshadow(gaussian, rgba(225,140,255,0.40), 14, 0.28, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(170,140,210,0.22), 10, 0.18, 0, 2);
 }
 
 .profile-container:hover {
-    -fx-effect: dropshadow(gaussian, rgba(255,200,255,0.65), 18, 0.32, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(180,150,220,0.35), 12, 0.2, 0, 2);
 }
 
 .profile-overlay {
     -fx-background-color:
-            radial-gradient(center 35% 30%, radius 65%, rgba(255,255,255,0.22), rgba(255,255,255,0.02));
+            radial-gradient(center 35% 30%, radius 65%, rgba(255,255,255,0.20), rgba(255,255,255,0.03));
     -fx-background-radius: 999;
     -fx-border-radius: 999;
     -fx-mouse-transparent: true;
@@ -62,32 +60,32 @@
 
 /* Базові тексти */
 .label {
-    -fx-text-fill: #d4bce8;
+    -fx-text-fill: #3f2d58;
 }
 
 .check-box,
 .radio-button {
-    -fx-text-fill: #d5b9f1;
+    -fx-text-fill: #3f2d58;
 }
 
 /* Кнопки */
 .button {
     -fx-background-color:
-            linear-gradient(to bottom, #f8c8ff 0%, #d88cff 40%, #9a4dff 100%);
-    -fx-text-fill: white;
+            linear-gradient(to bottom, #d8c1f3 0%, #c8aceb 45%, #b795df 100%);
+    -fx-text-fill: #3f2d58;
     -fx-font-weight: bold;
     -fx-background-radius: 18;
-    -fx-border-color: rgba(255,255,255,0.35);
+    -fx-border-color: rgba(120, 90, 160, 0.20);
     -fx-border-radius: 18;
     -fx-border-width: 1;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(225,140,255,0.45), 14, 0.25, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(170,140,210,0.20), 10, 0.18, 0, 2);
 }
 
 .button:hover {
     -fx-background-color:
-            linear-gradient(to bottom, #ffd8ff 0%, #e7a7ff 35%, #ae63ff 100%);
-    -fx-effect: dropshadow(gaussian, rgba(255,200,255,0.70), 18, 0.3, 0, 4);
+            linear-gradient(to bottom, #e2d0f7 0%, #d1b8ef 45%, #bea1e4 100%);
+    -fx-effect: dropshadow(gaussian, rgba(180,150,220,0.28), 12, 0.2, 0, 2);
 }
 
 .button:pressed {
@@ -102,14 +100,14 @@
 .combo-box,
 .date-picker {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.22), rgba(255,255,255,0.08)),
-            linear-gradient(to bottom right, #f5e9ff, #dfc2ff);
+            linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(248,242,253,0.75)),
+            linear-gradient(to bottom right, #f7f1fc, #efe3f8);
     -fx-background-radius: 16;
     -fx-border-radius: 16;
-    -fx-border-color: rgba(255,255,255,0.45);
+    -fx-border-color: rgba(150,120,190,0.28);
     -fx-border-width: 1.1;
-    -fx-text-fill: #2f1247;
-    -fx-prompt-text-fill: rgba(70,35,95,0.65);
+    -fx-text-fill: #3f2d58;
+    -fx-prompt-text-fill: rgba(85,65,110,0.65);
 }
 
 .text-field:focused,
@@ -118,11 +116,11 @@
 .combo-box:focused,
 .date-picker:focused {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,255,255,0.14)),
-            linear-gradient(to bottom right, #fff6ff, #ebd3ff);
-    -fx-border-color: #f7d0ff;
+            linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(250,245,254,0.88)),
+            linear-gradient(to bottom right, #fbf7fe, #f1e8fa);
+    -fx-border-color: #b89bdd;
     -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(240,180,255,0.65), 15, 0.3, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(185,160,220,0.28), 10, 0.2, 0, 0);
 }
 
 /* TabPane */
@@ -141,46 +139,46 @@
 
 .tab-pane .tab-header-background {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            linear-gradient(to bottom, rgba(255,255,255,0.10), rgba(255,255,255,0.03));
 }
 
 .tab-pane .tab {
     -fx-background-color:
-            linear-gradient(to bottom right, rgba(115,50,170,0.82), rgba(55,20,90,0.92));
+            linear-gradient(to bottom right, #d4bff0, #c5addf);
     -fx-background-insets: 0;
     -fx-background-radius: 16 16 16 16;
-    -fx-border-color: rgba(255,255,255,0.16);
+    -fx-border-color: rgba(120, 90, 160, 0.16);
     -fx-border-radius: 16 16 16 16;
     -fx-padding: 8 14 8 14;
 }
 
 .tab-pane .tab:selected {
     -fx-background-color:
-            linear-gradient(to bottom, #f8c8ff 0%, #d88cff 40%, #9a4dff 100%);
-    -fx-border-color: rgba(255,255,255,0.45);
-    -fx-effect: dropshadow(gaussian, rgba(225,140,255,0.55), 16, 0.28, 0, 3);
+            linear-gradient(to bottom, #e5d7f6 0%, #d7c0ef 45%, #c6acdf 100%);
+    -fx-border-color: rgba(120, 90, 160, 0.24);
+    -fx-effect: dropshadow(gaussian, rgba(180,150,220,0.20), 10, 0.16, 0, 2);
 }
 
 .tab-pane .tab:hover {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(170,90,235,0.95), rgba(80,30,130,0.96));
+            linear-gradient(to bottom, #ddd0f3, #ccb7e8);
 }
 
 .tab-pane .tab-label {
-    -fx-text-fill: #f5e9ff;
+    -fx-text-fill: #4b3568;
     -fx-font-weight: bold;
 }
 
 .tab-pane .tab:selected .tab-label {
-    -fx-text-fill: white;
+    -fx-text-fill: #3f2d58;
 }
 
 .tab-pane .tab-content-area {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
-            rgba(30,10,45,0.55);
+            linear-gradient(to bottom, rgba(255,255,255,0.14), rgba(255,255,255,0.05)),
+            rgba(226, 212, 243, 0.65);
     -fx-background-radius: 18;
-    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-color: rgba(140, 110, 180, 0.14);
     -fx-border-radius: 18;
     -fx-padding: 0;
 }
@@ -188,49 +186,50 @@
 /* Таблиці */
 .table-view {
     -fx-background-color:
-            linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(245,230,255,0.75)),
-            rgba(255,255,255,0.9);
+            linear-gradient(to bottom, rgba(255,255,255,0.94), rgba(247,241,252,0.88)),
+            rgba(255,255,255,0.95);
     -fx-background-radius: 18;
-    -fx-border-color: rgba(150,100,200,0.25);
+    -fx-border-color: rgba(150,120,190,0.22);
     -fx-border-radius: 18;
     -fx-padding: 4;
 }
 
 .table-view .column-header-background {
     -fx-background-color:
-            linear-gradient(to right, #d88cff, #9368cc);
+            linear-gradient(to right, #d7c0ef, #c3abdE);
     -fx-background-radius: 14 14 0 0;
 }
 
 .table-view .column-header .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #4a3566;
     -fx-font-weight: bold;
 }
 
 .table-view .column-header,
 .table-view .filler {
     -fx-background-color: transparent;
-    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-color: rgba(140,110,180,0.08);
 }
+
 .table-row-cell {
-    -fx-background-color: rgba(255,255,255,0.95);
-    -fx-text-fill: #2f1247;
+    -fx-background-color: rgba(255,255,255,0.98);
+    -fx-text-fill: #3f2d58;
 }
 
 .table-row-cell:odd {
-    -fx-background-color: rgba(245,235,255,0.85);
+    -fx-background-color: rgba(246,239,251,0.95);
 }
 
 .table-row-cell:hover {
-    -fx-background-color: rgba(220,180,255,0.6);
+    -fx-background-color: rgba(232,222,245,0.85);
 }
 
 .table-row-cell:selected {
-    -fx-background-color: rgba(200,140,255,0.7);
+    -fx-background-color: rgba(216,200,238,0.95);
 }
 
 .table-cell {
-    -fx-text-fill: #2f1247;
+    -fx-text-fill: #3f2d58;
     -fx-border-color: transparent;
 }
 
@@ -241,6 +240,6 @@
 }
 
 .scroll-bar .thumb {
-    -fx-background-color: rgba(180,120,240,0.7);
+    -fx-background-color: rgba(180,160,210,0.55);
     -fx-background-radius: 999;
 }
