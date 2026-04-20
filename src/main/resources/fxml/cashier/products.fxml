@@ -36,11 +36,16 @@
 
     <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="idColumn" prefWidth="150.0" text="UPC" />
-            <TableColumn fx:id="nameColumn" prefWidth="450.0" text="НАЗВА ТОВАРУ" />
+            <TableColumn fx:id="idColumn" prefWidth="120.0" text="UPC" />
+            <TableColumn fx:id="nameColumn" prefWidth="200.0" text="НАЗВА ТОВАРУ" />
+            <TableColumn fx:id="manufacturerColumn" prefWidth="150.0" text="ВИРОБНИК" />
+            <TableColumn fx:id="categoryColumn" prefWidth="120.0" text="КАТЕГОРІЯ" />
+            <TableColumn fx:id="priceColumn" prefWidth="100.0" text="ЦІНА" />
+            <TableColumn fx:id="stockColumn" prefWidth="100.0" text="К-ТЬ" />
+            <TableColumn fx:id="promoColumn" prefWidth="100.0" text="АКЦІЙНИЙ" />
         </columns>
         <placeholder>
-            <Label text="ТАБЛИЦЯ РЕЗУЛЬТАТІВ ПОШУКУ" />
+            <Label text="Товари не знайдено..." />
         </placeholder>
     </TableView>
 

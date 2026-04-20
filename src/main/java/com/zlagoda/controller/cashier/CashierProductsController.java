@@ -1,248 +1,185 @@
 package com.zlagoda.controller.cashier;
 
-import com.zlagoda.dao.ProductDAO;
+import com.zlagoda.dao.CategoryDAO;
 import com.zlagoda.dao.Store_ProductDAO;
-import com.zlagoda.model.Product;
-import com.zlagoda.model.Store_Product;
+import com.zlagoda.dto.StoreProductDTO;
+import com.zlagoda.model.Category;
+import com.zlagoda.model.User;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class CashierProductsController {
+
+    private User currentUser;
+    private final Store_ProductDAO storeProductDAO = new Store_ProductDAO();
+    private final CategoryDAO categoryDAO = new CategoryDAO();
+    private final ObservableList<StoreProductDTO> tableData = FXCollections.observableArrayList();
 
     @FXML public TextField nameSearchField;
     @FXML public ComboBox<String> categoryComboBox;
     @FXML public ComboBox<String> allComboBox;
     @FXML public ComboBox<String> sortComboBox;
-    @FXML public TableView<ProductRow> productsTable;
-    @FXML public TableColumn<ProductRow, String> idColumn;
-    @FXML public TableColumn<ProductRow, String> nameColumn;
-    @FXML public VBox detailsBox;
-    @FXML public Label upcLabel;
-    @FXML public Label nameLabel;
-    @FXML public Label manufacturerLabel;
-    @FXML public Label characteristicsLabel;
-    @FXML public Label stockLabel;
-    @FXML public Label priceLabel;
-    @FXML public Label promoPriceLabel;
 
-    private final Store_ProductDAO storeProductDAO = new Store_ProductDAO();
-    private final ProductDAO productDAO = new ProductDAO();
+    @FXML private TableView<StoreProductDTO> productsTable;
+    @FXML private TableColumn<StoreProductDTO, String> idColumn;
+    @FXML private TableColumn<StoreProductDTO, String> nameColumn;
+    @FXML private TableColumn<StoreProductDTO, String> categoryColumn;
+    @FXML private TableColumn<StoreProductDTO, Double> priceColumn;
+    @FXML private TableColumn<StoreProductDTO, Integer> stockColumn;
+    @FXML private TableColumn<StoreProductDTO, String> promoColumn;
 
-    private final ObservableList<ProductRow> tableData = FXCollections.observableArrayList();
-    private final List<ProductRow> allProducts = new ArrayList<>();
+    @FXML private VBox detailsBox;
+    @FXML private Label upcLabel, manufacturerLabel, characteristicsLabel, stockLabel, priceLabel;
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(data -> data.getValue().upcProperty());
-        nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
+        setupTable();
 
-        allComboBox.setItems(FXCollections.observableArrayList("усі", "акційні", "неакційні"));
+        allComboBox.setItems(FXCollections.observableArrayList("усі", "акційні", "неакційні", "наявні"));
         allComboBox.setValue("усі");
 
         sortComboBox.setItems(FXCollections.observableArrayList("НАЗВА", "КІЛЬКІСТЬ"));
         sortComboBox.setValue("НАЗВА");
 
-        categoryComboBox.setItems(FXCollections.observableArrayList("Усі"));
-        categoryComboBox.setValue("Усі");
-
-        productsTable.setItems(tableData);
+        sortComboBox.setOnAction(e -> refreshTable());
 
         productsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                showDetails(newVal);
-            } else {
-                clearDetails();
-            }
+            if (newVal != null) showDetails(newVal);
+            else clearDetails();
         });
 
-        loadProducts();
+        loadCategories();
+        refreshTable();
     }
 
-    private void loadProducts() {
+    private void setupTable() {
+        productsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUpc()));
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProductName()));
+        categoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategoryName()));
+        priceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSellingPrice()));
+        stockColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getProductsNumber()));
+        promoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isPromotional() ? "Так" : "Ні"));
+
+        productsTable.setItems(tableData);
+    }
+
+    @FXML
+    public void searchProduct(ActionEvent event) {
+        refreshTable();
+    }
+
+    private void refreshTable() {
         try {
-            allProducts.clear();
+            String name = (nameSearchField.getText() == null) ? "" : nameSearchField.getText().trim();
+            String category = categoryComboBox.getValue();
+            String promo = allComboBox.getValue();
+            String sort = sortComboBox.getValue();
 
-            List<Store_Product> storeProducts = storeProductDAO.getAllStoreProductsOrderByName();
+            List<StoreProductDTO> results;
 
-            Set<String> categoryValues = new TreeSet<>();
-            categoryValues.add("Усі");
-
-            for (Store_Product sp : storeProducts) {
-                Product p = productDAO.getProductById(sp.getId_product());
-                if (p == null) continue;
-
-                String categoryValue = String.valueOf(p.getCategory_number());
-                categoryValues.add(categoryValue);
-
-                allProducts.add(new ProductRow(sp, p));
+            if (!name.isEmpty()) {
+                if ("КІЛЬКІСТЬ".equals(sort)) {
+                    results = storeProductDAO.searchByProductNameOrderByNumber(name);
+                } else {
+                    results = storeProductDAO.searchByProductName(name);
+                }
+            }
+            else if ("акційні".equals(promo)) {
+                if ("КІЛЬКІСТЬ".equals(sort)) results = storeProductDAO.getPromotionalProductsOrderByNumber();
+                else results = storeProductDAO.getPromotionalProductsOrderByName();
+            }
+            else if ("неакційні".equals(promo)) {
+                if ("КІЛЬКІСТЬ".equals(sort)) results = storeProductDAO.getNonPromotionalProductsOrderByNumber();
+                else results = storeProductDAO.getNonPromotionalProductsOrderByName();
+            }
+            else {
+                if ("КІЛЬКІСТЬ".equals(sort)) results = storeProductDAO.getAllStoreProductsOrderByNumber();
+                else results = storeProductDAO.getAllStoreProductsOrderByName();
             }
 
-            categoryComboBox.setItems(FXCollections.observableArrayList(categoryValues));
-            categoryComboBox.setValue("Усі");
+            ObservableList<StoreProductDTO> filteredList = FXCollections.observableArrayList();
 
-            tableData.setAll(allProducts);
-            clearDetails();
+            for (StoreProductDTO item : results) {
+                boolean matchesCategory = (category == null || category.equals("Усі")) ||
+                        (item.getCategoryName() != null && item.getCategoryName().equals(category));
+
+                boolean matchesStock = !"у наявності".equals(promo) || item.getProductsNumber() > 0;
+
+                boolean matchesPromoStatus = true;
+                if (!name.isEmpty()) {
+                    if ("акційні".equals(promo)) matchesPromoStatus = item.isPromotional();
+                    else if ("неакційні".equals(promo)) matchesPromoStatus = !item.isPromotional();
+                }
+
+                if (matchesCategory && matchesStock && matchesPromoStatus) {
+                    filteredList.add(item);
+                }
+            }
+
+            tableData.setAll(filteredList);
+
+            productsTable.getSortOrder().clear();
 
         } catch (SQLException e) {
-            showError("Помилка завантаження товарів", e.getMessage());
+            showAlert("Помилка", e.getMessage());
         }
     }
 
     @FXML
-    public void searchProduct(ActionEvent actionEvent) {
-        String nameText = nameSearchField.getText() == null ? "" : nameSearchField.getText().trim().toLowerCase();
-        String category = categoryComboBox.getValue();
-        String promoFilter = allComboBox.getValue();
-        String sortValue = sortComboBox.getValue();
-
-        List<ProductRow> filtered = allProducts.stream()
-                .filter(row -> nameText.isEmpty() || row.getName().toLowerCase().contains(nameText))
-                .filter(row -> category == null || category.equals("Усі") || row.getCategoryNumberText().equals(category))
-                .filter(row -> {
-                    if ("акційні".equals(promoFilter)) return row.isPromotional();
-                    if ("неакційні".equals(promoFilter)) return !row.isPromotional();
-                    return true;
-                })
-                .collect(Collectors.toList());
-
-        if ("КІЛЬКІСТЬ".equals(sortValue)) {
-            filtered.sort(Comparator.comparingInt(ProductRow::getProductsNumber));
-        } else {
-            filtered.sort(Comparator.comparing(ProductRow::getName, String.CASE_INSENSITIVE_ORDER));
-        }
-
-        tableData.setAll(filtered);
-        productsTable.getSelectionModel().clearSelection();
-        clearDetails();
-    }
-
-    @FXML
-    public void clearButton(ActionEvent actionEvent) {
+    public void clearButton(ActionEvent event) {
         nameSearchField.clear();
         categoryComboBox.setValue("Усі");
         allComboBox.setValue("усі");
         sortComboBox.setValue("НАЗВА");
-
-        tableData.setAll(allProducts);
-        productsTable.getSelectionModel().clearSelection();
-        clearDetails();
+        refreshTable();
     }
 
-    private void showDetails(ProductRow row) {
+    private void loadCategories() {
         try {
-            detailsBox.setVisible(true);
-            detailsBox.setManaged(true);
-
-            upcLabel.setText(row.getUpc());
-            nameLabel.setText(row.getName());
-            manufacturerLabel.setText(row.getManufacturer());
-            characteristicsLabel.setText(row.getCharacteristics());
-            stockLabel.setText(String.valueOf(row.getProductsNumber()));
-            priceLabel.setText(String.format("%.2f", row.getSellingPrice()));
-
-            String promoText = "---";
-
-            if (row.isPromotional()) {
-                promoText = String.format("%.2f", row.getSellingPrice());
-            } else if (row.getUpcProm() != null && !row.getUpcProm().isBlank()) {
-                Store_Product promoProduct = storeProductDAO.getFullStoreProductByUPC(row.getUpcProm());
-                if (promoProduct != null) {
-                    promoText = String.format("%.2f", promoProduct.getSelling_price());
-                }
-            }
-
-            promoPriceLabel.setText(promoText);
-
+            List<Category> categories = categoryDAO.getAllCategoriesOrderByName();
+            ObservableList<String> names = FXCollections.observableArrayList("Усі");
+            for (Category c : categories) names.add(c.getName());
+            categoryComboBox.setItems(names);
+            categoryComboBox.setValue("Усі");
         } catch (SQLException e) {
-            showError("Помилка завантаження деталей", e.getMessage());
+            showAlert("Помилка категорій", e.getMessage());
         }
+    }
+
+    private void showDetails(StoreProductDTO dto) {
+        detailsBox.setVisible(true);
+        detailsBox.setManaged(true);
+        upcLabel.setText(dto.getUpc());
+        manufacturerLabel.setText(dto.getManufacturer());
+        characteristicsLabel.setText(dto.getCharacteristics());
+        stockLabel.setText(String.valueOf(dto.getProductsNumber()));
+        priceLabel.setText(String.format("%.2f грн", dto.getSellingPrice()));
     }
 
     private void clearDetails() {
         detailsBox.setVisible(false);
         detailsBox.setManaged(false);
-
-        upcLabel.setText("---");
-        nameLabel.setText("---");
-        manufacturerLabel.setText("---");
-        characteristicsLabel.setText("---");
-        stockLabel.setText("---");
-        priceLabel.setText("---");
-        promoPriceLabel.setText("---");
     }
 
-    private void showError(String header, String content) {
+    private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Помилка");
-        alert.setHeaderText(header);
+        alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
     }
 
-    public static class ProductRow {
-        private final Store_Product storeProduct;
-        private final Product product;
-
-        public ProductRow(Store_Product storeProduct, Product product) {
-            this.storeProduct = storeProduct;
-            this.product = product;
-        }
-
-        public String getUpc() {
-            return storeProduct.getUPC();
-        }
-
-        public SimpleStringProperty upcProperty() {
-            return new SimpleStringProperty(getUpc());
-        }
-
-        public String getName() {
-            return product.getName();
-        }
-
-        public SimpleStringProperty nameProperty() {
-            return new SimpleStringProperty(getName());
-        }
-
-        public String getManufacturer() {
-            return product.getManufacturer();
-        }
-
-        public String getCharacteristics() {
-            return product.getCharacteristics();
-        }
-
-        public int getCategoryNumber() {
-            return product.getCategory_number();
-        }
-
-        public String getCategoryNumberText() {
-            return String.valueOf(product.getCategory_number());
-        }
-
-        public int getProductsNumber() {
-            return storeProduct.getProducts_number();
-        }
-
-        public double getSellingPrice() {
-            return storeProduct.getSelling_price();
-        }
-
-        public boolean isPromotional() {
-            return storeProduct.isPromotional_product();
-        }
-
-        public String getUpcProm() {
-            return storeProduct.getUPC_prom();
-        }
+    public void initData(User user) {
+        this.currentUser = user;
     }
 }

@@ -1,5 +1,6 @@
 package com.zlagoda.dao;
 
+import com.zlagoda.dto.StoreProductDTO;
 import com.zlagoda.model.Store_Product;
 import com.zlagoda.util.DatabaseConnection;
 import java.sql.*;
@@ -61,35 +62,6 @@ public class Store_ProductDAO {
         }
     }
 
-    public List<Store_Product> getAllStoreProductsOrderByName() throws SQLException {
-        List<Store_Product> list = new ArrayList<>();
-        String sql = "SELECT sp.* FROM Store_Product sp " +
-                "JOIN Product p ON sp.id_product = p.id_product " +
-                "ORDER BY p.name";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet rs = statement.executeQuery()) {
-            while (rs.next()) {
-                list.add(mapStoreProduct(rs));
-            }
-        }
-        return list;
-    }
-
-    public List<Store_Product> getAllStoreProductsOrderByNumber() throws SQLException {
-        List<Store_Product> list = new ArrayList<>();
-        String sql = "SELECT * FROM Store_Product ORDER BY products_number";
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet rs = statement.executeQuery()) {
-            while (rs.next()) {
-                list.add(mapStoreProduct(rs));
-            }
-        }
-        return list;
-    }
-
     public Store_Product getStoreProductByUPC(String upc) throws SQLException {
         String sql = "SELECT upc, id_product, selling_price, products_number FROM Store_Product WHERE upc = ?";
         try (Connection connection = DatabaseConnection.getConnection();
@@ -126,48 +98,151 @@ public class Store_ProductDAO {
         return null;
     }
 
-    public List<Store_Product> getPromotionalProductsOrderByName() throws SQLException {
-        String sql = "SELECT sp.* FROM Store_Product sp " +
+    public List<StoreProductDTO> getProductsByCategory(String categoryName) throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE c.name = ? " +
+                "ORDER BY p.name";
+
+        List<StoreProductDTO> list = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, categoryName);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapToDto(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<StoreProductDTO> getAllStoreProductsOrderByName() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "ORDER BY p.name";
+        return executeDtoQuery(sql);
+    }
+
+    public List<StoreProductDTO> getAllStoreProductsOrderByNumber() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "ORDER BY sp.products_number DESC";
+        return executeDtoQuery(sql);
+    }
+
+    public List<StoreProductDTO> getPromotionalProductsOrderByNumber() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE sp.promotional_product = TRUE " +
+                "ORDER BY sp.products_number DESC";
+        return executeDtoQuery(sql);
+    }
+
+    public List<StoreProductDTO> getNonPromotionalProductsOrderByNumber() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE sp.promotional_product = FALSE " +
+                "ORDER BY sp.products_number DESC";
+        return executeDtoQuery(sql);
+    }
+
+    public List<StoreProductDTO> getPromotionalProductsOrderByName() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
                 "WHERE sp.promotional_product = TRUE " +
                 "ORDER BY p.name";
-        return executeListQuery(sql);
+        return executeDtoQuery(sql);
     }
 
-    public List<Store_Product> getPromotionalProductsOrderByNumber() throws SQLException {
-        String sql = "SELECT sp.* FROM Store_Product sp " +
+    public List<StoreProductDTO> getNonPromotionalProductsOrderByName() throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
-                "WHERE sp.promotional_product = TRUE " +
-                "ORDER BY sp.products_number";
-        return executeListQuery(sql);
-    }
-
-    public List<Store_Product> getNonPromotionalProductsOrderByName() throws SQLException {
-        String sql = "SELECT sp.* FROM Store_Product sp " +
-                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
                 "WHERE sp.promotional_product = FALSE " +
                 "ORDER BY p.name";
-        return executeListQuery(sql);
+        return executeDtoQuery(sql);
     }
 
-    public List<Store_Product> getNonPromotionalProductsOrderByNumber() throws SQLException {
-        String sql = "SELECT sp.* FROM Store_Product sp " +
+    public List<StoreProductDTO> searchByProductName(String name) throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
                 "JOIN Product p ON sp.id_product = p.id_product " +
-                "WHERE sp.promotional_product = FALSE " +
-                "ORDER BY sp.products_number";
-        return executeListQuery(sql);
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE p.name LIKE ? " +
+                "ORDER BY p.name";
+
+        List<StoreProductDTO> list = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + name + "%");
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapToDto(rs));
+                }
+            }
+        }
+        return list;
     }
 
-    private List<Store_Product> executeListQuery(String sql) throws SQLException {
-        List<Store_Product> list = new ArrayList<>();
+    public List<StoreProductDTO> searchByProductNameOrderByNumber(String name) throws SQLException {
+        String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "JOIN Category c ON p.category_number = c.category_number " +
+                "WHERE p.name LIKE ? " +
+                "ORDER BY sp.products_number DESC";
+
+        List<StoreProductDTO> list = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + name + "%");
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapToDto(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    private List<StoreProductDTO> executeDtoQuery(String sql) throws SQLException {
+        List<StoreProductDTO> list = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
-                list.add(mapStoreProduct(rs));
+                list.add(mapToDto(rs));
             }
         }
         return list;
+    }
+
+    private StoreProductDTO mapToDto(ResultSet rs) throws SQLException {
+        StoreProductDTO dto = new StoreProductDTO();
+        dto.setUpc(rs.getString("upc"));
+        dto.setUpcProm(rs.getString("upc_prom"));
+        dto.setProductName(rs.getString("name"));
+        dto.setManufacturer(rs.getString("manufacturer"));
+        dto.setCategoryName(rs.getString("category_name"));
+        dto.setSellingPrice(rs.getDouble("selling_price"));
+        dto.setProductsNumber(rs.getInt("products_number"));
+        dto.setPromotional(rs.getBoolean("promotional_product"));
+        dto.setCharacteristics(rs.getString("characteristics"));
+        return dto;
     }
 
     private Store_Product mapStoreProduct(ResultSet rs) throws SQLException {
