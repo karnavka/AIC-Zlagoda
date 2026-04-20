@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="700.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: #525659;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zlagoda.controller.manager.ReportPreviewController">
+    <padding>
+        <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
+    </padding>
+    <children>
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <Button onAction="#handleSavePdf" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" text="ЗБЕРЕГТИ PDF 📥" />
+            <Button onAction="#handleClose" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="ЗАКРИТИ" />
+        </HBox>
+
+        <VBox spacing="15.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 0);">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+            <children>
+                <Label text="МЕРЕЖА МАГАЗИНІВ «ЗЛАГОДА»">
+                    <font> <Font size="10.0" /> </font>
+                </Label>
+                <Label fx:id="reportTitleLabel" alignment="CENTER" maxWidth="Infinity" text="ЗВІТ ПО ПРАЦІВНИКАХ">
+                    <font> <Font name="System Bold" size="18.0" /> </font>
+                </Label>
+                <Label fx:id="dateLabel" alignment="CENTER_RIGHT" maxWidth="Infinity" text="Дата: 20.04.2026" />
+
+                <TableView fx:id="previewTable" prefHeight="400.0" VBox.vgrow="ALWAYS">
+                </TableView>
+
+                <HBox alignment="BOTTOM_LEFT" prefHeight="50.0">
+                    <Label text="Підпис відповідальної особи: ____________________" />
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</VBox>
