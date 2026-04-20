@@ -223,44 +223,6 @@ public class EmployeeDAO {
         return list;
     }
 
-
-    public List<Employee> getEmployeesWorkingEveryDay(LocalDate start, LocalDate end) throws SQLException {
-        List<Employee> list = new ArrayList<>();
-        String sql = "SELECT e.id_employee, e.surname, e.name " +
-                "FROM Employee e " +
-                "WHERE NOT EXISTS ( " +
-                "SELECT DISTINCT ch.print_date " +
-                "FROM Receipt r " +
-                "WHERE r.print_date BETWEEN ? AND ? " +
-                "AND NOT EXISTS ( " +
-                "SELECT * " +
-                "FROM Receipt r2 " +
-                "WHERE r2.id_employee = e.id_employee " +
-                "AND r2.print_date = r.print_date " +
-                ") " +
-                ")";
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setDate(1, Date.valueOf(start));
-            statement.setDate(2, Date.valueOf(end));
-
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    Employee employee = new Employee();
-                    employee.setId_employee(rs.getString("id_employee"));
-                    employee.setSurname(rs.getString("surname"));
-                    employee.setName(rs.getString("name"));
-
-                    list.add(employee);
-                }
-            }
-        }
-        return list;
-    }
-
-
     public static class EmployeeStat {
         private final String id_employee;
         private final String surname;
