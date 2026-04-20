@@ -2,24 +2,24 @@ package com.zlagoda.controller.manager;
 
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
-import com.zlagoda.dao.Customer_CardDAO;
-import com.zlagoda.dao.CheckDAO; // Не забудьте додати ваш DAO для чеків
-import com.zlagoda.model.Customer_Card;
-import com.zlagoda.model.Check; // Ваша модель чека
-import javafx.fxml.FXML;
-import javafx.print.PrinterJob;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
+import com.zlagoda.dao.CheckDAO;
+import com.zlagoda.dao.Customer_CardDAO;
+import com.zlagoda.dao.EmployeeDAO;
+import com.zlagoda.model.Check;
+import com.zlagoda.model.Customer_Card;
+import com.zlagoda.model.Employee;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 
 import java.awt.Desktop;
@@ -32,12 +32,13 @@ public class ManagerReportsController {
     @FXML
     private DatePicker reportDatePicker;
     @FXML
-    private DatePicker reportStartDatePicker; // З вашого FXML
+    private DatePicker reportStartDatePicker;
     @FXML
-    private DatePicker reportEndDatePicker;   // З вашого FXML
+    private DatePicker reportEndDatePicker;
 
     private final Customer_CardDAO customerDAO = new Customer_CardDAO();
-    private final CheckDAO checkDAO = new CheckDAO(); // Ініціалізація DAO для чеків
+    private final CheckDAO checkDAO = new CheckDAO();
+    private final EmployeeDAO employeeDAO = new EmployeeDAO();
 
     @FXML
     public void initialize() {
@@ -47,21 +48,16 @@ public class ManagerReportsController {
         if (reportEndDatePicker != null) reportEndDatePicker.setValue(today);
     }
 
-    // --- ЗВІТ ПО КЛІЄНТАХ ---
+    // --- 1. ЗВІТ ПО КЛІЄНТАХ ---
     @FXML
     private void handlePrintClientsReport() {
         try {
             LocalDate selectedDate = (reportDatePicker != null && reportDatePicker.getValue() != null)
-                    ? reportDatePicker.getValue()
-                    : LocalDate.now();
+                    ? reportDatePicker.getValue() : LocalDate.now();
 
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Налаштування звіту");
-            confirmAlert.setHeaderText("Сформувати звіт про постійних клієнтів?");
-            confirmAlert.setContentText("Буде згенеровано список усіх клієнтів станом на: " + selectedDate);
-
-            if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            if (showConfirmAlert("Клієнти", "Сформувати список усіх постійних клієнтів?")) {
                 List<Customer_Card> clients = customerDAO.getAllCustomerCardsOrderBySurname();
+
                 if (clients.isEmpty()) {
                     showAlert("Увага", "Список клієнтів порожній.", Alert.AlertType.WARNING);
                     return;
@@ -78,6 +74,7 @@ public class ManagerReportsController {
         }
     }
 
+    // --- 2. ЗВІТ ПО ЧЕКАХ ЗА ПЕРІОД ---
     @FXML
     private void handlePrintChecksReport() {
         try {
@@ -85,85 +82,60 @@ public class ManagerReportsController {
             LocalDate end = reportEndDatePicker.getValue();
 
             if (start == null || end == null || start.isAfter(end)) {
-                showAlert("Помилка дат", "Будь ласка, оберіть коректний період.", Alert.AlertType.WARNING);
+                showAlert("Помилка", "Оберіть коректний період дат.", Alert.AlertType.WARNING);
                 return;
             }
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmAlert.setTitle("Налаштування звіту");
-            confirmAlert.setHeaderText("Сформувати звіт по чеках?");
-            confirmAlert.setContentText("Буде згенеровано звіт за період:\nЗ: " + start + "\nПо: " + end);
 
-            if (confirmAlert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-
+            if (showConfirmAlert("Чеки", "Сформувати звіт по чеках за період: " + start + " - " + end + "?")) {
                 List<Check> checks = checkDAO.getChecksByPeriod(start.atStartOfDay(), end.atTime(23, 59, 59));
 
                 if (checks.isEmpty()) {
-                    showAlert("Інформація", "За вказаний період чеків не знайдено.", Alert.AlertType.INFORMATION);
+                    showAlert("Інформація", "За цей період чеків не знайдено.", Alert.AlertType.INFORMATION);
                     return;
                 }
 
                 File file = getSaveLocation("Checks_Report_" + start + "_to_" + end + ".pdf");
-
                 if (file != null) {
-
                     generateChecksPdf(checks, file.getAbsolutePath(), start, end);
-
                     showOpenReportDialog(file);
                 }
             }
         } catch (Exception e) {
-            showAlert("Помилка", "Не вдалося згенерувати звіт по чеках: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Помилка", "Помилка при генерації чеків: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    private void generateChecksPdf(List<Check> checks, String dest, LocalDate start, LocalDate end) throws Exception {
-        PdfWriter writer = new PdfWriter(dest);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
+    // --- 3. ЗВІТ ПО ПРАЦІВНИКАХ ---
+    @FXML
+    private void handlePrintEmployeesReport() {
+        try {
+            if (showConfirmAlert("Працівники", "Сформувати звіт про персонал магазину?")) {
+                List<Employee> employees = employeeDAO.getAllEmployeesOrderBySurname();
 
-        PdfFont font = PdfFontFactory.createFont("C:\\Windows\\Fonts\\arial.ttf", "Identity-H");
-        document.setFont(font);
+                if (employees.isEmpty()) {
+                    showAlert("Увага", "Список працівників порожній.", Alert.AlertType.WARNING);
+                    return;
+                }
 
-        document.add(new Paragraph("МЕРЕЖА МАГАЗИНІВ 'ЗЛАГОДА'")
-                .setTextAlignment(TextAlignment.CENTER).setBold().setFontSize(18));
-        document.add(new Paragraph("ЗВІТ ПО ПРОДАЖАХ (ЧЕКИ)")
-                .setTextAlignment(TextAlignment.CENTER).setFontSize(14));
-        document.add(new Paragraph("Період: з " + start + " по " + end + "\n\n"));
-
-        float[] columnWidths = {3, 3, 4, 2};
-        Table table = new Table(UnitValue.createPercentArray(columnWidths)).useAllAvailableWidth();
-
-        table.addHeaderCell(new Cell().add(new Paragraph("№ Чека").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Дата").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Касир").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Сума").setBold()));
-
-        double totalSum = 0;
-        for (Check c : checks) {
-            table.addCell(new Cell().add(new Paragraph(c.getCheck_number())));
-            table.addCell(new Cell().add(new Paragraph(c.getPrint_date().toString())));
-            table.addCell(new Cell().add(new Paragraph(c.getId_employee()))); // Прізвище касира
-            table.addCell(new Cell().add(new Paragraph(String.format("%.2f", c.getSum_total()))));
-            totalSum += c.getSum_total();
+                File file = getSaveLocation("Employees_Report_" + LocalDate.now() + ".pdf");
+                if (file != null) {
+                    generateEmployeesPdf(employees, file.getAbsolutePath());
+                    showOpenReportDialog(file);
+                }
+            }
+        } catch (Exception e) {
+            showAlert("Помилка", "Помилка звіту працівників: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
-        document.add(table);
-        document.add(new Paragraph("\nЗАГАЛЬНА СУМА ЗА ПЕРІОД: " + String.format("%.2f", totalSum) + " грн")
-                .setBold().setTextAlignment(TextAlignment.RIGHT));
-
-        document.close();
     }
+
 
     private void generateClientsPdf(List<Customer_Card> clients, String dest, LocalDate date) throws Exception {
         PdfWriter writer = new PdfWriter(dest);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
+        document.setFont(getPdfFont());
 
-        PdfFont font = PdfFontFactory.createFont("C:\\Windows\\Fonts\\arial.ttf", "Identity-H");
-        document.setFont(font);
-
-        document.add(new Paragraph("МЕРЕЖА МАГАЗИНІВ 'ЗЛАГОДА'").setTextAlignment(TextAlignment.CENTER).setBold().setFontSize(20));
-        document.add(new Paragraph("ЗВІТ: ПОСТІЙНІ КЛІЄНТИ").setTextAlignment(TextAlignment.CENTER).setFontSize(14));
+        document.add(new Paragraph("ЗВІТ: ПОСТІЙНІ КЛІЄНТИ").setTextAlignment(TextAlignment.CENTER).setBold().setFontSize(18));
         document.add(new Paragraph("Станом на: " + date + "\n\n"));
 
         Table table = new Table(UnitValue.createPercentArray(new float[]{2, 4, 4, 2})).useAllAvailableWidth();
@@ -172,41 +144,105 @@ public class ManagerReportsController {
         table.addHeaderCell(new Cell().add(new Paragraph("Ім'я").setBold()));
         table.addHeaderCell(new Cell().add(new Paragraph("Знижка %").setBold()));
 
-        for (Customer_Card client : clients) {
-            table.addCell(new Cell().add(new Paragraph(client.getCard_number())));
-            table.addCell(new Cell().add(new Paragraph(client.getSurname())));
-            table.addCell(new Cell().add(new Paragraph(client.getName())));
-            table.addCell(new Cell().add(new Paragraph(client.getPercent() + "%")));
+        for (Customer_Card c : clients) {
+            table.addCell(c.getCard_number());
+            table.addCell(c.getSurname());
+            table.addCell(c.getName());
+            table.addCell(c.getPercent() + "%");
         }
-
         document.add(table);
         document.close();
     }
 
-    // Допоміжні методи
+    private void generateChecksPdf(List<Check> checks, String dest, LocalDate start, LocalDate end) throws Exception {
+        PdfWriter writer = new PdfWriter(dest);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        document.setFont(getPdfFont());
+
+        document.add(new Paragraph("ЗВІТ ПО ПРОДАЖАХ (ЧЕКИ)").setTextAlignment(TextAlignment.CENTER).setBold().setFontSize(18));
+        document.add(new Paragraph("Період: " + start + " - " + end + "\n\n"));
+
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 3, 4, 2})).useAllAvailableWidth();
+        table.addHeaderCell(new Cell().add(new Paragraph("№ Чека").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Дата").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Касир").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Сума").setBold()));
+
+        double total = 0;
+        for (Check c : checks) {
+            table.addCell(c.getCheck_number());
+            table.addCell(c.getPrint_date().toLocalDate().toString());
+            table.addCell(c.getId_employee());
+            table.addCell(String.format("%.2f", c.getSum_total()));
+            total += c.getSum_total();
+        }
+        document.add(table);
+        document.add(new Paragraph("\nРАЗОМ ЗА ПЕРІОД: " + String.format("%.2f", total) + " грн").setBold().setTextAlignment(TextAlignment.RIGHT));
+        document.close();
+    }
+
+    private void generateEmployeesPdf(List<Employee> employees, String dest) throws Exception {
+        PdfWriter writer = new PdfWriter(dest);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        document.setFont(getPdfFont());
+
+        document.add(new Paragraph("ЗВІТ: ПЕРСОНАЛ").setTextAlignment(TextAlignment.CENTER).setBold().setFontSize(18));
+        document.add(new Paragraph("Дата формування: " + LocalDate.now() + "\n\n"));
+
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 3, 3, 2})).useAllAvailableWidth();
+        table.addHeaderCell(new Cell().add(new Paragraph("Прізвище").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Ім'я").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Посада").setBold()));
+        table.addHeaderCell(new Cell().add(new Paragraph("Зарплата").setBold()));
+
+        for (Employee e : employees) {
+
+            table.addCell(e.getSurname());
+            table.addCell(e.getName());
+            table.addCell(e.getRole());
+            table.addCell(String.format("%.2f", e.getSalary()));
+        }
+        document.add(table);
+        document.close();
+    }
+
+    private PdfFont getPdfFont() throws Exception {
+
+        String fontPath = "src/main/resources/ARIAL.TTF";
+        return PdfFontFactory.createFont(fontPath, "Identity-H");
+    }
+
     private File getSaveLocation(String defaultName) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Зберегти PDF звіт");
-        fileChooser.setInitialFileName(defaultName);
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        return fileChooser.showSaveDialog(null);
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Зберегти звіт");
+        fc.setInitialFileName(defaultName);
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        return fc.showSaveDialog(null);
+    }
+
+    private boolean showConfirmAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Підтвердження");
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
 
     private void showOpenReportDialog(File file) {
-        Alert openAlert = new Alert(Alert.AlertType.INFORMATION);
-        openAlert.setTitle("Успіх");
-        openAlert.setHeaderText("Звіт збережено!");
-        openAlert.setContentText("Бажаєте переглянути звіт зараз?");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Успіх");
+        alert.setHeaderText("Звіт збережено!");
+        alert.setContentText("Бажаєте переглянути файл зараз?");
 
         ButtonType openBtn = new ButtonType("Відкрити");
         ButtonType closeBtn = new ButtonType("Закрити", ButtonBar.ButtonData.CANCEL_CLOSE);
-        openAlert.getButtonTypes().setAll(openBtn, closeBtn);
+        alert.getButtonTypes().setAll(openBtn, closeBtn);
 
-        openAlert.showAndWait().ifPresent(type -> {
-            if (type == openBtn) {
-                try {
-                    if (Desktop.isDesktopSupported()) Desktop.getDesktop().open(file);
-                } catch (Exception e) { e.printStackTrace(); }
+        alert.showAndWait().ifPresent(type -> {
+            if (type == openBtn && Desktop.isDesktopSupported()) {
+                try { Desktop.getDesktop().open(file); } catch (Exception ignored) {}
             }
         });
     }
@@ -219,8 +255,6 @@ public class ManagerReportsController {
         alert.showAndWait();
     }
 
-    // Інші заглушки залишаються без змін
-    @FXML private void handlePrintEmployeesReport() {}
     @FXML private void handlePrintProductsReport() {}
     @FXML private void handlePrintStoreProductsReport() {}
     @FXML private void handlePrintCategoriesReport() {}
