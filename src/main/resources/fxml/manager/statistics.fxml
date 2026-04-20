@@ -32,87 +32,96 @@
                 <Button mnemonicParsing="false" onAction="#cleanAnalysis" style="-fx-background-color: #e74c3c; -fx-text-fill: white;-fx-font-weight: bold;"  text="ОЧИСТИТИ" />
             </children>
         </HBox>
-
-        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-            <children>
-                <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: white; -fx-border-color: transparent;">
+            <content>
+                <HBox spacing="20.0">
+                    <padding>
+                        <Insets bottom="10.0" left="5.0" right="15.0" top="5.0" />
+                    </padding>
                     <children>
-                        <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                        <VBox spacing="20.0" minWidth="550.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАТЕГОРІЇ" />
-                                <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
-                                    <VBox.margin>
-                                        <Insets top="9.0" />
-                                    </VBox.margin>
-                                    <columns>
-                                    <TableColumn fx:id="numberOfCategory" text="Номер" prefWidth="120.0"/>
-                                    <TableColumn fx:id="nameOfCategory" text="НАЗВА" prefWidth="240.0"/>
-                                    <TableColumn fx:id="numberOfSoldProductsInCategory" text="К-сть проданих товарів" prefWidth="100.0"/>
-                                </columns>
-                                    <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                    </columnResizePolicy>
-                                </TableView>
+                                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАТЕГОРІЇ" />
+                                        <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="numberOfCategory" prefWidth="120.0" text="Номер" />
+                                                <TableColumn fx:id="nameOfCategory" prefWidth="240.0" text="НАЗВА" />
+                                                <TableColumn fx:id="numberOfSoldProductsInCategory" prefWidth="150.0" text="К-сть проданих товарів" />
+                                            </columns>
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                            </columnResizePolicy>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+
+                                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАСИРИ" />
+                                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: white;">
+                                            <content>
+                                                <TableView fx:id="cashierTable" prefHeight="300.0"> <columns>
+                                                    <TableColumn fx:id="idOfCashier" prefWidth="80.0" text="ID" />
+                                                    <TableColumn fx:id="surname" prefWidth="150.0" text="Прізвище" />
+                                                    <TableColumn fx:id="firstName" prefWidth="150.0" text="Ім'я" />
+                                                    <TableColumn fx:id="numberOfSoldProductsByThisCashier" prefWidth="100.0" text="К-сть товарів" />
+                                                    <TableColumn fx:id="sumOfProductsSoldByThisCashier" prefWidth="100.0" text="Сума" />
+                                                </columns>
+                                                    <columnResizePolicy>
+                                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                    </columnResizePolicy>
+                                                </TableView>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
                             </children>
                         </VBox>
 
-                        <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                        <VBox spacing="20.0" minWidth="400.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="КАСИРИ" />
-                                <TableView fx:id="cashierTable" VBox.vgrow="ALWAYS">
-                                    <columns>
-                                        <TableColumn fx:id="idOfCashier" text="ID" prefWidth="120.0"/>
-                                        <TableColumn fx:id="surname" text="Прізвище" prefWidth="240.0"/>
-                                        <TableColumn fx:id="firstName" text="Ім'я" prefWidth="240.0"/>
-                                        <TableColumn fx:id="numberOfSoldProductsByThisCashier" text="К-сть товарів" prefWidth="100.0"/>
-                                        <TableColumn fx:id="sumOfProductsSoldByThisCashier" text="Сума" prefWidth="100.0"/>
-                                    </columns>
-                                    <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                    </columnResizePolicy>
-                                </TableView>
+                                <VBox spacing="5.0" prefHeight="280.0"> <children>
+                                    <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="ТОВАРИ" />
+                                    <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="productUpcColumn" prefWidth="100.0" text="UPC" />
+                                            <TableColumn fx:id="productNameColumn" prefWidth="150.0" text="НАЗВА" />
+                                            <TableColumn fx:id="productQuantityColumn" prefWidth="70.0" text="К-ТЬ" />
+                                            <TableColumn fx:id="productSumColumn" prefWidth="80.0" text="СУМА" />
+                                        </columns>
+                                        <columnResizePolicy>
+                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                        </columnResizePolicy>
+                                    </TableView>
+                                </children>
+                                </VBox>
+
+                                <ScrollPane fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" prefHeight="200.0" style="-fx-background-color: transparent; -fx-background: #f9f9f9; -fx-border-color: #eeeeee; -fx-border-radius: 10; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <GridPane hgap="10.0" vgap="15.0" style="-fx-padding: 15; -fx-background-color: transparent;">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label fx:id="productsWithoutSales" style="-fx-font-size: 13px;" text="Товари без продажів: —" wrapText="true" GridPane.rowIndex="0" />
+                                                <Label fx:id="categoriesWithousSales" style="-fx-font-size: 13px;" text="Категорії без продажів: —" wrapText="true" GridPane.rowIndex="1" />
+                                                <Label fx:id="cashiersWithAllCategories" style="-fx-font-size: 13px;" text="Касири, які продавали товари з кожної категорії за заданий період: —" wrapText="true" GridPane.rowIndex="2" />
+                                            </children>
+                                        </GridPane>
+                                    </content>
+                                </ScrollPane>
                             </children>
                         </VBox>
                     </children>
-                </VBox>
-
-                <VBox spacing="20.0" HBox.hgrow="ALWAYS">
-                    <children>
-                        <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <Label style="-fx-font-weight: bold; -fx-text-fill: #7f8c8d;" text="ТОВАРИ" />
-                                <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
-                                    <columns>
-                                        <TableColumn  fx:id="productUpcColumn" prefWidth="75.0" text="UPC" />
-                                        <TableColumn fx:id="productNameColumn" prefWidth="150.0" text="НАЗВА" />
-                                        <TableColumn fx:id="productQuantityColumn" prefWidth="75.0" text="К-ТЬ" />
-                                        <TableColumn fx:id="productSumColumn" prefWidth="100.0" text="СУМА" />
-                                    </columns>
-                                    <columnResizePolicy>
-                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                    </columnResizePolicy>
-                                </TableView>
-                            </children>
-                        </VBox>
-
-                        <GridPane hgap="10.0" style="-fx-background-color: #f9f9f9; -fx-padding: 15; -fx-background-radius: 10;" vgap="10.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <Label fx:id="productsWithoutSales" text="Товари без продажів: —" GridPane.rowIndex="0" />
-                                <Label fx:id="categoriesWithousSales" text="Категорії без продажів: —" GridPane.rowIndex="1" />
-                                <Label fx:id="cashiersWithAllCategories" text="Касири, які продавали товари з кожної категорії за заданий період: —" GridPane.rowIndex="2" />
-                            </children>
-                        </GridPane>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
+                </HBox>
+            </content>
+        </ScrollPane>
     </children>
 </VBox>
