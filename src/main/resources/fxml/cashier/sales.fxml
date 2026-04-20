@@ -31,7 +31,6 @@
         <TextField fx:id="upcInputField"  prefHeight="30.0" prefWidth="300.0" promptText="ВВЕДІТЬ UPC..."/>
         <Button fx:id="addButton" onAction="#searchProductByUPC" mnemonicParsing="false" prefHeight="30.0" text="ДОДАТИ"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button mnemonicParsing="false" text="ПОШУК ТОВАРУ ЗА UPC"/>
     </HBox>
 
     <Label fx:id="checkNumberLabel" text="ЧЕК № 12345">

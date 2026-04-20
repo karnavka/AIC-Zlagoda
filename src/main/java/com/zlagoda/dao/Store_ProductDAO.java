@@ -98,6 +98,33 @@ public class Store_ProductDAO {
         return null;
     }
 
+    public List<StoreProductDTO> searchByUpcStartingWith(String partialUpc) throws SQLException {
+        String sql = "SELECT sp.upc, p.name, sp.selling_price, sp.products_number " +
+                "FROM Store_Product sp " +
+                "JOIN Product p ON sp.id_product = p.id_product " +
+                "WHERE sp.upc LIKE ? " +
+                "LIMIT 10";
+
+        List<StoreProductDTO> results = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, partialUpc + "%");
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    StoreProductDTO dto = new StoreProductDTO();
+                    dto.setUpc(rs.getString("upc"));
+                    dto.setProductName(rs.getString("name"));
+                    dto.setSellingPrice(rs.getDouble("selling_price"));
+                    dto.setProductsNumber(rs.getInt("products_number"));
+                    results.add(dto);
+                }
+            }
+        }
+        return results;
+    }
+
     public List<StoreProductDTO> getProductsByCategory(String categoryName) throws SQLException {
         String sql = "SELECT sp.*, p.name, p.manufacturer, p.characteristics, c.name AS category_name " +
                 "FROM Store_Product sp " +

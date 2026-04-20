@@ -19,14 +19,23 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Button fx:id="upcCheckButton" onAction="#handleUpcCheck"
+                mnemonicParsing="false" text="ПОШУК ЗА UPC">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Button>
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <TextField fx:id="nameSearchField" promptText="НАЗВА ..." HBox.hgrow="ALWAYS" />
         <ComboBox fx:id="categoryComboBox" prefWidth="150.0" promptText="КАТЕГОРІЯ..." />
         <ComboBox fx:id="allComboBox" prefWidth="80.0" promptText="усі" />
-        <Button fx:id="searchButton" onAction="#searchProduct"  mnemonicParsing="false" text="ЗНАЙТИ" />
-        <Button fx:id="clearButton" onAction="#clearButton"  mnemonicParsing="false" text="ОЧИСТИТИ" />
+        <Button fx:id="searchButton" onAction="#searchProduct" mnemonicParsing="false" text="ЗНАЙТИ" />
+        <Button fx:id="clearButton" onAction="#clearButton" mnemonicParsing="false" text="ОЧИСТИТИ" />
     </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="5.0">

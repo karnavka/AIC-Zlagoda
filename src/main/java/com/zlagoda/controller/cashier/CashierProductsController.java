@@ -33,12 +33,15 @@ public class CashierProductsController {
     @FXML private TableColumn<StoreProductDTO, String> idColumn;
     @FXML private TableColumn<StoreProductDTO, String> nameColumn;
     @FXML private TableColumn<StoreProductDTO, String> categoryColumn;
+    @FXML private TableColumn<StoreProductDTO, String> manufacturerColumn;
     @FXML private TableColumn<StoreProductDTO, Double> priceColumn;
     @FXML private TableColumn<StoreProductDTO, Integer> stockColumn;
     @FXML private TableColumn<StoreProductDTO, String> promoColumn;
 
     @FXML private VBox detailsBox;
     @FXML private Label upcLabel, nameLabel, manufacturerLabel, characteristicsLabel, stockLabel, priceLabel, promoPriceLabel;
+
+    @FXML public Button upcCheckButton;
 
     @FXML
     public void initialize() {
@@ -67,6 +70,7 @@ public class CashierProductsController {
         idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUpc()));
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProductName()));
         categoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategoryName()));
+        manufacturerColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getManufacturer()));
         priceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getSellingPrice()));
         stockColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getProductsNumber()));
         promoColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().isPromotional() ? "Так" : "Ні"));
@@ -177,6 +181,55 @@ public class CashierProductsController {
             priceLabel.setText(String.format("%.2f грн", dto.getSellingPrice()));
             promoPriceLabel.setText("---");
         }
+    }
+
+    @FXML
+    public void handleUpcCheck(ActionEvent event) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Швидкий пошук за UPC");
+
+        TextField upcInput = new TextField();
+        upcInput.setPromptText("UPC...");
+
+        TableView<StoreProductDTO> resultTable = new TableView<>();
+        resultTable.setPrefHeight(150);
+        resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<StoreProductDTO, String> upcCol = new TableColumn<>("UPC");
+        upcCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUpc()));
+
+        TableColumn<StoreProductDTO, String> nameCol = new TableColumn<>("Назва");
+        nameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProductName()));
+
+        TableColumn<StoreProductDTO, Double> priceCol = new TableColumn<>("Ціна");
+        priceCol.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getSellingPrice()));
+
+        TableColumn<StoreProductDTO, Integer> stockCol = new TableColumn<>("К-ть");
+        stockCol.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getProductsNumber()));
+
+        resultTable.getColumns().addAll(upcCol, nameCol, priceCol, stockCol);
+
+        upcInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            String code = newValue.trim();
+            if (code.length() >= 1) {
+                try {
+                    List<StoreProductDTO> products = storeProductDAO.searchByUpcStartingWith(code);
+                    resultTable.setItems(FXCollections.observableArrayList(products));
+                } catch (SQLException ex) {
+                    System.err.println("Помилка пошуку: " + ex.getMessage());
+                }
+            } else {
+                resultTable.getItems().clear();
+            }
+        });
+
+        VBox vbox = new VBox(10, new Label("Введіть UPC товару:"), upcInput, resultTable);
+        vbox.setPadding(new javafx.geometry.Insets(20));
+        vbox.setPrefWidth(550);
+
+        dialog.getDialogPane().setContent(vbox);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.showAndWait();
     }
 
     private void clearDetails() {
