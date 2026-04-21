@@ -2,6 +2,7 @@ package com.zlagoda.controller.cashier;
 
 import com.zlagoda.dao.*;
 import com.zlagoda.dto.CheckDetailsDTO;
+import com.zlagoda.dto.StoreProductDTO;
 import com.zlagoda.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -314,5 +316,66 @@ System.out.println("Searching for UPC");
         vatLabel.setText("0.00");
 
         checkNumberLabel.setText("");
+    }
+
+    @FXML
+    public void handleUpcCheck(ActionEvent event) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Швидкий пошук за UPC");
+
+        TextField upcInput = new TextField();
+        upcInput.setPromptText("UPC...");
+        upcInput.setPrefWidth(400);
+
+        TableView<StoreProductDTO> resultTable = new TableView<>();
+        resultTable.setPrefHeight(200);
+        resultTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        TableColumn<StoreProductDTO, String> upcCol = new TableColumn<>("UPC");
+        upcCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getUpc()));
+
+        TableColumn<StoreProductDTO, String> nameCol = new TableColumn<>("Назва");
+        nameCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getProductName()));
+
+        TableColumn<StoreProductDTO, Double> priceCol = new TableColumn<>("Ціна");
+        priceCol.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getSellingPrice()));
+
+        TableColumn<StoreProductDTO, Integer> stockCol = new TableColumn<>("К-ть");
+        stockCol.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getProductsNumber()));
+
+        resultTable.getColumns().addAll(upcCol, nameCol, priceCol, stockCol);
+
+        upcInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            String code = newValue.trim();
+            if (!code.isEmpty()) {
+                try {
+                    List<StoreProductDTO> products = storeProductDAO.searchByUpcStartingWith(code);
+                    resultTable.setItems(FXCollections.observableArrayList(products));
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                resultTable.getItems().clear();
+            }
+        });
+
+        resultTable.setRowFactory(tv -> {
+            TableRow<StoreProductDTO> row = new TableRow<>();
+            row.setOnMouseClicked(e -> {
+                if (e.getClickCount() == 2 && (!row.isEmpty())) {
+                    upcInputField.setText(row.getItem().getUpc());
+                    dialog.setResult(null);
+                    dialog.close();
+                }
+            });
+            return row;
+        });
+
+        VBox vbox = new VBox(10, new Label("Введіть код для перевірки ціни та залишку:"), upcInput, resultTable);
+        vbox.setPadding(new javafx.geometry.Insets(20));
+
+        dialog.getDialogPane().setContent(vbox);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.showAndWait();
     }
 }

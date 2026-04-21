@@ -14,23 +14,33 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label text="ПРОДАЖ">
-        <font>
-            <Font name="System Bold" size="18.0"/>
-        </font>
-        <graphic>
-            <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                <image>
-                    <Image url="@/images/icons_sales.png"/>
-                </image>
-            </ImageView>
-        </graphic>
-    </Label>
+    <HBox alignment="CENTER_LEFT" spacing="15.0">
+        <Label text="ПРОДАЖ">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+            <graphic>
+                <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/icons_sales.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Label>
+
+        <Region HBox.hgrow="ALWAYS" />
+
+        <Button fx:id="upcCheckButton" onAction="#handleUpcCheck"
+                mnemonicParsing="false" text="ПОШУК ЗА UPC">
+            <font>
+                <Font size="12.0" />
+            </font>
+        </Button>
+    </HBox>
 
     <HBox alignment="CENTER_LEFT" spacing="15.0">
-        <TextField fx:id="upcInputField"  prefHeight="30.0" prefWidth="300.0" promptText="ВВЕДІТЬ UPC..."/>
+        <TextField fx:id="upcInputField" prefHeight="30.0" prefWidth="300.0" promptText="ВВЕДІТЬ UPC..."/>
         <Button fx:id="addButton" onAction="#searchProductByUPC" mnemonicParsing="false" prefHeight="30.0" text="ДОДАТИ"/>
-        <Region HBox.hgrow="ALWAYS"/>
     </HBox>
 
     <Label fx:id="checkNumberLabel" text="ЧЕК № 12345">
