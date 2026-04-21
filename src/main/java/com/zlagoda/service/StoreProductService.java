@@ -8,8 +8,6 @@ public class StoreProductService {
 
     private Store_ProductDAO storeProductDAO = new Store_ProductDAO();
 
-    // не впевнена чи треба нам такий метод (як ми реалізовуємо поставки?)
-    // можливо для цього вистачить і одного методу update з дао
     public void updateProductPriceAndNumber(String upc, int addedNumber, double newPrice) throws SQLException {
         Store_Product product = storeProductDAO.getFullStoreProductByUPC(upc);
 

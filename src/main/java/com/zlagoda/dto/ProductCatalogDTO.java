@@ -1,7 +1,5 @@
 package com.zlagoda.dto;
 
-
-
 public class ProductCatalogDTO {
     private int idProduct;
     private String productName;
