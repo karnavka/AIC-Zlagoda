@@ -106,12 +106,17 @@ public class ManagerEmployeesController {
     @FXML
     public void clearEmployees(ActionEvent actionEvent) {
         lastNameSearchField.clear();
+
+        if (roleSearchComboBox != null) {
+            roleSearchComboBox.getSelectionModel().select("Всі ролі");
+        }
+
         employeesTable.getSelectionModel().clearSelection();
         selectedEmployee = null;
         editMode = false;
         clearForm();
         hideEditBox();
-        loadAllEmployees();
+        searchEmployee();
     }
 
     @FXML
